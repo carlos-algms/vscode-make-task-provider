@@ -5,6 +5,7 @@ import FolderDetector from './FolderDetector';
 export default class TaskDetector {
   private taskProvider: vscode.Disposable | undefined;
   private detectors = new Map<string, FolderDetector>();
+  private disposables: vscode.Disposable[] = [];
 
   start(): void {
     const folders = vscode.workspace.workspaceFolders;
@@ -13,11 +14,13 @@ export default class TaskDetector {
       this.updateWorkspaceFolders(folders, []);
     }
 
-    vscode.workspace.onDidChangeWorkspaceFolders((event) =>
-      this.updateWorkspaceFolders(event.added, event.removed),
-    );
+    this.disposables.push(
+      vscode.workspace.onDidChangeWorkspaceFolders((event) =>
+        this.updateWorkspaceFolders(event.added, event.removed),
+      ),
 
-    vscode.workspace.onDidChangeConfiguration(this.updateConfiguration, this);
+      vscode.workspace.onDidChangeConfiguration(this.updateConfiguration, this),
+    );
   }
 
   dispose(): void {
@@ -27,6 +30,13 @@ export default class TaskDetector {
     }
 
     this.detectors.clear();
+
+    const disposables = this.disposables;
+    this.disposables = [];
+
+    for (const disposable of disposables) {
+      disposable.dispose();
+    }
   }
 
   private updateWorkspaceFolders(

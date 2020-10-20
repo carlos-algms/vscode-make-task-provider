@@ -49,6 +49,7 @@ export default class FolderDetector {
     if (this.fileWatcher) {
       this.fileWatcher.dispose();
     }
+    this.fileWatcher = undefined;
   }
 
   async getTasks(): Promise<vscode.Task[]> {
