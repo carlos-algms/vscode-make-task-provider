@@ -18,8 +18,15 @@
     "taskDefinitions": [
       {
         "type": "make",
-        "required": [],
-        "properties": {}
+        "required": [
+          "targetName"
+        ],
+        "properties": {
+          "targetName": {
+            "type": "string",
+            "description": "The make target name to run. Must exist in your Makefile"
+          }
+        }
       }
     ]
   },

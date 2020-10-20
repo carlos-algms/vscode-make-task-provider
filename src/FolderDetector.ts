@@ -4,6 +4,7 @@ import vscode from 'vscode';
 import getMakefileTargetNames, { MAKEFILE } from './shared/getMakefileTargetNames';
 import getOutputChannel from './shared/getOutputChannel';
 import localize from './shared/localize';
+import { MakefileTaskDefinition } from './shared/MakeTask';
 import showError from './shared/showError';
 import { getTaskGroupGuess } from './shared/taskGroup';
 
@@ -64,26 +65,28 @@ export default class FolderDetector {
     return this.promise;
   }
 
-  async getTask({ definition, name }: vscode.Task): Promise<vscode.Task | undefined> {
-    return this.makeTask(name, definition);
+  async getTask(task: vscode.Task): Promise<vscode.Task | undefined> {
+    const definition: MakefileTaskDefinition = <any>task.definition;
+    return this.makeTask(definition.targetName);
   }
 
-  private makeTask = (name: string, definition?: vscode.TaskDefinition): vscode.Task => {
-    const validDefinition: vscode.TaskDefinition = definition || {
+  private makeTask = (targetName: string): vscode.Task => {
+    const definition: MakefileTaskDefinition = {
       type: this.sourceName,
+      targetName,
     };
 
     const options: vscode.ShellExecutionOptions = { cwd: this.rootPath };
 
     const task = new vscode.Task(
-      validDefinition,
+      definition,
       this.workspaceFolder,
-      name,
+      targetName,
       this.sourceName,
-      new vscode.ShellExecution(`make`, [name], options),
+      new vscode.ShellExecution(`make`, [targetName], options),
     );
 
-    task.group = getTaskGroupGuess(name);
+    task.group = getTaskGroupGuess(targetName);
     return task;
   };
 
