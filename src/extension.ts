@@ -1,4 +1,4 @@
-import vscode from 'vscode';
+import type vscode from 'vscode';
 import TaskDetector from './TaskDetector';
 
 let detector: TaskDetector;
