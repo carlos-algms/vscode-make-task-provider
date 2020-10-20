@@ -1,23 +1,18 @@
 {
+  "version": "0.0.1",
   "name": "make",
   "publisher": "carlos-algms",
-  "author": {
-    "name": "Carlos Gomes",
-    "email": "vscode-publisher@gomescarlos.com"
-  },
   "displayName": "Makefile support for VS Code",
   "description": "Extension to add Makefile capabilities to VS Code.",
+  "icon": "images/Makefile.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/carlos-algms/makefile-support-for-vscode.git"
   },
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.50.0"
+  "author": {
+    "name": "Carlos Gomes",
+    "email": "vscode-publisher@gomescarlos.com"
   },
-  "categories": [
-    "Other"
-  ],
   "main": "./build/extension.js",
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask"
@@ -52,5 +47,11 @@
     "typescript": "^4.0.3",
     "vscode-nls": "^5.0.0",
     "vscode-test": "^1.4.0"
-  }
+  },
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Other"
+  ]
 }
