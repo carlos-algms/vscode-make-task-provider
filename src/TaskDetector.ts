@@ -4,9 +4,7 @@ import FolderDetector from './FolderDetector';
 
 export default class TaskDetector {
   private taskProvider: vscode.Disposable | undefined;
-  private detectors: Map<string, FolderDetector> = new Map();
-
-  constructor() {}
+  private detectors = new Map<string, FolderDetector>();
 
   start(): void {
     const folders = vscode.workspace.workspaceFolders;
@@ -35,57 +33,61 @@ export default class TaskDetector {
     added: readonly vscode.WorkspaceFolder[],
     removed: readonly vscode.WorkspaceFolder[],
   ): void {
-    for (const remove of removed) {
-      const detector = this.detectors.get(remove.uri.toString()); // TODO uri.toString() can be cached?
-      if (detector) {
-        detector.dispose();
-        this.detectors.delete(remove.uri.toString());
-      }
-    }
-
-    for (const add of added) {
-      const detector = new FolderDetector(add);
-      this.detectors.set(add.uri.toString(), detector);
-      if (detector.isEnabled()) {
-        detector.start();
-      }
-    }
-
+    this.removeDetectorsForFolders(removed);
+    this.startDetectorForFolders(added);
     this.updateProvider();
   }
 
-  private updateConfiguration(): void {
+  private removeDetectorsForFolders(folders: readonly vscode.WorkspaceFolder[]) {
+    for (const remove of folders) {
+      const identifier = remove.uri.toString();
+      const detector = this.detectors.get(identifier);
+      if (detector) {
+        detector.dispose();
+        this.detectors.delete(identifier);
+      }
+    }
+  }
+
+  private removeAllDetectors() {
     for (const detector of this.detectors.values()) {
       detector.dispose();
       this.detectors.delete(detector.workspaceFolder.uri.toString());
     }
+  }
+
+  private startDetectorForFolders(folders: readonly vscode.WorkspaceFolder[]) {
+    for (const folder of folders) {
+      if (!this.detectors.has(folder.uri.toString())) {
+        const detector = new FolderDetector(folder);
+        this.detectors.set(folder.uri.toString(), detector);
+        if (detector.isEnabled()) {
+          detector.start();
+        }
+      }
+    }
+  }
+
+  private updateConfiguration(): void {
+    this.removeAllDetectors();
 
     const folders = vscode.workspace.workspaceFolders;
 
     if (folders) {
-      for (const folder of folders) {
-        if (!this.detectors.has(folder.uri.toString())) {
-          const detector = new FolderDetector(folder);
-          this.detectors.set(folder.uri.toString(), detector);
-          if (detector.isEnabled()) {
-            detector.start();
-          }
-        }
-      }
+      this.startDetectorForFolders(folders);
     }
+
     this.updateProvider();
   }
 
   private updateProvider(): void {
     if (!this.taskProvider && this.detectors.size > 0) {
-      const _this = this;
-
       this.taskProvider = vscode.tasks.registerTaskProvider('make', {
         provideTasks: (): Promise<vscode.Task[]> => {
-          return _this.getTasks();
+          return this.getTasks();
         },
-        resolveTask(_task: vscode.Task): Promise<vscode.Task | undefined> {
-          return _this.getTask(_task);
+        resolveTask: (task: vscode.Task): Promise<vscode.Task | undefined> => {
+          return this.getTask(task);
         },
       });
     } else if (this.taskProvider && this.detectors.size === 0) {
@@ -111,20 +113,14 @@ export default class TaskDetector {
     for (const detector of this.detectors.values()) {
       promises.push(
         detector.getTasks().then(
-          (value) => value,
+          (tasks) => tasks,
           () => [],
         ),
       );
     }
 
     const tasksResolved = await Promise.all(promises);
-    const result: vscode.Task[] = [];
-
-    for (const tasks of tasksResolved) {
-      if (tasks && tasks.length > 0) {
-        result.push(...tasks);
-      }
-    }
+    const result: vscode.Task[] = tasksResolved.flat();
 
     return result;
   }
