@@ -2,65 +2,48 @@ import path from 'path';
 import vscode from 'vscode';
 
 import exec from './shared/exec';
-import localize from './shared/localize';
 import exists from './shared/exists';
 import getOutputChannel from './shared/getOutputChannel';
+import localize from './shared/localize';
 import showError from './shared/showError';
+import { getTaskGroupGuess } from './shared/taskGroup';
 
 type AutoDetect = 'on' | 'off';
 
-interface MakeTaskDefinition extends vscode.TaskDefinition {
-  task: string;
-  args?: string[];
-  file?: string;
-}
-
 const MAKEFILE = 'Makefile';
-
-const buildNames = ['build', 'compile', 'watch'];
-function isBuildTask(name: string): boolean {
-  for (const buildName of buildNames) {
-    if (name.indexOf(buildName) !== -1) {
-      return true;
-    }
-  }
-  return false;
-}
-
-const testNames = ['test'];
-function isTestTask(name: string): boolean {
-  for (const testName of testNames) {
-    if (name.indexOf(testName) !== -1) {
-      return true;
-    }
-  }
-  return false;
-}
 
 export default class FolderDetector {
   private fileWatcher?: vscode.FileSystemWatcher;
   private promise?: Thenable<vscode.Task[]>;
+  private rootPath?: string;
+  private sourceName = 'make';
 
-  constructor(private _workspaceFolder: vscode.WorkspaceFolder) {}
-
-  get workspaceFolder(): vscode.WorkspaceFolder {
-    return this._workspaceFolder;
+  constructor(public readonly workspaceFolder: vscode.WorkspaceFolder) {
+    this.rootPath = workspaceFolder.uri.scheme === 'file' ? workspaceFolder.uri.fsPath : undefined;
   }
 
   isEnabled(): boolean {
     return (
       vscode.workspace
-        .getConfiguration('make', this._workspaceFolder.uri)
+        .getConfiguration('make', this.workspaceFolder.uri)
         .get<AutoDetect>('autoDetect', 'on') === 'on'
     );
   }
 
-  unsetPromise = () => {
+  unsetPromise = (): void => {
     this.promise = undefined;
   };
 
   start(): void {
-    const pattern = path.join(this._workspaceFolder.uri.fsPath, `{${MAKEFILE}}`);
+    if (!this.rootPath) {
+      getOutputChannel().appendLine(
+        'Wrong Workspace schema: ' + this.workspaceFolder.uri.toString(),
+      );
+      showError();
+      return;
+    }
+
+    const pattern = path.join(this.rootPath, `{${MAKEFILE}}`);
     this.fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
     this.fileWatcher.onDidChange(this.unsetPromise);
     this.fileWatcher.onDidCreate(this.unsetPromise);
@@ -79,28 +62,23 @@ export default class FolderDetector {
     return this.promise;
   }
 
-  async getTask(_task: vscode.Task): Promise<vscode.Task | undefined> {
-    const taskDefinition = _task.definition;
-    const target = taskDefinition.task;
+  async getTask({ definition, name }: vscode.Task): Promise<vscode.Task | undefined> {
+    const options: vscode.ShellExecutionOptions = { cwd: this.workspaceFolder.uri.fsPath };
 
-    if (target) {
-      const options: vscode.ShellExecutionOptions = { cwd: this.workspaceFolder.uri.fsPath };
-      const source = 'make';
-      const quotedMakeTask = target.includes(' ') ? `"${target}"` : target;
+    const task = new vscode.Task(
+      definition,
+      this.workspaceFolder,
+      name,
+      this.sourceName,
+      new vscode.ShellExecution(`make`, [name], options),
+    );
 
-      const task = new vscode.Task(
-        taskDefinition,
-        this.workspaceFolder,
-        target,
-        source,
-        new vscode.ShellExecution(`make`, [quotedMakeTask, ...taskDefinition.args], options),
-      );
-      return task;
-    }
+    task.group = getTaskGroupGuess(name);
 
-    return undefined;
+    return task;
   }
 
+  // TODO export to a helper
   private getResultLines(result: string): string[] {
     const startAt = result.lastIndexOf('# Files');
     const lines = result.substr(startAt).split(/\r{0,1}\n/g);
@@ -112,24 +90,23 @@ export default class FolderDetector {
   }
 
   private async computeTasks(): Promise<vscode.Task[]> {
-    const rootPath =
-      this._workspaceFolder.uri.scheme === 'file' ? this._workspaceFolder.uri.fsPath : undefined;
     const emptyTasks: vscode.Task[] = [];
 
-    if (!rootPath) {
+    if (!this.rootPath) {
       return emptyTasks;
     }
 
-    const makeFileExists = await exists(path.join(rootPath, MAKEFILE));
+    const makeFileExists = await exists(path.join(this.rootPath, MAKEFILE));
 
     if (!makeFileExists) {
       return emptyTasks;
     }
 
+    // TODO extract reading the Make targets to external file
     const commandLine = `make --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
 
     try {
-      const { stdout, stderr } = await exec(commandLine, { cwd: rootPath });
+      const { stdout, stderr } = await exec(commandLine, { cwd: this.rootPath });
 
       if (stderr) {
         getOutputChannel().appendLine(stderr);
@@ -146,34 +123,30 @@ export default class FolderDetector {
             continue;
           }
 
-          const source = 'make';
-          const kind: MakeTaskDefinition = {
-            type: source,
+          const kind: vscode.TaskDefinition = {
+            type: this.sourceName,
             task: name,
           };
-          const options: vscode.ShellExecutionOptions = {};
+          const options: vscode.ShellExecutionOptions = { cwd: this.rootPath };
 
           const task = new vscode.Task(
             kind,
             this.workspaceFolder,
             name,
-            source,
-            new vscode.ShellExecution(`make ${name}`, options),
+            this.sourceName,
+            new vscode.ShellExecution(`make`, [name], options),
           );
 
-          const lowerCaseTaskName = name.toLowerCase();
-          if (isBuildTask(lowerCaseTaskName)) {
-            task.group = vscode.TaskGroup.Build;
-          } else if (isTestTask(lowerCaseTaskName)) {
-            task.group = vscode.TaskGroup.Test;
-          }
+          task.group = getTaskGroupGuess(name);
 
           result.push(task);
         }
       }
       return result;
     } catch (err) {
+      this.unsetPromise();
       const channel = getOutputChannel();
+
       if (err.stderr) {
         channel.appendLine(err.stderr);
       }
@@ -184,14 +157,12 @@ export default class FolderDetector {
       channel.appendLine(
         localize(
           'execFailed',
-          'Auto detecting Make for folder {0} failed with error: {1}',
+          'Auto detecting Make targets for folder `{0}` failed with error: {1}',
           this.workspaceFolder.name,
           err.error ? err.error.toString() : 'unknown',
         ),
       );
       showError();
-
-      this.unsetPromise();
 
       return emptyTasks;
     }

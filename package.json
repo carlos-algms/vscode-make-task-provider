@@ -18,23 +18,8 @@
     "taskDefinitions": [
       {
         "type": "make",
-        "required": [
-          "task"
-        ],
-        "properties": {
-          "task": {
-            "type": "string",
-            "description": "%make.taskDefinition.type.description%"
-          },
-          "args": {
-            "type": "array",
-            "description": "%make.taskDefinition.args.description%"
-          },
-          "file": {
-            "type": "string",
-            "description": "%make.taskDefinition.file.description%"
-          }
-        }
+        "required": [],
+        "properties": {}
       }
     ]
   },
