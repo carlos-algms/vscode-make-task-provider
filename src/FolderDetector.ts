@@ -1,6 +1,7 @@
 import path from 'path';
 import vscode from 'vscode';
 
+import { APP_NAME } from './shared/constants';
 import getMakefileTargetNames, { MAKEFILE } from './shared/getMakefileTargetNames';
 import getOutputChannel from './shared/getOutputChannel';
 import localize from './shared/localize';
@@ -23,7 +24,7 @@ export default class FolderDetector {
   isEnabled(): boolean {
     return (
       vscode.workspace
-        .getConfiguration('make', this.workspaceFolder.uri)
+        .getConfiguration(APP_NAME, this.workspaceFolder.uri)
         .get<AutoDetect>('autoDetect', 'on') === 'on'
     );
   }

@@ -1,9 +1,9 @@
 {
   "version": "0.0.1",
-  "name": "make",
+  "name": "make-task-provider",
   "publisher": "carlos-algms",
-  "displayName": "Makefile support for VS Code",
-  "description": "Extension to add Makefile capabilities to VS Code.",
+  "displayName": "Make support and task provider",
+  "description": "Extension to run Makefile tasks from VS Code",
   "icon": "images/Makefile.png",
   "repository": "https://github.com/carlos-algms/makefile-support-for-vscode",
   "author": {
@@ -13,7 +13,7 @@
   "main": "./build/extension.js",
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask",
-    "onCommand:make.runTarget"
+    "onCommand:make-task-provider.runTarget"
   ],
   "contributes": {
     "taskDefinitions": [
@@ -32,7 +32,7 @@
     ],
     "commands": [
       {
-        "command": "make.runTarget",
+        "command": "make-task-provider.runTarget",
         "title": "Make: Run target"
       }
     ]

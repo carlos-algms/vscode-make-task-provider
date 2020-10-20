@@ -1,11 +1,12 @@
-import { Disposable } from 'vscode';
+import vscode, { Disposable } from 'vscode';
+
 import { runFromCommandPicker } from './runFromCommandPicker';
+import { APP_NAME } from './shared/constants';
 import TaskDetector from './TaskDetector';
-import vscode from 'vscode';
 
 export function commandsManager(detector: TaskDetector): Disposable[] {
   const disposables: Disposable[] = [
-    vscode.commands.registerCommand('make.runTarget', () => {
+    vscode.commands.registerCommand(`${APP_NAME}.runTarget`, () => {
       runFromCommandPicker(detector);
     }),
   ];
