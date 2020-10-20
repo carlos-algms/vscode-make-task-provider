@@ -1,6 +1,10 @@
 {
   "name": "make",
   "publisher": "carlos-algms",
+  "author": {
+    "name": "Carlos Gomes",
+    "email": "vscode-publisher@gomescarlos.com"
+  },
   "displayName": "Makefile support for VS Code",
   "description": "Extension to add Makefile capabilities to VS Code.",
   "repository": {
