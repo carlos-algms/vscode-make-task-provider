@@ -1,5 +1,6 @@
 {
   "name": "make",
+  "publisher": "cgomes",
   "displayName": "Makefile support for VS Code",
   "description": "Extension to add Makefile capabilities to VS Code.",
   "version": "0.0.1",
@@ -9,15 +10,31 @@
   "categories": [
     "Other"
   ],
+  "main": "./build/extension.js",
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask"
   ],
-  "main": "./build/extension.js",
   "contributes": {
-    "commands": [
+    "taskDefinitions": [
       {
-        "command": "make.helloWorld",
-        "title": "Hello World"
+        "type": "make",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "%make.taskDefinition.type.description%"
+          },
+          "args": {
+            "type": "array",
+            "description": "%make.taskDefinition.args.description%"
+          },
+          "file": {
+            "type": "string",
+            "description": "%make.taskDefinition.file.description%"
+          }
+        }
       }
     ]
   },
@@ -30,16 +47,17 @@
     "test": "node ./build/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.50.0",
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.3",
     "@types/node": "^12.12.68",
-    "eslint": "^7.11.0",
+    "@types/vscode": "^1.50.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
+    "eslint": "^7.11.0",
     "glob": "^7.1.6",
     "mocha": "^8.2.0",
     "typescript": "^4.0.3",
+    "vscode-nls": "^5.0.0",
     "vscode-test": "^1.4.0"
   }
 }
