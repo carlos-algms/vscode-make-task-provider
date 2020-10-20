@@ -35,7 +35,18 @@
         "command": "make-task-provider.runTarget",
         "title": "Make: Run target"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "TypeScript",
+      "properties": {
+        "make-task-provider.autoDetect": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "description": "Controls whether auto detection of Make tasks is on or off. Default is on."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
