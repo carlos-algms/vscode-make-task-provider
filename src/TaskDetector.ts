@@ -52,8 +52,8 @@ export default class TaskDetector {
   private removeAllDetectors() {
     for (const detector of this.detectors.values()) {
       detector.dispose();
-      this.detectors.delete(detector.workspaceFolder.uri.toString());
     }
+    this.detectors.clear();
   }
 
   private startDetectorForFolders(folders: readonly vscode.WorkspaceFolder[]) {
@@ -96,17 +96,9 @@ export default class TaskDetector {
     }
   }
 
-  getTasks(): Promise<vscode.Task[]> {
-    return this.computeTasks();
-  }
-
-  private async computeTasks(): Promise<vscode.Task[]> {
+  async getTasks(): Promise<vscode.Task[]> {
     if (this.detectors.size === 0) {
       return [];
-    }
-
-    if (this.detectors.size === 1) {
-      return this.detectors.values().next().value.getTasks();
     }
 
     const promises: Promise<vscode.Task[]>[] = [];
