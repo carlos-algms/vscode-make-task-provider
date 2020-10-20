@@ -30,6 +30,10 @@ export default class FolderDetector {
   }
 
   start(): void {
+    if (!this.isEnabled()) {
+      return;
+    }
+
     if (!this.rootPath) {
       getOutputChannel().appendLine(
         'Wrong Workspace schema: ' + this.workspaceFolder.uri.toString(),

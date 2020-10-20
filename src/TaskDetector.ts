@@ -71,9 +71,7 @@ export default class TaskDetector {
       if (!this.detectors.has(folder.uri.toString())) {
         const detector = new FolderDetector(folder);
         this.detectors.set(folder.uri.toString(), detector);
-        if (detector.isEnabled()) {
-          detector.start();
-        }
+        detector.start();
       }
     }
   }
