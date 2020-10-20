@@ -1,15 +1,13 @@
-import type vscode from 'vscode';
+import vscode from 'vscode';
+
+import { commandsManager } from './commandsManager';
 import TaskDetector from './TaskDetector';
 
-let detector: TaskDetector | null;
-export function activate(_context: vscode.ExtensionContext): void {
-  detector = new TaskDetector();
+export function activate(context: vscode.ExtensionContext): void {
+  const detector = new TaskDetector();
   detector.start();
+
+  context.subscriptions.push(detector, ...commandsManager(detector));
 }
 
-export function deactivate(): void {
-  if (detector) {
-    detector.dispose();
-  }
-  detector = null;
-}
+export function deactivate(): void {}
