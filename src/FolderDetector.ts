@@ -45,7 +45,7 @@ export default class FolderDetector {
     this.fileWatcher.onDidDelete(this.unsetPromise);
   }
 
-  dispose() {
+  dispose(): void {
     this.unsetPromise();
 
     if (this.fileWatcher) {

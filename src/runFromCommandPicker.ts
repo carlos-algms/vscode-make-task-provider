@@ -1,7 +1,7 @@
 import vscode from 'vscode';
 import TaskDetector from './TaskDetector';
 
-export async function runFromCommandPicker(taskDetector: TaskDetector | null) {
+export async function runFromCommandPicker(taskDetector: TaskDetector | null): void {
   if (!taskDetector) {
     return;
   }

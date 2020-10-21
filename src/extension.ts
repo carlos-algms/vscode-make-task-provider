@@ -10,4 +10,6 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(detector, ...commandsManager(detector));
 }
 
-export function deactivate(): void {}
+export function deactivate(): void {
+  // noop
+}

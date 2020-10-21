@@ -3,7 +3,7 @@ import vscode from 'vscode';
 import getOutputChannel from './getOutputChannel';
 import localize from './localize';
 
-export default async function showError() {
+export default async function showError(): Promise<void> {
   const result = await vscode.window.showWarningMessage(
     localize(
       'makeTaskDetectError',

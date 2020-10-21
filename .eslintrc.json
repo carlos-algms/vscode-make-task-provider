@@ -5,14 +5,24 @@
     "ecmaVersion": 6,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
+    "prefer-const": "warn",
     "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/semi": "warn",
-    "curly": "warn",
-    "eqeqeq": "warn",
-    "no-throw-literal": "warn",
-    "semi": "off",
-    "prefer-const": "warn"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/prefer-for-of": "error",
+    "@typescript-eslint/prefer-includes": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/prefer-reduce-type-parameter": "off",
+    "@typescript-eslint/prefer-string-starts-ends-with": "off",
+    "@typescript-eslint/type-annotation-spacing": "error"
   }
 }

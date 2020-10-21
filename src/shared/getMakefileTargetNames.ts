@@ -15,8 +15,8 @@ function getResultLines(result: string): string[] {
   const lines = result.substr(startAt).split(/\r{0,1}\n/g);
   const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:$/;
   const validLines = lines
-    .filter(line => validLineRegex.test(line))
-    .map(line => line.replace(':', ''));
+    .filter((line) => validLineRegex.test(line))
+    .map((line) => line.replace(':', ''));
   return validLines;
 }
 
