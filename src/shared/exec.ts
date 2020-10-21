@@ -1,4 +1,5 @@
 import cp from 'child_process';
+
 type StdIo = { stdout: string; stderr: string };
 
 export default function exec(command: string, options: cp.ExecOptions): Promise<StdIo> {

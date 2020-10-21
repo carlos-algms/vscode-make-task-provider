@@ -4,7 +4,9 @@ import FolderDetector from './FolderDetector';
 
 export default class TaskDetector {
   private taskProvider: vscode.Disposable | undefined;
+
   private detectors = new Map<string, FolderDetector>();
+
   private disposables: vscode.Disposable[] = [];
 
   start(): void {
@@ -31,7 +33,7 @@ export default class TaskDetector {
 
     this.detectors.clear();
 
-    const disposables = this.disposables;
+    const { disposables } = this;
     this.disposables = [];
 
     for (const disposable of disposables) {

@@ -11,8 +11,11 @@ import { getTaskGroupGuess } from './shared/taskGroup';
 
 export default class FolderDetector {
   private fileWatcher?: vscode.FileSystemWatcher;
+
   private promise?: Thenable<vscode.Task[]>;
+
   private rootPath?: string;
+
   private sourceName = 'make';
 
   constructor(public readonly workspaceFolder: vscode.WorkspaceFolder) {
@@ -32,7 +35,7 @@ export default class FolderDetector {
 
     if (!this.rootPath) {
       getOutputChannel().appendLine(
-        'Wrong Workspace schema: ' + this.workspaceFolder.uri.toString(),
+        `Wrong Workspace schema: ${this.workspaceFolder.uri.toString()}`,
       );
       showError();
       return;

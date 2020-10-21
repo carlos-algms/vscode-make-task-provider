@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import path from 'path';
 import Mocha from 'mocha';
 import glob from 'glob';
@@ -14,7 +15,8 @@ export function run(): Promise<void> {
   return new Promise((c, e) => {
     glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
       if (err) {
-        return e(err);
+        e(err);
+        return;
       }
 
       // Add files to the test suite
@@ -29,9 +31,9 @@ export function run(): Promise<void> {
             c();
           }
         });
-      } catch (err) {
-        console.error(err);
-        e(err);
+      } catch (error) {
+        console.error(error);
+        e(error);
       }
     });
   });
