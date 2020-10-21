@@ -9,8 +9,6 @@ import { MakefileTaskDefinition } from './shared/MakeTask';
 import showError from './shared/showError';
 import { getTaskGroupGuess } from './shared/taskGroup';
 
-type AutoDetect = 'on' | 'off';
-
 export default class FolderDetector {
   private fileWatcher?: vscode.FileSystemWatcher;
   private promise?: Thenable<vscode.Task[]>;
@@ -22,11 +20,9 @@ export default class FolderDetector {
   }
 
   isEnabled(): boolean {
-    return (
-      vscode.workspace
-        .getConfiguration(APP_NAME, this.workspaceFolder.uri)
-        .get<AutoDetect>('autoDetect', 'on') === 'on'
-    );
+    return vscode.workspace
+      .getConfiguration(APP_NAME, this.workspaceFolder.uri)
+      .get<boolean>('autoDetect', true);
   }
 
   start(): void {
