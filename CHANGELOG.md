@@ -1,3 +1,15 @@
+## <small>1.0.4 (2020-10-21)</small>
+
+* Enabled eslint rules that required Types ([5283fef](https://github.com/carlos-algms/vscode-make-task-provider/commit/5283fef))
+* Enhanced Eslint Rules ([68b74f3](https://github.com/carlos-algms/vscode-make-task-provider/commit/68b74f3))
+* Enhanced ESLint rules ([f738b07](https://github.com/carlos-algms/vscode-make-task-provider/commit/f738b07))
+* Exclude build folder ([680a6d2](https://github.com/carlos-algms/vscode-make-task-provider/commit/680a6d2))
+* Fix changelog command before publish ([38156cc](https://github.com/carlos-algms/vscode-make-task-provider/commit/38156cc))
+* Fix return type ([f06acd6](https://github.com/carlos-algms/vscode-make-task-provider/commit/f06acd6))
+* Included changelog generation ([8331e8a](https://github.com/carlos-algms/vscode-make-task-provider/commit/8331e8a))
+
+
+
 ## <small>1.0.3 (2020-10-21)</small>
 
 * 1.0.3 ([9a5ab9b](https://github.com/carlos-algms/vscode-make-task-provider/commit/9a5ab9b))
