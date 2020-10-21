@@ -3,7 +3,8 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
   },
   "extends": [
     "eslint:recommended",
@@ -18,11 +19,11 @@
     "@typescript-eslint/semi": "warn",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/prefer-for-of": "error",
-    "@typescript-eslint/prefer-includes": "off",
-    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/prefer-includes": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
     "@typescript-eslint/prefer-optional-chain": "error",
-    "@typescript-eslint/prefer-reduce-type-parameter": "off",
-    "@typescript-eslint/prefer-string-starts-ends-with": "off",
+    "@typescript-eslint/prefer-reduce-type-parameter": "error",
+    "@typescript-eslint/prefer-string-starts-ends-with": "error",
     "@typescript-eslint/type-annotation-spacing": "error"
   }
 }
