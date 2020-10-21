@@ -55,8 +55,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./build/test/runTest.js",
-    "changelog": "conventional-changelog --infile CHANGELOG.md --same-file -r 0",
-    "version": "yarn run changelog"
+    "changelog": "conventional-changelog --infile CHANGELOG.md --same-file",
+    "version": "yarn run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
     "vscode-nls": "^5.0.0"
