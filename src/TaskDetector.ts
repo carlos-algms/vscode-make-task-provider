@@ -78,7 +78,7 @@ export default class TaskDetector {
     }
   }
 
-  private updateConfiguration(): void {
+  private updateConfiguration = (): void => {
     this.removeAllDetectors();
 
     const folders = vscode.workspace.workspaceFolders;
@@ -88,7 +88,7 @@ export default class TaskDetector {
     }
 
     this.updateProvider();
-  }
+  };
 
   private updateProvider(): void {
     if (!this.taskProvider && this.detectors.size > 0) {
@@ -133,7 +133,9 @@ export default class TaskDetector {
     }
 
     if (this.detectors.size === 1) {
+      /* eslint-disable */
       return this.detectors.values().next().value.getTask(task);
+      /* eslint-enable */
     }
 
     if (task.scope === vscode.TaskScope.Workspace || task.scope === vscode.TaskScope.Global) {

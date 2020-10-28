@@ -69,9 +69,10 @@ export default class FolderDetector {
     return this.promise;
   }
 
-  async getTask(task: vscode.Task): Promise<vscode.Task | undefined> {
+  getTask(task: vscode.Task): Promise<vscode.Task | undefined> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const definition: MakefileTaskDefinition = <any>task.definition;
-    return this.makeTask(definition.targetName);
+    return Promise.resolve(this.makeTask(definition.targetName));
   }
 
   private makeTask = (targetName: string): vscode.Task => {
@@ -108,6 +109,7 @@ export default class FolderDetector {
       this.unsetPromise();
       const channel = getOutputChannel();
 
+      /* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call */
       if (err.stderr) {
         channel.appendLine(err.stderr);
       }
@@ -124,6 +126,7 @@ export default class FolderDetector {
           err.error ? err.error.toString() : 'unknown',
         ),
       );
+      /* eslint-enable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call */
       showError();
 
       return [];
