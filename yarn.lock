@@ -1804,11 +1804,6 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
 
-vscode-nls@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/vscode-nls/-/vscode-nls-5.0.0.tgz#99f0da0bd9ea7cda44e565a74c54b1f2bc257840"
-  integrity sha512-u0Lw+IYlgbEJFF6/qAqG2d1jQmJl0eyAGJHoAJqr2HT4M2BNuQYSEiSE75f52pXHSJm8AlTjnLLbBFPrdz2hpA==
-
 vscode-test@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/vscode-test/-/vscode-test-1.4.0.tgz#a56f73c1667b4d37ba6baa6765f233a19d4ffbfe"

@@ -1,5 +1,5 @@
 import { ShellExecution, ShellExecutionOptions, Task, WorkspaceFolder } from 'vscode';
-import { getTaskGroupGuess } from '../shared/taskGroup';
+import { getTaskGroupGuess } from './taskGroup';
 import { MakefileTask, MakefileTaskDefinition } from './MakefileTask';
 
 type PossibleDefinition = MakefileTaskDefinition | string;
@@ -36,6 +36,7 @@ export function createMakefileTask(
   );
 
   task.group = getTaskGroupGuess(targetName);
+  // TODO maybe include the relative path to the Makefile in case of multiple?
   // task.detail = `make ${targetName}`;
 
   return task;

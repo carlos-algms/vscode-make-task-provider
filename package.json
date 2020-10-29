@@ -58,9 +58,7 @@
     "changelog": "conventional-changelog --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md"
   },
-  "dependencies": {
-    "vscode-nls": "^5.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.3",

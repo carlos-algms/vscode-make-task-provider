@@ -1,5 +1,0 @@
-{
-  "description": "Extension to add Make capabilities to VS Code.",
-  "displayName": "Make support for VS Code",
-  "config.make.autoDetect": "Controls whether auto detection of Make tasks is ON or OFF. Default is on."
-}
