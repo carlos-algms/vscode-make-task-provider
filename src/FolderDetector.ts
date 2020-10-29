@@ -2,10 +2,10 @@ import path from 'path';
 import vscode from 'vscode';
 
 import { APP_NAME } from './shared/constants';
-import getMakefileTargetNames, { MAKEFILE } from './shared/getMakefileTargetNames';
+import getMakefileTargetNames, { MAKEFILE } from './Tasks/getMakefileTargetNames';
 import getOutputChannel from './shared/getOutputChannel';
 import localize from './shared/localize';
-import { MakefileTaskDefinition } from './shared/MakeTask';
+import { MakefileTaskDefinition } from './Tasks/MakefileTask';
 import showError from './shared/showError';
 import { getTaskGroupGuess } from './shared/taskGroup';
 

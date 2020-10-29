@@ -1,13 +1,15 @@
 import vscode from 'vscode';
+import { registerCommands } from './commandPicker/commandsManager';
 
-import { commandsManager } from './commandsManager';
-import TaskDetector from './TaskDetector';
+import registerTaskProvider from './Tasks/registerTaskProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
-  const detector = new TaskDetector();
-  detector.start();
+  const provider = registerTaskProvider(context);
 
-  context.subscriptions.push(detector, ...commandsManager(detector));
+  // TODO implement onDidChangeWorkspaceFolders to create the provider
+  if (provider) {
+    registerCommands(context, provider);
+  }
 }
 
 export function deactivate(): void {

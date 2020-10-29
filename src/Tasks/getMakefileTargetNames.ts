@@ -1,9 +1,9 @@
 import path from 'path';
 
-import exec from './exec';
-import exists from './exists';
-import getOutputChannel from './getOutputChannel';
-import showError from './showError';
+import exec from '../shared/exec';
+import exists from '../shared/exists';
+import getOutputChannel from '../shared/getOutputChannel';
+import showError from '../shared/showError';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
 const CMD = `make --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
