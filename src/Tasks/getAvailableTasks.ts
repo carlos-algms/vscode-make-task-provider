@@ -1,5 +1,5 @@
 import path from 'path';
-import { RelativePattern, Uri, workspace } from 'vscode';
+import vscode from 'vscode';
 import { isAutoDetectEnabled } from '../shared/config';
 import { createMakefileTask } from './createMakefileTask';
 import getMakefileTargetNames from './getMakefileTargetNames';
@@ -22,7 +22,7 @@ export default async function getAvailableTasks(): Promise<MakefileTask[]> {
 async function fetchAvailableTasks(): Promise<MakefileTask[]> {
   const usedFiles: Set<string> = new Set();
 
-  const folders = workspace.workspaceFolders;
+  const folders = vscode.workspace.workspaceFolders;
   if (!folders) {
     return emptyTasks;
   }
@@ -35,8 +35,8 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
 
   try {
     const promises = validFolders.map(async (folder) => {
-      const relativePattern = new RelativePattern(folder, '**/Makefile');
-      const files = await workspace.findFiles(relativePattern);
+      const relativePattern = new vscode.RelativePattern(folder, '**/Makefile');
+      const files = await vscode.workspace.findFiles(relativePattern);
       const uniqueFiles = files.filter((file) => {
         if (usedFiles.has(file.fsPath)) {
           return false;
@@ -57,8 +57,8 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
   }
 }
 
-async function buildMakefileTasksForFolder(makefileUri: Uri): Promise<MakefileTask[]> {
-  const folder = workspace.getWorkspaceFolder(makefileUri);
+async function buildMakefileTasksForFolder(makefileUri: vscode.Uri): Promise<MakefileTask[]> {
+  const folder = vscode.workspace.getWorkspaceFolder(makefileUri);
 
   if (!folder) {
     return emptyTasks;

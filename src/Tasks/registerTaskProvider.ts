@@ -1,25 +1,25 @@
-import { ExtensionContext, TaskProvider, tasks, workspace } from 'vscode';
+import vscode from 'vscode';
 import { MakefileTaskProvider } from './MakefileTaskProvider';
 import { invalidateTaskCaches } from './taskCaches';
 
 export default function registerTaskProvider(
-  context: ExtensionContext,
+  context: vscode.ExtensionContext,
 ): MakefileTaskProvider | null {
-  if (!workspace.workspaceFolders) {
+  if (!vscode.workspace.workspaceFolders) {
     return null;
   }
 
-  const watcher = workspace.createFileSystemWatcher('**/Makefile');
+  const watcher = vscode.workspace.createFileSystemWatcher('**/Makefile');
   watcher.onDidChange(invalidateTaskCaches);
   watcher.onDidDelete(invalidateTaskCaches);
   watcher.onDidCreate(invalidateTaskCaches);
   context.subscriptions.push(watcher);
 
-  const workspaceWatcher = workspace.onDidChangeWorkspaceFolders(invalidateTaskCaches);
+  const workspaceWatcher = vscode.workspace.onDidChangeWorkspaceFolders(invalidateTaskCaches);
   context.subscriptions.push(workspaceWatcher);
 
   const provider = new MakefileTaskProvider();
-  const disposable = tasks.registerTaskProvider('make', <TaskProvider>provider);
+  const disposable = vscode.tasks.registerTaskProvider('make', <vscode.TaskProvider>provider);
   context.subscriptions.push(disposable);
   return provider;
 }

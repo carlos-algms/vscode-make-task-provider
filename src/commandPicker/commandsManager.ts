@@ -1,10 +1,10 @@
-import vscode, { ExtensionContext } from 'vscode';
+import vscode from 'vscode';
 import { APP_NAME } from '../shared/constants';
 import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
 import { runFromCommandPicker } from './runFromCommandPicker';
 
 export function registerCommands(
-  context: ExtensionContext,
+  context: vscode.ExtensionContext,
   taskProvider: MakefileTaskProvider,
 ): void {
   context.subscriptions.push(

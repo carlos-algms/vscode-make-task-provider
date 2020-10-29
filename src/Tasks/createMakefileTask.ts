@@ -1,4 +1,4 @@
-import { ShellExecution, ShellExecutionOptions, Task, WorkspaceFolder } from 'vscode';
+import vscode from 'vscode';
 import { getTaskGroupGuess } from './taskGroup';
 import { MakefileTask, MakefileTaskDefinition } from './MakefileTask';
 
@@ -17,20 +17,22 @@ export function getDefinition(nameOrDefinition: PossibleDefinition): MakefileTas
 
 export function createMakefileTask(
   nameOrDefinition: PossibleDefinition,
-  folder: WorkspaceFolder,
+  folder: vscode.WorkspaceFolder,
   makefileRootFolder?: string,
 ): MakefileTask {
   const definition = getDefinition(nameOrDefinition);
   const { targetName } = definition;
-  const options: ShellExecutionOptions = { cwd: makefileRootFolder ?? folder.uri.toString() };
+  const options: vscode.ShellExecutionOptions = {
+    cwd: makefileRootFolder ?? folder.uri.toString(),
+  };
 
   const task = <MakefileTask>(
-    new Task(
+    new vscode.Task(
       definition,
       folder,
       targetName,
       'make',
-      new ShellExecution(`make`, [targetName], options),
+      new vscode.ShellExecution(`make`, [targetName], options),
       [],
     )
   );
