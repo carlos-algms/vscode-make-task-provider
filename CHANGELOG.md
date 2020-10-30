@@ -1,3 +1,14 @@
+## 1.1.0 (2020-10-30)
+
+* Create a Tree View to list all available Tasks ([345834c](https://github.com/carlos-algms/vscode-make-task-provider/commit/345834c))
+* Enabled more restricted Linter rules ([b5d10b7](https://github.com/carlos-algms/vscode-make-task-provider/commit/b5d10b7))
+* Refactor for better tracking multiple Makefiles ([7311146](https://github.com/carlos-algms/vscode-make-task-provider/commit/7311146))
+* Refactored Task Provider to more functional style ([2ce7570](https://github.com/carlos-algms/vscode-make-task-provider/commit/2ce7570))
+* Removed unused code ([80fcc1e](https://github.com/carlos-algms/vscode-make-task-provider/commit/80fcc1e))
+* Use VSCode full qualified props to avoid collision ([e2e7b73](https://github.com/carlos-algms/vscode-make-task-provider/commit/e2e7b73))
+
+
+
 ## <small>1.0.4 (2020-10-21)</small>
 
 * Enabled eslint rules that required Types ([5283fef](https://github.com/carlos-algms/vscode-make-task-provider/commit/5283fef))
