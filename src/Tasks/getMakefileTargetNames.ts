@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { MAKEFILE } from '../shared/constants';
 import exec from '../shared/exec';
 import exists from '../shared/exists';
 import getOutputChannel from '../shared/getOutputChannel';
@@ -7,8 +8,6 @@ import showError from '../shared/showError';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
 const CMD = `make --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
-
-export const MAKEFILE = 'Makefile';
 
 function getResultLines(result: string): string[] {
   const startAt = result.lastIndexOf('# Files');

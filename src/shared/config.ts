@@ -1,10 +1,37 @@
 import vscode from 'vscode';
 import { APP_NAME } from './constants';
 
-export function getFolderConfig(folder: vscode.WorkspaceFolder): vscode.WorkspaceConfiguration {
-  return vscode.workspace.getConfiguration(APP_NAME, folder.uri);
+export const CONFIG_KEYS = {
+  autoDetect: `${APP_NAME}.autoDetect`,
+};
+
+export const COMMANDS = {
+  /**
+   * Run a Make target in interactive mode
+   * Either by command picker or from menu: Terminal -> Run Task
+   */
+  runTarget: `${APP_NAME}.runTarget`,
+
+  /**
+   * Run a specific target clicked on the tree-view
+   */
+  runTargetFromTreeView: `${APP_NAME}.runTargetFromTreeView`,
+
+  /**
+   * Open a Makefile containing a specific target
+   */
+  openMakefile: `${APP_NAME}.openMakefile`,
+
+  /**
+   * Should invalidate all caches and refresh the tree-view
+   */
+  refresh: `${APP_NAME}.refresh`,
+};
+
+export function getFolderConfig(folder?: vscode.WorkspaceFolder): vscode.WorkspaceConfiguration {
+  return vscode.workspace.getConfiguration(APP_NAME, folder?.uri);
 }
 
-export function isAutoDetectEnabled(folder: vscode.WorkspaceFolder): boolean {
+export function isAutoDetectEnabled(folder?: vscode.WorkspaceFolder): boolean {
   return getFolderConfig(folder).get<boolean>('autoDetect', true);
 }

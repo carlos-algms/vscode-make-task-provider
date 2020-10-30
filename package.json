@@ -13,7 +13,8 @@
   "main": "./build/extension.js",
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask",
-    "onCommand:make-task-provider.runTarget"
+    "onCommand:make-task-provider.runTarget",
+    "onView:make"
   ],
   "contributes": {
     "taskDefinitions": [
@@ -30,14 +31,72 @@
         }
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "make",
+          "name": "Makefile tasks",
+          "icon": "images/official-gnu.svg",
+          "visibility": "visible",
+          "contextualTitle": "Makefile tasks"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "make-task-provider.runTarget",
-        "title": "Make: Run target"
+        "title": "Make: Run target",
+        "icon": "$(run)"
+      },
+      {
+        "command": "make-task-provider.runTargetFromTreeView",
+        "title": "Run this target",
+        "icon": "$(run)"
+      },
+      {
+        "command": "make-task-provider.openMakefile",
+        "title": "Open the Makefile",
+        "icon": "$(makefile)"
+      },
+      {
+        "command": "make-task-provider.refresh",
+        "title": "%command.refresh%",
+        "icon": "$(refresh)"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "make-task-provider.runTargetFromTreeView",
+          "when": "false"
+        },
+        {
+          "command": "make-task-provider.refresh",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "make-task-provider.refresh",
+          "when": "view == make",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "make-task-provider.openMakefile",
+          "when": "view == make && viewItem == Makefile",
+          "group": "navigation@1"
+        },
+        {
+          "command": "make-task-provider.runTargetFromTreeView",
+          "when": "view == make && viewItem == MakefileTarget",
+          "group": "inline"
+        }
+      ]
+    },
     "configuration": {
-      "title": "TypeScript",
+      "title": "Make Task Provider",
       "properties": {
         "make-task-provider.autoDetect": {
           "scope": "resource",

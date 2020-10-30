@@ -1,15 +1,28 @@
 import vscode from 'vscode';
-import { APP_NAME } from '../shared/constants';
+
+import { COMMANDS } from '../shared/config';
 import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
+import { invalidateTaskCaches } from '../Tasks/taskCaches';
+import { MakefileTreeDataProvider } from '../TreeView/MakefileTreeDataProvider';
+
 import { runFromCommandPicker } from './runFromCommandPicker';
 
 export function registerCommands(
   context: vscode.ExtensionContext,
-  taskProvider: MakefileTaskProvider,
+  taskProvider?: MakefileTaskProvider,
+  treeViewProvider?: MakefileTreeDataProvider,
 ): void {
   context.subscriptions.push(
-    vscode.commands.registerCommand(`${APP_NAME}.runTarget`, () => {
+    vscode.commands.registerCommand(COMMANDS.runTarget, () => {
       runFromCommandPicker(taskProvider);
+    }),
+
+    vscode.commands.registerCommand(COMMANDS.refresh, () => {
+      invalidateTaskCaches();
+
+      if (treeViewProvider) {
+        treeViewProvider.refresh();
+      }
     }),
   );
 }
