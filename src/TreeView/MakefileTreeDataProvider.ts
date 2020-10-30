@@ -1,4 +1,5 @@
 import vscode from 'vscode';
+import path from 'path';
 
 import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
 import { TYPE } from '../shared/constants';
@@ -104,35 +105,33 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     const folders = new Map<string, FolderItem>();
     const makefiles = new Map<string, MakefileItem>();
 
-    let folder = null;
-    let makefileFile = null;
+    let folderItem: FolderItem | undefined;
+    let makefileItem: MakefileItem | undefined;
 
     targets.forEach((target) => {
+      // TODO if the target is `target.source === 'Workspace`, list it under a different folder
       if (isWorkspaceFolder(target.scope)) {
-        folder = folders.get(target.scope.name);
+        folderItem = folders.get(target.scope.name);
 
-        if (!folder) {
-          folder = new FolderItem(target.scope);
-          folders.set(target.scope.name, folder);
+        if (!folderItem) {
+          folderItem = new FolderItem(target.scope);
+          folders.set(target.scope.name, folderItem);
         }
 
-        // const { scope } = target;
-        // const relativePath = definition.path ? definition.path : '';
-        // const fullPath = path.join(target.scope.name, relativePath);
-        // TODO get relative and full path for the makefiles
-        const relativePath = 'relative/Makefile';
-        const fullPath = '/fullPath/Makefile';
+        const { definition } = target;
+        const relativePath = definition.relativeFolder ?? '';
+        const fullPath = path.join(target.scope.name, relativePath);
 
-        makefileFile = makefiles.get(fullPath);
+        makefileItem = makefiles.get(fullPath);
 
-        if (!makefileFile) {
-          makefileFile = new MakefileItem(folder, relativePath);
-          folder.addFile(makefileFile);
-          makefiles.set(fullPath, makefileFile);
+        if (!makefileItem) {
+          makefileItem = new MakefileItem(folderItem, relativePath);
+          folderItem.addFile(makefileItem);
+          makefiles.set(fullPath, makefileItem);
         }
 
-        const targetItem = new MakefileTargetItem(this.extensionContext, makefileFile, target);
-        makefileFile.addTargetItem(targetItem);
+        const targetItem = new MakefileTargetItem(this.extensionContext, makefileItem, target);
+        makefileItem.addTargetItem(targetItem);
       }
     });
 

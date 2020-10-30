@@ -1,6 +1,8 @@
-import path from 'path';
 import vscode from 'vscode';
+
 import { isAutoDetectEnabled } from '../shared/config';
+import { MAKEFILE } from '../shared/constants';
+
 import { createMakefileTask } from './createMakefileTask';
 import getMakefileTargetNames from './getMakefileTargetNames';
 import { MakefileTask } from './MakefileTask';
@@ -35,7 +37,7 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
 
   try {
     const promises = validFolders.map(async (folder) => {
-      const relativePattern = new vscode.RelativePattern(folder, '**/Makefile');
+      const relativePattern = new vscode.RelativePattern(folder, `**/${MAKEFILE}`);
       const files = await vscode.workspace.findFiles(relativePattern);
       const uniqueFiles = files.filter((file) => {
         if (usedFiles.has(file.fsPath)) {
@@ -45,34 +47,30 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
         return true;
       });
 
-      const filesPromises = uniqueFiles.map(buildMakefileTasksForFolder);
+      const filesPromises = uniqueFiles.map((file) => buildTasksFromMakefile(file, folder));
 
       return (await Promise.all(filesPromises)).flat();
     });
 
-    const allTasks: MakefileTask[] = (await Promise.all(promises)).filter(Boolean).flat();
+    const allTasks: MakefileTask[] = (await Promise.all(promises)).flat().filter(Boolean);
     return allTasks;
   } catch (error) {
     return Promise.reject(error);
   }
 }
 
-async function buildMakefileTasksForFolder(makefileUri: vscode.Uri): Promise<MakefileTask[]> {
-  const folder = vscode.workspace.getWorkspaceFolder(makefileUri);
-
-  if (!folder) {
-    return emptyTasks;
-  }
-
-  const makefileRootFolder = path.dirname(makefileUri.fsPath);
-  const targetNames = await getMakefileTargetNames(makefileRootFolder);
+async function buildTasksFromMakefile(
+  makefileUri: vscode.Uri,
+  folder: vscode.WorkspaceFolder,
+): Promise<MakefileTask[]> {
+  const targetNames = await getMakefileTargetNames(makefileUri);
 
   if (!targetNames) {
     return emptyTasks;
   }
 
   const tasks: MakefileTask[] = targetNames.map((name) =>
-    createMakefileTask(name, folder, makefileRootFolder),
+    createMakefileTask(name, folder, makefileUri),
   );
 
   return tasks;

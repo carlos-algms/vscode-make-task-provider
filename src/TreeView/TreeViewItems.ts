@@ -27,7 +27,7 @@ export class FolderItem extends vscode.TreeItem {
 }
 
 export class MakefileItem extends vscode.TreeItem {
-  path: string;
+  relativePath: string;
 
   folder: FolderItem;
 
@@ -45,7 +45,7 @@ export class MakefileItem extends vscode.TreeItem {
     super(MakefileItem.getLabel(folder.label ?? '', relativePath), Expanded);
 
     this.folder = folder;
-    this.path = relativePath;
+    this.relativePath = relativePath;
     this.contextValue = MAKEFILE;
 
     if (relativePath) {
@@ -83,13 +83,15 @@ export class MakefileTargetItem extends vscode.TreeItem {
       arguments: [this],
     };
 
-    if (task.group && task.group === vscode.TaskGroup.Clean) {
-      this.iconPath = new vscode.ThemeIcon('wrench-subaction');
-    } else {
-      this.iconPath = new vscode.ThemeIcon('wrench');
-    }
-
     this.tooltip = task.detail ?? '';
+
+    if (task.group === vscode.TaskGroup.Test) {
+      this.iconPath = new vscode.ThemeIcon('beaker');
+    } else if (task.group === vscode.TaskGroup.Build) {
+      this.iconPath = new vscode.ThemeIcon('package');
+    } else {
+      this.iconPath = new vscode.ThemeIcon('terminal');
+    }
   }
 
   getFolder(): vscode.WorkspaceFolder {

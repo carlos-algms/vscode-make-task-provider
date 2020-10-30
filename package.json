@@ -27,6 +27,10 @@
           "targetName": {
             "type": "string",
             "description": "The make target name to run. Must exist in your Makefile"
+          },
+          "relativeFolder": {
+            "type": "string",
+            "description": "Relative path to the folder where the Makefile is located in the Workspace"
           }
         }
       }

@@ -1,14 +1,27 @@
+import path from 'path';
 import vscode from 'vscode';
-import { getTaskGroupGuess } from './taskGroup';
+
+import { MAKE_BIN, TYPE } from '../shared/constants';
+import { getParentRelativePath } from '../shared/workspaceUtils';
+
 import { MakefileTask, MakefileTaskDefinition } from './MakefileTask';
+import { getTaskGroupGuess } from './taskGroup';
 
 type PossibleDefinition = MakefileTaskDefinition | string;
 
-export function getDefinition(nameOrDefinition: PossibleDefinition): MakefileTaskDefinition {
+/**
+ * When the definition is coming from `resolveTask`, it is required to return it immutable.
+ */
+export function getDefinition(
+  nameOrDefinition: PossibleDefinition,
+  folder: vscode.WorkspaceFolder,
+  makefileUri: vscode.Uri,
+): MakefileTaskDefinition {
   if (typeof nameOrDefinition === 'string') {
     return {
       type: 'make',
       targetName: nameOrDefinition,
+      relativeFolder: getParentRelativePath(makefileUri, folder),
     };
   }
 
@@ -18,27 +31,27 @@ export function getDefinition(nameOrDefinition: PossibleDefinition): MakefileTas
 export function createMakefileTask(
   nameOrDefinition: PossibleDefinition,
   folder: vscode.WorkspaceFolder,
-  makefileRootFolder?: string,
+  makefileUri: vscode.Uri,
 ): MakefileTask {
-  const definition = getDefinition(nameOrDefinition);
+  const definition = getDefinition(nameOrDefinition, folder, makefileUri);
   const { targetName } = definition;
-  const options: vscode.ShellExecutionOptions = {
-    cwd: makefileRootFolder ?? folder.uri.toString(),
-  };
+
+  const cwd = path.dirname(makefileUri.fsPath);
+
+  const options: vscode.ShellExecutionOptions = { cwd };
 
   const task = <MakefileTask>(
     new vscode.Task(
       definition,
       folder,
       targetName,
-      'make',
-      new vscode.ShellExecution(`make`, [targetName], options),
+      TYPE,
+      new vscode.ShellExecution(MAKE_BIN, [targetName], options),
       [],
     )
   );
 
   task.group = getTaskGroupGuess(targetName);
-  // TODO maybe include the relative path to the Makefile in case of multiple?
   // task.detail = `make ${targetName}`;
 
   return task;

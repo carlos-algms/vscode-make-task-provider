@@ -1,13 +1,14 @@
 import path from 'path';
+import vscode from 'vscode';
 
-import { MAKEFILE } from '../shared/constants';
+import { MAKE_BIN } from '../shared/constants';
 import exec from '../shared/exec';
 import exists from '../shared/exists';
 import getOutputChannel from '../shared/getOutputChannel';
 import showError from '../shared/showError';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
-const CMD = `make --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
+const CMD = `${MAKE_BIN} --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
 
 function getResultLines(result: string): string[] {
   const startAt = result.lastIndexOf('# Files');
@@ -19,17 +20,16 @@ function getResultLines(result: string): string[] {
   return validLines;
 }
 
-export default async function getMakefileTargetNames(rootPath?: string): Promise<string[] | null> {
-  if (!rootPath) {
-    return null;
-  }
-
-  const makeFileExists = await exists(path.join(rootPath, MAKEFILE));
+export default async function getMakefileTargetNames(
+  makefileUri: vscode.Uri,
+): Promise<string[] | null> {
+  const makeFileExists = await exists(makefileUri.fsPath);
 
   if (!makeFileExists) {
     return null;
   }
 
+  const rootPath = path.dirname(makefileUri.fsPath);
   const { stdout, stderr } = await exec(CMD, { cwd: rootPath });
 
   if (stderr) {
