@@ -1,3 +1,9 @@
+## <small>1.1.1 (2020-10-30)</small>
+
+* Use common ignores while searching for Makefiles ([8ffaf19](https://github.com/carlos-algms/vscode-make-task-provider/commit/8ffaf19))
+
+
+
 ## 1.1.0 (2020-10-30)
 
 * Create a Tree View to list all available Tasks ([345834c](https://github.com/carlos-algms/vscode-make-task-provider/commit/345834c))
