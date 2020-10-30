@@ -28,6 +28,18 @@ export const COMMANDS = {
   refresh: `${APP_NAME}.refresh`,
 };
 
+// TODO use common excludes from user config and also provide a custom exclude setting
+export const COMMON_EXCLUDES = [
+  '**/node_modules',
+  '**/.vscode',
+  '**/.vscode-test',
+  '**/build',
+  '**/dist',
+  '**/.temp',
+  '**/bower_components',
+  '**/.git',
+].join(',');
+
 export function getFolderConfig(folder?: vscode.WorkspaceFolder): vscode.WorkspaceConfiguration {
   return vscode.workspace.getConfiguration(APP_NAME, folder?.uri);
 }

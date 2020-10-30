@@ -1,6 +1,6 @@
 import vscode from 'vscode';
 
-import { isAutoDetectEnabled } from '../shared/config';
+import { COMMON_EXCLUDES, isAutoDetectEnabled } from '../shared/config';
 import { MAKEFILE } from '../shared/constants';
 
 import { createMakefileTask } from './createMakefileTask';
@@ -38,7 +38,8 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
   try {
     const promises = validFolders.map(async (folder) => {
       const relativePattern = new vscode.RelativePattern(folder, `**/${MAKEFILE}`);
-      const files = await vscode.workspace.findFiles(relativePattern);
+      // TODO make the exclude patter dynamic
+      const files = await vscode.workspace.findFiles(relativePattern, `{${COMMON_EXCLUDES}}`);
       const uniqueFiles = files.filter((file) => {
         if (usedFiles.has(file.fsPath)) {
           return false;
