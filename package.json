@@ -59,12 +59,12 @@
       },
       {
         "command": "make-task-provider.openMakefile",
-        "title": "Open the Makefile",
+        "title": "Open file",
         "icon": "$(makefile)"
       },
       {
         "command": "make-task-provider.refresh",
-        "title": "%command.refresh%",
+        "title": "Refresh",
         "icon": "$(refresh)"
       }
     ],
