@@ -1,29 +1,30 @@
 import vscode from 'vscode';
-import path from 'path';
 
 import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
 import { TYPE } from '../shared/constants';
-import { isWorkspaceFolder } from '../shared/workspaceUtils';
 import { MakefileTask } from '../Tasks/MakefileTask';
 
-import { FolderItem, MakefileItem, MakefileTargetItem, NoTargets } from './TreeViewItems';
+import { buildTasksTree } from './taskTreeBuilder';
+import {
+  BaseTreeItem,
+  FolderItem,
+  MakefileTargetItem,
+  NoTargets,
+  TaskHostFileItem,
+} from './TreeViewItems';
 
 export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-  private taskTree: FolderItem[] | MakefileItem[] | NoTargets[] | null = null;
-
-  private extensionContext: vscode.ExtensionContext;
+  private taskTree: BaseTreeItem<null | FolderItem>[] | null = null;
 
   private eventEmitter: vscode.EventEmitter<vscode.TreeItem | null> = new vscode.EventEmitter<vscode.TreeItem | null>();
 
   readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | null> = this.eventEmitter.event;
 
   constructor(context: vscode.ExtensionContext) {
-    const { subscriptions } = context;
-    this.extensionContext = context;
-
-    subscriptions.push(
+    context.subscriptions.push(
+      this.eventEmitter,
       vscode.commands.registerCommand(COMMANDS.runTargetFromTreeView, this.runTargetFromTreeView),
-      vscode.commands.registerCommand(COMMANDS.openMakefile, this.openMakefile),
+      vscode.commands.registerCommand(COMMANDS.openMakefile, this.openHostFile),
     );
   }
 
@@ -31,13 +32,19 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     return vscode.tasks.executeTask(item.task);
   };
 
-  private openMakefile = async (selection: MakefileItem | MakefileTargetItem) => {
+  /**
+   * Open the file where the target tasks are stored
+   * Can be a Makefile or a tasks.json
+   */
+  private openHostFile = async (selection: TaskHostFileItem | MakefileTargetItem) => {
     let uri: vscode.Uri | undefined;
+    let targetItem: MakefileTargetItem | undefined;
 
-    if (selection instanceof MakefileItem) {
+    if (selection instanceof MakefileTargetItem) {
+      uri = selection.getParent().resourceUri;
+      targetItem = selection;
+    } else {
       uri = selection.resourceUri;
-    } else if (selection instanceof MakefileTargetItem) {
-      uri = selection.makefileItem.resourceUri;
     }
 
     if (!uri) {
@@ -45,10 +52,7 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     }
 
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
-    const offset = this.findScript(
-      document,
-      selection instanceof MakefileTargetItem ? selection : undefined,
-    );
+    const offset = this.findScript(document, targetItem);
     const position = document.positionAt(offset);
 
     await vscode.window.showTextDocument(document, {
@@ -62,84 +66,31 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     return 0;
   }
 
-  async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
-    if (!this.taskTree) {
-      const availableTargets = <MakefileTask[]>await vscode.tasks.fetchTasks({ type: TYPE });
+  async getChildren(element?: BaseTreeItem): Promise<vscode.TreeItem[] | null | undefined> {
+    if (!element) {
+      if (!this.taskTree) {
+        const availableTargets = <MakefileTask[]>await vscode.tasks.fetchTasks({ type: TYPE });
 
-      if (availableTargets) {
-        this.taskTree = this.buildTaskTree(availableTargets);
-        if (this.taskTree.length === 0) {
+        if (availableTargets) {
+          this.taskTree = buildTasksTree(availableTargets);
+        }
+
+        if (!this.taskTree || this.taskTree.length === 0) {
           let message = 'No scripts found.';
 
           if (!isAutoDetectEnabled()) {
+            // TODO maybe return an item that when clicked enable the auto detection and triggers a refresh
             message = `The setting "${CONFIG_KEYS.autoDetect}" is false.`;
           }
 
           this.taskTree = [new NoTargets(message)];
         }
       }
+
+      return this.taskTree;
     }
 
-    if (element instanceof FolderItem) {
-      return element.fileItems;
-    }
-
-    if (element instanceof MakefileItem) {
-      return element.targets;
-    }
-
-    if (element instanceof MakefileTargetItem || element instanceof NoTargets) {
-      return [];
-    }
-
-    if (!element) {
-      if (this.taskTree) {
-        return this.taskTree;
-      }
-    }
-
-    return [];
-  }
-
-  private buildTaskTree(targets: MakefileTask[]): FolderItem[] | MakefileItem[] | NoTargets[] {
-    const folders = new Map<string, FolderItem>();
-    const makefiles = new Map<string, MakefileItem>();
-
-    let folderItem: FolderItem | undefined;
-    let makefileItem: MakefileItem | undefined;
-
-    targets.forEach((target) => {
-      // TODO if the target is `target.source === 'Workspace`, list it under a different folder
-      if (isWorkspaceFolder(target.scope)) {
-        folderItem = folders.get(target.scope.name);
-
-        if (!folderItem) {
-          folderItem = new FolderItem(target.scope);
-          folders.set(target.scope.name, folderItem);
-        }
-
-        const { definition } = target;
-        const relativePath = definition.relativeFolder ?? '';
-        const fullPath = path.join(target.scope.name, relativePath);
-
-        makefileItem = makefiles.get(fullPath);
-
-        if (!makefileItem) {
-          makefileItem = new MakefileItem(folderItem, relativePath);
-          folderItem.addFile(makefileItem);
-          makefiles.set(fullPath, makefileItem);
-        }
-
-        const targetItem = new MakefileTargetItem(this.extensionContext, makefileItem, target);
-        makefileItem.addTargetItem(targetItem);
-      }
-    });
-
-    if (folders.size === 1) {
-      return [...makefiles.values()];
-    }
-
-    return [...folders.values()];
+    return element.getChildren();
   }
 
   refresh(): void {
@@ -151,23 +102,7 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     return element;
   }
 
-  getParent(element: vscode.TreeItem): vscode.TreeItem | null {
-    if (element instanceof FolderItem) {
-      return null;
-    }
-
-    if (element instanceof MakefileItem) {
-      return element.folder;
-    }
-
-    if (element instanceof MakefileTargetItem) {
-      return element.makefileItem;
-    }
-
-    if (element instanceof NoTargets) {
-      return null;
-    }
-
-    return null;
+  getParent(element: BaseTreeItem): vscode.TreeItem | null {
+    return element.getParent();
   }
 }

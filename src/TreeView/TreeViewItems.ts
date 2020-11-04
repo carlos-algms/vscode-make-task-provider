@@ -6,34 +6,84 @@ import { MakefileTask } from '../Tasks/MakefileTask';
 import { COMMANDS } from '../shared/config';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const { Expanded } = vscode.TreeItemCollapsibleState;
+const { Expanded, None } = vscode.TreeItemCollapsibleState;
 
-export class FolderItem extends vscode.TreeItem {
-  fileItems: MakefileItem[] = [];
+export class BaseTreeItem<TParent = null, TChild = vscode.TreeItem> extends vscode.TreeItem {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  label: string;
 
-  workspaceFolder: vscode.WorkspaceFolder;
+  private parent: TParent;
 
-  constructor(folder: vscode.WorkspaceFolder) {
-    super(folder.name, Expanded);
-    this.contextValue = 'folder';
-    this.resourceUri = folder.uri;
-    this.workspaceFolder = folder;
-    this.iconPath = vscode.ThemeIcon.Folder;
+  protected children: TChild[] = [];
+
+  constructor(parent: TParent, label: string, collapsibleState?: vscode.TreeItemCollapsibleState) {
+    super(label, collapsibleState);
+    this.parent = parent;
   }
 
-  addFile(file: MakefileItem): void {
-    this.fileItems.push(file);
+  getParent(): TParent {
+    return this.parent;
+  }
+
+  getChildren(): TChild[] {
+    return this.children;
+  }
+
+  addChild(child: TChild): void {
+    this.children.push(child);
   }
 }
 
-export class MakefileItem extends vscode.TreeItem {
-  relativePath: string;
+export class FolderItem extends BaseTreeItem<null, TaskHostFileItem> {
+  readonly workspaceFolder: vscode.WorkspaceFolder;
 
-  folder: FolderItem;
+  constructor(workspaceFolder: vscode.WorkspaceFolder) {
+    super(null, workspaceFolder.name, Expanded);
+    this.contextValue = 'folder';
+    this.resourceUri = workspaceFolder.uri;
+    this.iconPath = vscode.ThemeIcon.Folder;
 
-  targets: MakefileTargetItem[] = [];
+    this.workspaceFolder = workspaceFolder;
+  }
 
-  static getLabel(_folderName: string, relativePath: string): string {
+  getChildren(): TaskHostFileItem[] {
+    return this.children.sort((a, b) => {
+      if (a instanceof TasksJsonItem) {
+        return 1;
+      }
+
+      if (b instanceof TasksJsonItem) {
+        return -1;
+      }
+
+      return a.label.length - b.label.length;
+    });
+  }
+}
+
+export class TaskHostFileItem extends BaseTreeItem<FolderItem> {}
+
+export class TasksJsonItem extends TaskHostFileItem {
+  private static fixedLabel: string = path.join('.vscode', 'tasks.json');
+
+  static getLabel(): string {
+    return TasksJsonItem.fixedLabel;
+  }
+
+  constructor(parent: FolderItem) {
+    super(parent, TasksJsonItem.getLabel(), Expanded);
+
+    this.contextValue = MAKEFILE;
+    this.resourceUri = vscode.Uri.file(
+      path.join(parent.resourceUri?.fsPath ?? '', this.label ?? ''),
+    );
+    this.iconPath = vscode.ThemeIcon.File;
+  }
+}
+
+export class MakefileItem extends TaskHostFileItem {
+  static getLabel(relativePath: string): string {
     if (relativePath.length > 0) {
       return path.join(relativePath, MAKEFILE);
     }
@@ -41,40 +91,27 @@ export class MakefileItem extends vscode.TreeItem {
     return MAKEFILE;
   }
 
-  constructor(folder: FolderItem, relativePath: string) {
-    super(MakefileItem.getLabel(folder.label ?? '', relativePath), Expanded);
+  constructor(parent: FolderItem, relativePath: string) {
+    super(parent, MakefileItem.getLabel(relativePath), Expanded);
 
-    this.folder = folder;
-    this.relativePath = relativePath;
     this.contextValue = MAKEFILE;
 
-    if (relativePath) {
-      this.resourceUri = vscode.Uri.file(
-        path.join(folder.resourceUri?.fsPath ?? '', relativePath, MAKEFILE),
-      );
-    } else {
-      this.resourceUri = vscode.Uri.file(path.join(folder.resourceUri?.fsPath ?? '', MAKEFILE));
-    }
+    this.resourceUri = vscode.Uri.file(
+      path.join(parent.resourceUri?.fsPath ?? '', relativePath, MAKEFILE),
+    );
     this.iconPath = vscode.ThemeIcon.File;
-  }
-
-  addTargetItem(target: MakefileTargetItem): void {
-    this.targets.push(target);
   }
 }
 
-export class MakefileTargetItem extends vscode.TreeItem {
+export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
   task: MakefileTask;
 
-  makefileItem: MakefileItem;
+  constructor(hostFile: BaseTreeItem<FolderItem>, task: MakefileTask) {
+    super(hostFile, task.name, None);
 
-  // TODO exclude context, it is not being used
-  constructor(_context: vscode.ExtensionContext, makefileItem: MakefileItem, task: MakefileTask) {
-    super(task.name, vscode.TreeItemCollapsibleState.None);
+    this.task = task;
 
     this.contextValue = 'MakefileTarget';
-    this.makefileItem = makefileItem;
-    this.task = task;
 
     // TODO read the default click action from the config, run, or open the file at the script position
     this.command = {
@@ -93,15 +130,11 @@ export class MakefileTargetItem extends vscode.TreeItem {
       this.iconPath = new vscode.ThemeIcon('terminal');
     }
   }
-
-  getFolder(): vscode.WorkspaceFolder {
-    return this.makefileItem.folder.workspaceFolder;
-  }
 }
 
-export class NoTargets extends vscode.TreeItem {
+export class NoTargets extends BaseTreeItem<null> {
   constructor(message: string) {
-    super(message, vscode.TreeItemCollapsibleState.None);
+    super(null, message, None);
     this.contextValue = 'noScripts';
   }
 }
