@@ -1,3 +1,12 @@
+## <small>1.1.2 (2020-11-04)</small>
+
+* Include tree-view to the README ([00d0998](https://github.com/carlos-algms/vscode-make-task-provider/commit/00d0998))
+* Refactored Tree View to show tasks from tasks.json ([766a4b7](https://github.com/carlos-algms/vscode-make-task-provider/commit/766a4b7))
+* Replaced Makefile hardcoded with constant ([ec4c5be](https://github.com/carlos-algms/vscode-make-task-provider/commit/ec4c5be))
+* Updated command description ([d6cfc91](https://github.com/carlos-algms/vscode-make-task-provider/commit/d6cfc91))
+
+
+
 ## <small>1.1.1 (2020-10-30)</small>
 
 * Use common ignores while searching for Makefiles ([8ffaf19](https://github.com/carlos-algms/vscode-make-task-provider/commit/8ffaf19))
