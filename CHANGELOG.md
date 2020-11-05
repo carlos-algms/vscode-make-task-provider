@@ -1,3 +1,9 @@
+## <small>1.1.3 (2020-11-05)</small>
+
+* Included Composer vendor folder to excludes ([4517cde](https://github.com/carlos-algms/vscode-make-task-provider/commit/4517cde))
+
+
+
 ## <small>1.1.2 (2020-11-04)</small>
 
 * Include tree-view to the README ([00d0998](https://github.com/carlos-algms/vscode-make-task-provider/commit/00d0998))
