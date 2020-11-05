@@ -38,6 +38,7 @@ export const COMMON_EXCLUDES = [
   '**/.temp',
   '**/bower_components',
   '**/.git',
+  '**/vendor',
 ].join(',');
 
 export function getFolderConfig(folder?: vscode.WorkspaceFolder): vscode.WorkspaceConfiguration {
