@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import { machineIdSync } from 'node-machine-id';
 import { userInfo } from 'os';
 import { Event as AnalyticsEvent, Exception, IAnalyticsClient } from 'vscode-extension-analytics';
-import { AmplitudeHttpClient, AmplitudeEventData } from './AmplitudeHttpClient';
+import { AmplitudeHttpClient } from './AmplitudeHttpClient';
 
 // https://github.com/threadheap/serverless-ide-vscode/blob/master/packages/vscode/src/analytics/index.ts
 export default class AnalyticsAmplitudeClient implements IAnalyticsClient {
@@ -32,18 +32,20 @@ export default class AnalyticsAmplitudeClient implements IAnalyticsClient {
   }
 
   sendEvent(event: AnalyticsEvent): void {
-    const amplitudeEvent: AmplitudeEventData = {
-      event_type: event.action,
+    this.track(event.action, event);
+  }
+
+  sendException(exception: Exception): void {
+    this.track('exception', exception);
+  }
+
+  private track(eventType: string, event: AnalyticsEvent | Exception) {
+    this.amplitudeInstance.track({
+      event_type: eventType,
       user_id: this.userId,
       device_id: this.deviceId,
       session_id: this.sessionId,
       event_properties: event.toJSON(),
-    };
-
-    this.amplitudeInstance.track(amplitudeEvent);
-  }
-
-  sendException(_event: Exception): void {
-    // TODO: send exception
+    });
   }
 }

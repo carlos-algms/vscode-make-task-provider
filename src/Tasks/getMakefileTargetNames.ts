@@ -6,6 +6,7 @@ import exec from '../shared/exec';
 import exists from '../shared/exists';
 import getOutputChannel from '../shared/getOutputChannel';
 import showError from '../shared/showError';
+import { trackException } from '../telemetry/tracking';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
 const CMD = `${MAKE_BIN} --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
@@ -33,8 +34,15 @@ export default async function getMakefileTargetNames(
   const { stdout, stderr } = await exec(CMD, { cwd: rootPath });
 
   if (stderr) {
+    trackException(new Error(stderr), {
+      category: 'TaskProvider',
+      action: 'getNames',
+      stdout,
+    });
+
     getOutputChannel().appendLine(stderr);
     showError();
+    return null;
   }
 
   const targetNames = getResultLines(stdout);

@@ -11,6 +11,19 @@ export { AnalyticsEvent, Exception, Attributes };
 
 const API_KEY = '74556fcd07b7703909928dae21126b7f';
 
+export type Primitive = string | number | null | undefined;
+
+export interface PrimitiveHash {
+  [key: string]: Primitive | Primitive[] | PrimitiveHash | PrimitiveHash[];
+}
+
+export type ExceptionAttributes = Attributes & {
+  category?: string;
+  action?: string;
+  label?: string;
+  value?: Primitive | Primitive[] | PrimitiveHash | PrimitiveHash[];
+};
+
 let tracker: AnalyticsReporter | null = null;
 
 const createReporter = (extensionId: string, extensionVersion: string): AnalyticsReporter => {
@@ -32,4 +45,8 @@ export function getTracker(): AnalyticsReporter {
 
 export function trackEvent(name: string, attributes: Attributes = {}): void {
   getTracker().sendEvent(new AnalyticsEvent(name, attributes));
+}
+
+export function trackException(error: Error, attributes: ExceptionAttributes = {}): void {
+  getTracker().sendException(new Exception(error, attributes));
 }

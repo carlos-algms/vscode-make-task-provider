@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import vscode from 'vscode';
 
 import { MAKEFILE } from '../shared/constants';
 import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
+import { trackEvent, trackException } from '../telemetry/tracking';
 
 import { createMakefileTask } from './createMakefileTask';
 import getMakefileTargetNames from './getMakefileTargetNames';
@@ -39,6 +41,10 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
     const allTasks: MakefileTask[] = (await Promise.all(promises)).flat().filter(Boolean);
     return allTasks;
   } catch (error) {
+    trackException(error, {
+      category: 'Tasks',
+      action: 'fetch',
+    });
     return Promise.reject(error);
   }
 }
@@ -52,6 +58,10 @@ async function buildTasksFromMakefile(
   if (!targetNames) {
     return emptyTasks;
   }
+
+  trackEvent('TargetNames', {
+    targetNames,
+  });
 
   const tasks: MakefileTask[] = targetNames.map((name) =>
     createMakefileTask(name, folder, makefileUri),

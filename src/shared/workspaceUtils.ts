@@ -2,7 +2,7 @@ import vscode from 'vscode';
 import path from 'path';
 
 export function isWorkspaceFolder(value: unknown): value is vscode.WorkspaceFolder {
-  return value && typeof value !== 'number';
+  return Boolean(value) && typeof value !== 'number';
 }
 
 /**
