@@ -2,25 +2,30 @@
 import * as crypto from 'crypto';
 import { machineIdSync } from 'node-machine-id';
 import { userInfo } from 'os';
-import { Event as AnalyticsEvent, Exception, IAnalyticsClient } from 'vscode-extension-analytics';
-import { AmplitudeHttpClient } from './AmplitudeHttpClient';
+import {
+  Event as AnalyticsEvent,
+  Exception as AnalyticsException,
+  IAnalyticsClient,
+} from 'vscode-extension-analytics';
+import { init as AmplitudeInit } from '@amplitude/node';
+
+export { AnalyticsEvent, AnalyticsException };
+
+const API_KEY = '74556fcd07b7703909928dae21126b7f';
 
 // https://github.com/threadheap/serverless-ide-vscode/blob/master/packages/vscode/src/analytics/index.ts
-export default class AnalyticsAmplitudeClient implements IAnalyticsClient {
-  private amplitudeInstance: AmplitudeHttpClient;
+export default class AmplitudeVsCodeAnalyticsClient implements IAnalyticsClient {
+  private amplitudeInstance = AmplitudeInit(API_KEY);
 
-  private deviceId: string;
+  private deviceId = machineIdSync();
 
-  private sessionId: number;
+  private sessionId = Date.now();
 
   private userId: string;
 
-  constructor(apiKey: string) {
+  constructor() {
     const user = userInfo({ encoding: 'utf8' });
-    this.amplitudeInstance = new AmplitudeHttpClient(apiKey);
-    this.deviceId = machineIdSync();
     this.userId = crypto.createHash('md5').update(user.username).digest('hex');
-    this.sessionId = Date.now();
   }
 
   initialise(): void {
@@ -28,19 +33,19 @@ export default class AnalyticsAmplitudeClient implements IAnalyticsClient {
   }
 
   async flush(): Promise<void> {
-    await this.amplitudeInstance.dispose();
+    await this.amplitudeInstance.flush();
   }
 
   sendEvent(event: AnalyticsEvent): void {
     this.track(event.action, event);
   }
 
-  sendException(exception: Exception): void {
+  sendException(exception: AnalyticsException): void {
     this.track('exception', exception);
   }
 
-  private track(eventType: string, event: AnalyticsEvent | Exception) {
-    this.amplitudeInstance.track({
+  private track(eventType: string, event: AnalyticsEvent | AnalyticsException) {
+    this.amplitudeInstance.logEvent({
       event_type: eventType,
       user_id: this.userId,
       device_id: this.deviceId,

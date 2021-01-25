@@ -1,15 +1,6 @@
-import {
-  AnalyticsReporter,
-  Attributes,
-  Event as AnalyticsEvent,
-  Exception,
-} from 'vscode-extension-analytics';
-import AnalyticsAmplitudeClient from './AnalyticsAmplitudeClient';
+import { AnalyticsReporter, Attributes, Exception } from 'vscode-extension-analytics';
+import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
 import packageJSON from '../../package.json';
-
-export { AnalyticsEvent, Exception, Attributes };
-
-const API_KEY = '74556fcd07b7703909928dae21126b7f';
 
 export type Primitive = string | number | null | undefined;
 
@@ -27,7 +18,7 @@ export type ExceptionAttributes = Attributes & {
 let tracker: AnalyticsReporter | null = null;
 
 const createReporter = (extensionId: string, extensionVersion: string): AnalyticsReporter => {
-  const client = new AnalyticsAmplitudeClient(API_KEY);
+  const client = new AmplitudeVsCodeAnalyticsClient();
 
   return new AnalyticsReporter(extensionId, extensionVersion, client, {
     configId: 'make-task-provider.telemetry',

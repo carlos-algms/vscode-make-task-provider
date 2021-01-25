@@ -137,6 +137,7 @@
     "version": "yarn run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
+    "@amplitude/node": "^1.2.0",
     "node-machine-id": "^1.1.12",
     "vscode-extension-analytics": "^0.0.4"
   },

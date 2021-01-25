@@ -2,6 +2,35 @@
 # yarn lockfile v1
 
 
+"@amplitude/eslint-config-typescript@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/eslint-config-typescript/-/eslint-config-typescript-1.1.0.tgz#f6d876febda6f4470564e806576e43750d60a094"
+  integrity sha512-N8sKkwtFakPD2/cSOrBnM5Wudjp4qeDD69U1cG7dZ6DDczxBhUEqnJDJ0wiYmKMPXqr+bmFOsDdbCcOmb/CLYA==
+
+"@amplitude/node@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/node/-/node-1.2.0.tgz#1ab8d31a257a8fe72fc876109d3ec9721cfd55ac"
+  integrity sha512-3XpGPiPC/haFfeZuRRQ/haY/cUmpOO39fnaxJLiChGIARBN10A+6w1oKUau6DZ2l/SvVLQIpWVD7dx8GdjhZdQ==
+  dependencies:
+    "@amplitude/types" "^1.2.0"
+    "@amplitude/utils" "^1.2.0"
+    tslib "^1.9.3"
+
+"@amplitude/types@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/types/-/types-1.2.0.tgz#ff78e3c06bf990236fe8907cb441858a790fa072"
+  integrity sha512-K1J/lXumpTnIwGftp4G8tpsWNQSDlGdKzdxbDKE8ZmtEt0DDpZVLPpCg3BzIEd9050zVr9FU0fFtHUWnjoWPaw==
+  dependencies:
+    "@amplitude/eslint-config-typescript" "^1.1.0"
+
+"@amplitude/utils@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/utils/-/utils-1.2.0.tgz#40152cbc82ec71d6d7f10b4c6883880afd410f67"
+  integrity sha512-S3XgxnRMMvzd4Tjcvx8PBmeojydJqTKSyJYQx7nl4WUExCnSJ8fROhSvbvVAJuw4p2C7wVKSxOXaYrq1s34Ljw==
+  dependencies:
+    "@amplitude/types" "^1.2.0"
+    tslib "^1.9.3"
+
 "@babel/code-frame@^7.0.0":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -1760,7 +1789,7 @@ tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@^1.8.1:
+tslib@^1.8.1, tslib@^1.9.3:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
