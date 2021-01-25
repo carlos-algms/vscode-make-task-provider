@@ -1,7 +1,7 @@
 import vscode from 'vscode';
 
-import { COMMON_EXCLUDES, isAutoDetectEnabled } from '../shared/config';
 import { MAKEFILE } from '../shared/constants';
+import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
 
 import { createMakefileTask } from './createMakefileTask';
 import getMakefileTargetNames from './getMakefileTargetNames';
@@ -22,35 +22,18 @@ export default async function getAvailableTasks(): Promise<MakefileTask[]> {
 }
 
 async function fetchAvailableTasks(): Promise<MakefileTask[]> {
-  const usedFiles: Set<string> = new Set();
+  const folders = getValidWorkspaceFolders();
 
-  const folders = vscode.workspace.workspaceFolders;
   if (!folders) {
     return emptyTasks;
   }
 
-  const validFolders = folders.filter((f) => isAutoDetectEnabled(f) && f.uri.scheme === 'file');
-
-  if (!validFolders || !validFolders.length) {
-    return emptyTasks;
-  }
-
   try {
-    const promises = validFolders.map(async (folder) => {
-      const relativePattern = new vscode.RelativePattern(folder, `**/${MAKEFILE}`);
-      // TODO make the exclude patter dynamic
-      const files = await vscode.workspace.findFiles(relativePattern, `{${COMMON_EXCLUDES}}`);
-      const uniqueFiles = files.filter((file) => {
-        if (usedFiles.has(file.fsPath)) {
-          return false;
-        }
-        usedFiles.add(file.fsPath);
-        return true;
-      });
+    const promises = folders.map(async (folder) => {
+      const files = await findFilesInFolder(folder, `**/${MAKEFILE}`);
+      const tasksPromises = files.map((file) => buildTasksFromMakefile(file, folder));
 
-      const filesPromises = uniqueFiles.map((file) => buildTasksFromMakefile(file, folder));
-
-      return (await Promise.all(filesPromises)).flat();
+      return (await Promise.all(tasksPromises)).flat();
     });
 
     const allTasks: MakefileTask[] = (await Promise.all(promises)).flat().filter(Boolean);
