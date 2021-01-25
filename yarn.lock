@@ -1258,6 +1258,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
+node-machine-id@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/node-machine-id/-/node-machine-id-1.1.12.tgz#37904eee1e59b320bb9c5d6c0a59f3b469cb6267"
+  integrity sha512-QNABxbrPa3qEIfrE6GOJ7BYIuignnJw7iQ2YPbc3Nla1HzRJjXzZOiikfF8m7eAMfichLt3M4VgLOetqgDmgGQ==
+
 normalize-package-data@^2.3.2:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/normalize-package-data/-/normalize-package-data-2.5.0.tgz#e66db1838b200c1dfc233225d12cb36520e234a8"
@@ -1803,6 +1808,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+vscode-extension-analytics@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/vscode-extension-analytics/-/vscode-extension-analytics-0.0.4.tgz#3efb2d81afed322d4f126eb260f7fb1f785c4ab0"
+  integrity sha512-Ll0KT0tZOnnjefseaIBaJ6RVNQ0XNG8uxTCkU5GBcp6aPrYkQwu/kcQ5uC6vhKZwD998OpK+PKN9KYMmKJMZhA==
 
 vscode-test@^1.4.0:
   version "1.4.0"

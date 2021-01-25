@@ -10,7 +10,7 @@
     "name": "Carlos Gomes",
     "email": "vscode-publisher@gomescarlos.com"
   },
-  "main": "./build/extension.js",
+  "main": "./build/src/extension.js",
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask",
     "onCommand:make-task-provider.runTarget",
@@ -136,7 +136,10 @@
     "changelog": "conventional-changelog --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-machine-id": "^1.1.12",
+    "vscode-extension-analytics": "^0.0.4"
+  },
   "devDependencies": {
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.3",
