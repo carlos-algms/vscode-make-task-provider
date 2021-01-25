@@ -8,7 +8,7 @@ export interface PrimitiveHash {
   [key: string]: Primitive | Primitive[] | PrimitiveHash | PrimitiveHash[];
 }
 
-export type ExceptionAttributes = Attributes & {
+export type StandardAttributes = Attributes & {
   category?: string;
   action?: string;
   label?: string;
@@ -34,10 +34,10 @@ export function getTracker(): AnalyticsReporter {
   return tracker;
 }
 
-export function trackEvent(name: string, attributes: Attributes = {}): void {
+export function trackEvent(name: string, attributes: StandardAttributes = {}): void {
   getTracker().sendEvent(new AnalyticsEvent(name, attributes));
 }
 
-export function trackException(error: Error, attributes: ExceptionAttributes = {}): void {
+export function trackException(error: Error, attributes: StandardAttributes = {}): void {
   getTracker().sendException(new Exception(error, attributes));
 }

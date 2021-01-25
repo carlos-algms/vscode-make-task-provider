@@ -3,6 +3,7 @@ import vscode from 'vscode';
 import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
 import { TYPE } from '../shared/constants';
 import { MakefileTask } from '../Tasks/MakefileTask';
+import { trackEvent } from '../telemetry/tracking';
 
 import { buildTasksTree } from './taskTreeBuilder';
 import {
@@ -29,6 +30,12 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
   }
 
   private runTargetFromTreeView = (item: MakefileTargetItem): Thenable<vscode.TaskExecution> => {
+    trackEvent('Command', {
+      category: 'TreeView',
+      action: 'Run',
+      label: item.label,
+    });
+
     return vscode.tasks.executeTask(item.task);
   };
 
@@ -37,6 +44,11 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
    * Can be a Makefile or a tasks.json
    */
   private openHostFile = async (selection: TaskHostFileItem | MakefileTargetItem) => {
+    trackEvent('Command', {
+      category: 'TreeView',
+      action: 'OpenFile',
+    });
+
     let uri: vscode.Uri | undefined;
     let targetItem: MakefileTargetItem | undefined;
 
