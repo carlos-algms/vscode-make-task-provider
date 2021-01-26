@@ -133,7 +133,7 @@
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./build/test/runTest.js",
-    "changelog": "conventional-changelog --infile CHANGELOG.md --same-file",
+    "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
