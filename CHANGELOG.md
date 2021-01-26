@@ -1,3 +1,17 @@
+## 1.2.0 (2021-01-26)
+
+* Adjust vscode types to match engine ([7f08e31](https://github.com/carlos-algms/vscode-make-task-provider/commit/7f08e31))
+* Adjust vscode version to match engines ([ecf62c8](https://github.com/carlos-algms/vscode-make-task-provider/commit/ecf62c8))
+* Clear build before compile ([cbfd8f3](https://github.com/carlos-algms/vscode-make-task-provider/commit/cbfd8f3))
+* Fix changelog cli command ([044afe2](https://github.com/carlos-algms/vscode-make-task-provider/commit/044afe2))
+* Include .temp as ignored ([b04b0c5](https://github.com/carlos-algms/vscode-make-task-provider/commit/b04b0c5))
+* Send telemetry data to Amplitude (#2) ([90ed73b](https://github.com/carlos-algms/vscode-make-task-provider/commit/90ed73b)), closes [#2](https://github.com/carlos-algms/vscode-make-task-provider/issues/2)
+* Split tasks fetcher from files fetcher ([7dbda1e](https://github.com/carlos-algms/vscode-make-task-provider/commit/7dbda1e))
+* Upgrade dependencies ([791d13e](https://github.com/carlos-algms/vscode-make-task-provider/commit/791d13e))
+* Upgrade ESLint and fix new styles ([520830f](https://github.com/carlos-algms/vscode-make-task-provider/commit/520830f))
+
+
+
 ## <small>1.1.3 (2020-11-05)</small>
 
 * Included Composer vendor folder to excludes ([4517cde](https://github.com/carlos-algms/vscode-make-task-provider/commit/4517cde))
