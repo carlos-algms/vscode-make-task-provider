@@ -35,11 +35,10 @@ export default async function getMakefileTargetNames(
     return null;
   }
 
-  const targetNames = getResultLines(stdout);
-  return targetNames;
+  return extractNamesFromStdout(stdout);
 }
 
-function getResultLines(result: string): string[] {
+function extractNamesFromStdout(result: string): string[] {
   const startAt = result.lastIndexOf('# Files');
   const lines = result.substr(startAt).split(/\r{0,1}\n/g);
   const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:$/;

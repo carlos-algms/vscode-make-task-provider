@@ -1,4 +1,5 @@
 import vscode from 'vscode';
+import { trackExecutionTime } from '../telemetry/tracking';
 import { COMMON_EXCLUDES, isAutoDetectEnabled } from './config';
 
 export async function findFilesInFolder(
@@ -7,7 +8,13 @@ export async function findFilesInFolder(
 ): Promise<vscode.Uri[]> {
   const relativePattern = new vscode.RelativePattern(folder, globPattern);
   // TODO make the exclude pattern dynamic
-  const files = await vscode.workspace.findFiles(relativePattern, `{${COMMON_EXCLUDES}}`);
+  const files = await trackExecutionTime(
+    async () => vscode.workspace.findFiles(relativePattern, `{${COMMON_EXCLUDES}}`),
+    {
+      label: `Find Files in Folder: [${globPattern}]`,
+      category: 'Workspace',
+    },
+  );
   return filterUniqueUris(files);
 }
 
