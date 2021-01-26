@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import vscode from 'vscode';
 
 import { MAKEFILE } from '../shared/constants';
 import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
+import { trackEvent, trackException, trackExecutionTime } from '../telemetry/tracking';
 
 import { createMakefileTask } from './createMakefileTask';
 import getMakefileTargetNames from './getMakefileTargetNames';
@@ -14,7 +16,7 @@ export default async function getAvailableTasks(): Promise<MakefileTask[]> {
   let tasks = getCachedTasks();
 
   if (!tasks) {
-    tasks = await fetchAvailableTasks();
+    tasks = await trackExecutionTime(fetchAvailableTasks, { label: 'Fetch available tasks' });
     setCachedTasks(tasks);
   }
 
@@ -39,6 +41,10 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
     const allTasks: MakefileTask[] = (await Promise.all(promises)).flat().filter(Boolean);
     return allTasks;
   } catch (error) {
+    trackException(error, {
+      action: 'Fetch available tasks',
+      category: 'Tasks',
+    });
     return Promise.reject(error);
   }
 }
@@ -52,6 +58,13 @@ async function buildTasksFromMakefile(
   if (!targetNames) {
     return emptyTasks;
   }
+
+  trackEvent({
+    action: 'Target names found',
+    category: 'Tasks',
+    value: targetNames,
+    valueText: targetNames.toString(),
+  });
 
   const tasks: MakefileTask[] = targetNames.map((name) =>
     createMakefileTask(name, folder, makefileUri),

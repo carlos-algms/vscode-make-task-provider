@@ -3,6 +3,7 @@ import vscode from 'vscode';
 import { COMMANDS } from '../shared/config';
 import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
 import { invalidateTaskCaches } from '../Tasks/taskCaches';
+import { trackEvent } from '../telemetry/tracking';
 import { MakefileTreeDataProvider } from '../TreeView/MakefileTreeDataProvider';
 
 import { runFromCommandPicker } from './runFromCommandPicker';
@@ -23,6 +24,12 @@ export function registerCommands(
       if (treeViewProvider) {
         treeViewProvider.refresh();
       }
+
+      trackEvent({
+        action: 'Run Command',
+        category: 'Global',
+        label: 'Refresh',
+      });
     }),
   );
 }

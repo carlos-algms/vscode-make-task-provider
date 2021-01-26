@@ -4,6 +4,7 @@ import { registerCommands } from './commandPicker/commandsManager';
 import { COMMANDS } from './shared/config';
 import { MAKEFILE } from './shared/constants';
 import registerTaskProvider from './Tasks/registerTaskProvider';
+import { getTracker, trackEvent } from './telemetry/tracking';
 import { registerTreeViewProvider } from './TreeView/registerTreeViewProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -25,8 +26,16 @@ export function activate(context: vscode.ExtensionContext): void {
     watcher.onDidCreate(runRefreshCommand);
     context.subscriptions.push(watcher);
   }
+
+  trackEvent({
+    action: 'activated',
+  });
 }
 
 export function deactivate(): void {
-  // noop
+  trackEvent({
+    action: 'deactivated',
+  });
+
+  getTracker().dispose();
 }
