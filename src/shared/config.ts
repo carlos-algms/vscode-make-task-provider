@@ -1,4 +1,5 @@
 import vscode from 'vscode';
+
 import { APP_NAME } from './constants';
 
 export const CONFIG_KEYS = {

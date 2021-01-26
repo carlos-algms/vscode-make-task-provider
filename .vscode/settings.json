@@ -1,5 +1,11 @@
 {
-  // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": false,
+  "eslint.packageManager": "yarn",
+  "npm.packageManager": "yarn",
+  "prettier.packageManager": "yarn",
   "typescript.tsc.autoDetect": "off",
-  "editor.formatOnSave": true
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

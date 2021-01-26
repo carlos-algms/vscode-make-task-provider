@@ -1,9 +1,10 @@
 /* eslint-disable no-use-before-define, max-classes-per-file */
-import vscode from 'vscode';
 import path from 'path';
+import vscode from 'vscode';
+
+import { COMMANDS } from '../shared/config';
 import { MAKEFILE } from '../shared/constants';
 import { MakefileTask } from '../Tasks/MakefileTask';
-import { COMMANDS } from '../shared/config';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const { Expanded, None } = vscode.TreeItemCollapsibleState;

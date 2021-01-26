@@ -1,5 +1,7 @@
 import vscode from 'vscode';
+
 import { trackExecutionTime } from '../telemetry/tracking';
+
 import { COMMON_EXCLUDES, isAutoDetectEnabled } from './config';
 
 export async function findFilesInFolder(

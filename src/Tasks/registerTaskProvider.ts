@@ -1,4 +1,5 @@
 import vscode from 'vscode';
+
 import { TYPE } from '../shared/constants';
 import { trackEvent } from '../telemetry/tracking';
 

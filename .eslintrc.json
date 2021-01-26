@@ -4,7 +4,11 @@
   "parserOptions": {
     "ecmaVersion": 2019,
     "sourceType": "module",
-    "project": ["./tsconfig.json"]
+    "project": ["./tsconfig.eslint.json"]
+  },
+  "env": {
+    "browser": true,
+    "node": true
   },
   "plugins": ["prettier", "@typescript-eslint"],
   "extends": [
@@ -14,14 +18,15 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:prettier/recommended",
-    "plugin:import/typescript",
     "prettier/@typescript-eslint",
-    "prettier/react"
+    "plugin:import/warnings",
+    "plugin:import/errors",
+    "plugin:import/typescript"
   ],
   "settings": {
     "import/core-modules": ["vscode"]
   },
-  "ignorePatterns": ["node_modules/", "lib/", "public/", "build/", "dist/"],
+  "ignorePatterns": ["node_modules/", "lib/", "public/", "build/", "dist/", ".temp"],
   "rules": {
     "class-methods-use-this": "off",
     "no-console": "off",
@@ -33,6 +38,18 @@
     "no-use-before-define": ["error", { "functions": false, "classes": true }],
     "import/extensions": "off",
     "import/prefer-default-export": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external"],
+          ["parent", "internal"],
+          ["index", "sibling"]
+        ],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ],
     "@typescript-eslint/naming-convention": "warn",
     "@typescript-eslint/semi": "warn",
     "@typescript-eslint/no-explicit-any": "off",
@@ -43,6 +60,7 @@
     "@typescript-eslint/prefer-reduce-type-parameter": "error",
     "@typescript-eslint/prefer-string-starts-ends-with": "error",
     "@typescript-eslint/type-annotation-spacing": "error",
-    "@typescript-eslint/no-floating-promises": "off"
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }

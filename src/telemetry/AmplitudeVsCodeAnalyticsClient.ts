@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { init as AmplitudeInit } from '@amplitude/node';
 import * as crypto from 'crypto';
 import { machineIdSync } from 'node-machine-id';
 import { userInfo } from 'os';
@@ -7,7 +8,6 @@ import {
   Exception as AnalyticsException,
   IAnalyticsClient,
 } from 'vscode-extension-analytics';
-import { init as AmplitudeInit } from '@amplitude/node';
 
 export { AnalyticsEvent, AnalyticsException };
 

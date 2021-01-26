@@ -21,5 +21,5 @@
     "removeComments": false,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "src/test", ".vscode-test", "build"]
+  "exclude": ["node_modules", "src/test", ".vscode-test", "build", ".temp"]
 }

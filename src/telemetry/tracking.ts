@@ -1,6 +1,8 @@
 import { AnalyticsReporter, Attributes, Exception } from 'vscode-extension-analytics';
-import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
+
 import packageJSON from '../../package.json';
+
+import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
 
 export type Primitive = string | number | null | undefined;
 

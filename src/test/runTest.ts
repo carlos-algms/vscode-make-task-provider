@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as path from 'path';
-
 import { runTests } from 'vscode-test';
 
 async function main() {

@@ -1,4 +1,5 @@
 import vscode from 'vscode';
+
 import { showQuickPickForTasks } from '../shared/quickPicker';
 import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
 import { trackEvent } from '../telemetry/tracking';
