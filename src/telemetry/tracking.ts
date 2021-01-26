@@ -41,3 +41,25 @@ export function trackEvent(attributes: StandardAttributes): void {
 export function trackException(error: Error, attributes: StandardAttributes): void {
   getTracker().sendException(new Exception(error, attributes));
 }
+
+/**
+ * Awaits for a callback execution and track the execution duration
+ * @returns the callback return value
+ */
+export async function trackExecutionTime<T>(
+  cb: () => T | Promise<T>,
+  { category, label }: { category?: string; label: string },
+): Promise<T> {
+  const start = Date.now();
+  const result = await cb();
+  const duration = Date.now() - start;
+
+  trackEvent({
+    action: 'Timing',
+    category,
+    label,
+    value: duration,
+  });
+
+  return result;
+}

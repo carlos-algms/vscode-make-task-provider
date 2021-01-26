@@ -3,7 +3,7 @@ import vscode from 'vscode';
 
 import { MAKEFILE } from '../shared/constants';
 import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
-import { trackEvent, trackException } from '../telemetry/tracking';
+import { trackEvent, trackException, trackExecutionTime } from '../telemetry/tracking';
 
 import { createMakefileTask } from './createMakefileTask';
 import getMakefileTargetNames from './getMakefileTargetNames';
@@ -16,7 +16,7 @@ export default async function getAvailableTasks(): Promise<MakefileTask[]> {
   let tasks = getCachedTasks();
 
   if (!tasks) {
-    tasks = await fetchAvailableTasks();
+    tasks = await trackExecutionTime(fetchAvailableTasks, { label: 'Fetch available tasks' });
     setCachedTasks(tasks);
   }
 
