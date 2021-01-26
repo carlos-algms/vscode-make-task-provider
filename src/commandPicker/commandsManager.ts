@@ -25,10 +25,10 @@ export function registerCommands(
         treeViewProvider.refresh();
       }
 
-      trackEvent('Command', {
-        category: 'command',
-        action: 'run',
-        label: 'refresh',
+      trackEvent({
+        action: 'Run Command',
+        category: 'Global',
+        label: 'Refresh',
       });
     }),
   );

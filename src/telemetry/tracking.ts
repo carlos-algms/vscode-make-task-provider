@@ -9,8 +9,8 @@ export interface PrimitiveHash {
 }
 
 export type StandardAttributes = Attributes & {
-  category?: string;
-  action?: string;
+  action: string;
+  category?: string; // TODO investigate create an enum to avoid Typos
   label?: string;
   value?: Primitive | Primitive[] | PrimitiveHash | PrimitiveHash[];
 };
@@ -34,10 +34,10 @@ export function getTracker(): AnalyticsReporter {
   return tracker;
 }
 
-export function trackEvent(name: string, attributes: StandardAttributes = {}): void {
-  getTracker().sendEvent(new AnalyticsEvent(name, attributes));
+export function trackEvent(attributes: StandardAttributes): void {
+  getTracker().sendEvent(new AnalyticsEvent(attributes.action, attributes));
 }
 
-export function trackException(error: Error, attributes: StandardAttributes = {}): void {
+export function trackException(error: Error, attributes: StandardAttributes): void {
   getTracker().sendException(new Exception(error, attributes));
 }

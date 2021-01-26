@@ -27,10 +27,15 @@ export function activate(context: vscode.ExtensionContext): void {
     context.subscriptions.push(watcher);
   }
 
-  trackEvent('activated');
+  trackEvent({
+    action: 'activated',
+  });
 }
 
 export function deactivate(): void {
-  trackEvent('deactivated');
+  trackEvent({
+    action: 'deactivated',
+  });
+
   getTracker().dispose();
 }

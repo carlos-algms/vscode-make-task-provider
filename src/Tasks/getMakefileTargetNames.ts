@@ -11,16 +11,6 @@ import { trackException } from '../telemetry/tracking';
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
 const CMD = `${MAKE_BIN} --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
 
-function getResultLines(result: string): string[] {
-  const startAt = result.lastIndexOf('# Files');
-  const lines = result.substr(startAt).split(/\r{0,1}\n/g);
-  const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:$/;
-  const validLines = lines
-    .filter((line) => validLineRegex.test(line))
-    .map((line) => line.replace(':', ''));
-  return validLines;
-}
-
 export default async function getMakefileTargetNames(
   makefileUri: vscode.Uri,
 ): Promise<string[] | null> {
@@ -35,9 +25,9 @@ export default async function getMakefileTargetNames(
 
   if (stderr) {
     trackException(new Error(stderr), {
-      category: 'TaskProvider',
+      category: 'Tasks',
       action: 'getNames',
-      stdout,
+      value: stdout,
     });
 
     getOutputChannel().appendLine(stderr);
@@ -47,4 +37,14 @@ export default async function getMakefileTargetNames(
 
   const targetNames = getResultLines(stdout);
   return targetNames;
+}
+
+function getResultLines(result: string): string[] {
+  const startAt = result.lastIndexOf('# Files');
+  const lines = result.substr(startAt).split(/\r{0,1}\n/g);
+  const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:$/;
+  const validLines = lines
+    .filter((line) => validLineRegex.test(line))
+    .map((line) => line.replace(':', ''));
+  return validLines;
 }

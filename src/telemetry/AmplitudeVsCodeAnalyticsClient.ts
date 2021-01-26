@@ -41,7 +41,7 @@ export default class AmplitudeVsCodeAnalyticsClient implements IAnalyticsClient 
   }
 
   sendException(exception: AnalyticsException): void {
-    this.track('exception', exception);
+    this.track('Exception', exception);
   }
 
   private track(eventType: string, event: AnalyticsEvent | AnalyticsException) {

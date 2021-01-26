@@ -4,10 +4,11 @@ import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
 import { trackEvent } from '../telemetry/tracking';
 
 export async function runFromCommandPicker(taskProvider?: MakefileTaskProvider): Promise<void> {
-  trackEvent('Command', {
-    category: 'commandPicker',
-    action: 'run',
+  trackEvent({
+    action: 'Run Command',
+    category: 'CommandPicker',
     label: 'runTarget',
+    value: 'triggered',
   });
 
   // TODO check if is safe to use vscode.tasks.fetchTasks({ type: 'make' });
@@ -17,11 +18,13 @@ export async function runFromCommandPicker(taskProvider?: MakefileTaskProvider):
   if (!targets?.length) {
     vscode.window.showInformationMessage(`No make scripts found`);
 
-    trackEvent('Command', {
-      category: 'commandPicker',
-      action: 'run',
-      label: 'noTargets',
+    trackEvent({
+      action: 'Run Command',
+      category: 'CommandPicker',
+      label: 'runTarget',
+      value: 'noTargetsAvailable',
     });
+
     return;
   }
 
@@ -29,25 +32,18 @@ export async function runFromCommandPicker(taskProvider?: MakefileTaskProvider):
 
   if (selectedTarget) {
     vscode.tasks.executeTask(selectedTarget);
-    trackEvent('Command', {
-      category: 'commandPicker',
-      action: 'run',
-      label: 'execute',
-      task: {
-        name: selectedTarget.name,
-        source: selectedTarget.source,
-        detail: selectedTarget.detail,
-        problemMatchers: selectedTarget.problemMatchers?.toString(),
-        targetName: selectedTarget.definition.targetName,
-        relativeFolder: selectedTarget.definition.relativeFolder,
-        type: selectedTarget.definition.type,
-      },
+    trackEvent({
+      action: 'Run Command',
+      category: 'CommandPicker',
+      label: 'runTarget',
+      value: selectedTarget.name,
     });
   } else {
-    trackEvent('Command', {
-      category: 'commandPicker',
-      action: 'run',
-      label: 'userCancelled',
+    trackEvent({
+      action: 'Run Command',
+      category: 'CommandPicker',
+      label: 'runTarget',
+      value: 'userCancelled',
     });
   }
 }

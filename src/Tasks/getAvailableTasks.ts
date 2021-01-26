@@ -42,8 +42,8 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
     return allTasks;
   } catch (error) {
     trackException(error, {
+      action: 'Fetch available tasks',
       category: 'Tasks',
-      action: 'fetch',
     });
     return Promise.reject(error);
   }
@@ -59,8 +59,11 @@ async function buildTasksFromMakefile(
     return emptyTasks;
   }
 
-  trackEvent('TargetNames', {
-    targetNames,
+  trackEvent({
+    action: 'Target names found',
+    category: 'Tasks',
+    value: targetNames,
+    valueText: targetNames.toString(),
   });
 
   const tasks: MakefileTask[] = targetNames.map((name) =>

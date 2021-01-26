@@ -30,9 +30,9 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
   }
 
   private runTargetFromTreeView = (item: MakefileTargetItem): Thenable<vscode.TaskExecution> => {
-    trackEvent('Command', {
+    trackEvent({
+      action: 'Run Command',
       category: 'TreeView',
-      action: 'Run',
       label: item.label,
     });
 
@@ -44,9 +44,10 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
    * Can be a Makefile or a tasks.json
    */
   private openHostFile = async (selection: TaskHostFileItem | MakefileTargetItem) => {
-    trackEvent('Command', {
+    trackEvent({
+      action: 'Run Command',
       category: 'TreeView',
-      action: 'OpenFile',
+      label: 'Open File',
     });
 
     let uri: vscode.Uri | undefined;
