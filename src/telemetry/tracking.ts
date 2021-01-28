@@ -1,6 +1,6 @@
 import { AnalyticsReporter, Attributes, Exception } from 'vscode-extension-analytics';
 
-import packageJSON from '../../package.json';
+import { name, version } from '../../package.json';
 
 import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
 
@@ -30,7 +30,7 @@ const createReporter = (extensionId: string, extensionVersion: string): Analytic
 
 export function getTracker(): AnalyticsReporter {
   if (!tracker) {
-    tracker = createReporter(packageJSON.name, packageJSON.version);
+    tracker = createReporter(name, version);
   }
 
   return tracker;
