@@ -10,7 +10,7 @@
     "name": "Carlos Gomes",
     "email": "vscode-publisher@gomescarlos.com"
   },
-  "main": "./build/src/extension.js",
+  "main": "./build/extension.js",
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask",
     "onCommand:make-task-provider.runTarget",
@@ -127,27 +127,27 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile",
-    "compile": "rm -rf build/ && tsc -p tsconfig.json",
-    "lint": "eslint src",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "yarn lint && rm -rf build/ && yarn compile:prod",
+    "compile": "esbuild src/extension.ts --bundle --sourcemap --platform=node --target=node14 --external:vscode  --outfile=build/extension.js",
+    "compile:prod": "yarn run compile --minify --define:process.env.NODE_ENV=\\\"production\\\"",
+    "lint": "yarn type-check && eslint src",
+    "watch": "nodemon --watch src -e ts --exec \"yarn compile\" ",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./build/test/runTest.js",
     "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
-    "version": "yarn run changelog && git add CHANGELOG.md"
+    "version": "yarn run changelog && git add CHANGELOG.md",
+    "type-check": "tsc --noEmit -p ./"
   },
-  "dependencies": {
-    "@amplitude/node": "^1.2.0",
-    "node-machine-id": "^1.1.12",
-    "vscode-extension-analytics": "^0.0.4"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@amplitude/node": "^1.2.0",
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.2.0",
     "@types/node": "~14",
     "@types/vscode": "^1.50.0",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
+    "esbuild": "^0.8.36",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^7.2.0",
@@ -155,8 +155,11 @@
     "eslint-plugin-prettier": "^3.3.1",
     "glob": "^7.1.6",
     "mocha": "^8.2.1",
+    "node-machine-id": "^1.1.12",
+    "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3",
+    "vscode-extension-analytics": "^0.0.4",
     "vscode-test": "^1.5.0"
   },
   "engines": {

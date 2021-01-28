@@ -2,6 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "ES2019",
+    "moduleResolution": "node",
     "rootDir": "./",
     "baseUrl": "src",
     "outDir": "build",

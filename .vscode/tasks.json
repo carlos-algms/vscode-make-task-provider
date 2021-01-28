@@ -6,7 +6,15 @@
     {
       "type": "npm",
       "script": "watch",
-      "problemMatcher": "$tsc-watch",
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": { "regexp": "__________" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "restarting due to changes",
+          "endsPattern": "clean exit - waiting for changes before restart$"
+        }
+      },
       "isBackground": true,
       "presentation": {
         "reveal": "never"
