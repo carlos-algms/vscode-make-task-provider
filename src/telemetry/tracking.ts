@@ -20,7 +20,7 @@ export type StandardAttributes = Attributes & {
 let tracker: AnalyticsReporter | null = null;
 
 const createReporter = (extensionId: string, extensionVersion: string): AnalyticsReporter => {
-  const client = new AmplitudeVsCodeAnalyticsClient();
+  const client = new AmplitudeVsCodeAnalyticsClient(extensionId, extensionVersion);
 
   return new AnalyticsReporter(extensionId, extensionVersion, client, {
     configId: 'make-task-provider.telemetry',

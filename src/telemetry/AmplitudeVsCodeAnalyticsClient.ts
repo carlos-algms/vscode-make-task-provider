@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { init as AmplitudeInit } from '@amplitude/node';
+import * as Sentry from '@sentry/node';
 import * as crypto from 'crypto';
 import { machineIdSync } from 'node-machine-id';
 import { userInfo } from 'os';
@@ -23,13 +24,33 @@ export default class AmplitudeVsCodeAnalyticsClient implements IAnalyticsClient 
 
   private userId: string;
 
-  constructor() {
+  constructor(private extensionId: string, private extensionVersion: string) {
     const user = userInfo({ encoding: 'utf8' });
     this.userId = crypto.createHash('md5').update(user.username).digest('hex');
   }
 
   initialise(): void {
-    // noop
+    Sentry.init({
+      dsn: 'https://1035245fc12e491799d0b7a41a9c70a7@o443279.ingest.sentry.io/5613298',
+      integrations: (integrations) =>
+        integrations.filter(
+          (integration) =>
+            integration.name !== 'OnUncaughtException' &&
+            integration.name !== 'OnUnhandledRejection',
+        ),
+      release: `${this.extensionId}@${this.extensionVersion}`,
+    });
+
+    Sentry.configureScope((scope) => {
+      scope.setUser({
+        id: this.userId,
+      });
+
+      scope.setTags({
+        deviceId: this.deviceId,
+        sessionId: this.sessionId.toString(),
+      });
+    });
   }
 
   async flush(): Promise<void> {
@@ -37,20 +58,22 @@ export default class AmplitudeVsCodeAnalyticsClient implements IAnalyticsClient 
   }
 
   sendEvent(event: AnalyticsEvent): void {
-    this.track(event.action, event);
-  }
-
-  sendException(exception: AnalyticsException): void {
-    this.track('Exception', exception);
-  }
-
-  private track(eventType: string, event: AnalyticsEvent | AnalyticsException) {
     this.amplitudeInstance.logEvent({
-      event_type: eventType,
+      event_type: event.action,
       user_id: this.userId,
       device_id: this.deviceId,
       session_id: this.sessionId,
       event_properties: event.toJSON(),
+    });
+  }
+
+  sendException({ error, attributes }: AnalyticsException): void {
+    const { action, category, label, ...extra } = attributes;
+
+    Sentry.captureException(error, {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      tags: { action, category, label } as any,
+      extra,
     });
   }
 }
