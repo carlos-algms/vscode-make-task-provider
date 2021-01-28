@@ -1,3 +1,11 @@
+## 1.3.0 (2021-01-28)
+
+* Build using ESBuild ([b1c37cb](https://github.com/carlos-algms/vscode-make-task-provider/commit/b1c37cb))
+* Fix package.json import to avoid bundling it ([23458f3](https://github.com/carlos-algms/vscode-make-task-provider/commit/23458f3))
+* Send exceptions to Sentry instead of Amplitude ([689d9ef](https://github.com/carlos-algms/vscode-make-task-provider/commit/689d9ef))
+
+
+
 ## 1.2.0 (2021-01-26)
 
 * Adjust vscode types to match engine ([7f08e31](https://github.com/carlos-algms/vscode-make-task-provider/commit/7f08e31))
