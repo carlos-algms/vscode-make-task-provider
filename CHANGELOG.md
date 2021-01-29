@@ -1,3 +1,9 @@
+## <small>1.3.1 (2021-01-29)</small>
+
+* Better error handling and notifications to user ([57e96ec](https://github.com/carlos-algms/vscode-make-task-provider/commit/57e96ec))
+
+
+
 ## 1.3.0 (2021-01-28)
 
 * Build using ESBuild ([b1c37cb](https://github.com/carlos-algms/vscode-make-task-provider/commit/b1c37cb))
