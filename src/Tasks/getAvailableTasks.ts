@@ -2,6 +2,8 @@
 import vscode from 'vscode';
 
 import { MAKEFILE } from '../shared/constants';
+import { showGenericErrorNotification } from '../shared/errorNotifications';
+import getOutputChannel from '../shared/getOutputChannel';
 import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
 import { trackEvent, trackException, trackExecutionTime } from '../telemetry/tracking';
 
@@ -40,12 +42,16 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
 
     const allTasks: MakefileTask[] = (await Promise.all(promises)).flat().filter(Boolean);
     return allTasks;
-  } catch (error) {
-    trackException(error, {
+  } catch (errorThrown) {
+    trackException(errorThrown, {
       action: 'Fetch available tasks',
       category: 'Tasks',
     });
-    return Promise.reject(error);
+
+    displayError(errorThrown);
+
+    // returning empty list to avoid UI staying in infinite loading loop.
+    return [];
   }
 }
 
@@ -56,6 +62,11 @@ async function buildTasksFromMakefile(
   const targetNames = await getMakefileTargetNames(makefileUri);
 
   if (!targetNames) {
+    trackEvent({
+      action: 'Target names empty',
+      category: 'Tasks',
+      value: [],
+    });
     return emptyTasks;
   }
 
@@ -71,4 +82,11 @@ async function buildTasksFromMakefile(
   );
 
   return tasks;
+}
+
+function displayError(errorThrown: Error) {
+  const { message } = errorThrown;
+
+  getOutputChannel().appendLine(message);
+  showGenericErrorNotification();
 }

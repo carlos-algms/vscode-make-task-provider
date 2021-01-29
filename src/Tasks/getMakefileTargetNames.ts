@@ -2,10 +2,10 @@ import path from 'path';
 import vscode from 'vscode';
 
 import { MAKE_BIN } from '../shared/constants';
+import { showGenericErrorNotification } from '../shared/errorNotifications';
 import exec from '../shared/exec';
 import exists from '../shared/exists';
 import getOutputChannel from '../shared/getOutputChannel';
-import showError from '../shared/showError';
 import { trackException } from '../telemetry/tracking';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
@@ -14,28 +14,33 @@ const CMD = `${MAKE_BIN} --no-builtin-rules --no-builtin-variables --print-data-
 export default async function getMakefileTargetNames(
   makefileUri: vscode.Uri,
 ): Promise<string[] | null> {
-  const makeFileExists = await exists(makefileUri.fsPath);
+  try {
+    const makeFileExists = await exists(makefileUri.fsPath);
 
-  if (!makeFileExists) {
-    return null;
-  }
+    if (!makeFileExists) {
+      return null;
+    }
 
-  const rootPath = path.dirname(makefileUri.fsPath);
-  const { stdout, stderr } = await exec(CMD, { cwd: rootPath });
+    const rootPath = path.dirname(makefileUri.fsPath);
+    // TODO: how to warn the user that `make` is not available?
+    const { stdout, error } = await exec(CMD, { cwd: rootPath });
 
-  if (stderr) {
-    trackException(new Error(stderr), {
+    if (error) {
+      return null;
+    }
+
+    return extractNamesFromStdout(stdout);
+  } catch (error) {
+    trackException(error, {
       category: 'Tasks',
       action: 'getNames',
-      value: stdout,
+      label: 'Unknown Exception',
     });
 
-    getOutputChannel().appendLine(stderr);
-    showError();
-    return null;
+    getOutputChannel().appendLine((<Error>error)?.message);
+    showGenericErrorNotification();
   }
-
-  return extractNamesFromStdout(stdout);
+  return null;
 }
 
 function extractNamesFromStdout(result: string): string[] {
