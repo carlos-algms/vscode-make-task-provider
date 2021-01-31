@@ -12,6 +12,7 @@ Run `make` tasks and targets from VS Code command picker or via tasks menu.
   - **Terminal -> Run task**
 - Tasks-View listing all available targets
 - Multiple workspaces ready!
+- **NEW** set the executable path to your `make` command
 
 ### Running from the command picker:
 
