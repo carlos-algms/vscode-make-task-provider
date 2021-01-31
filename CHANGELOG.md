@@ -1,3 +1,11 @@
+## 1.4.0 (2021-01-31)
+
+* Enable setting make executable path ([df76f99](https://github.com/carlos-algms/vscode-make-task-provider/commit/df76f99)), closes [#3](https://github.com/carlos-algms/vscode-make-task-provider/issues/3)
+* Fix make executable path when not set by user ([eb84dda](https://github.com/carlos-algms/vscode-make-task-provider/commit/eb84dda))
+* Include executablePath instructions ([726a10c](https://github.com/carlos-algms/vscode-make-task-provider/commit/726a10c))
+
+
+
 ## <small>1.3.1 (2021-01-29)</small>
 
 * Better error handling and notifications to user ([57e96ec](https://github.com/carlos-algms/vscode-make-task-provider/commit/57e96ec))
