@@ -1,7 +1,7 @@
 import path from 'path';
 import vscode from 'vscode';
 
-import { MAKE_BIN } from '../shared/constants';
+import { getMakeExecutablePath } from '../shared/config';
 import { showGenericErrorNotification } from '../shared/errorNotifications';
 import exec from '../shared/exec';
 import exists from '../shared/exists';
@@ -9,10 +9,11 @@ import getOutputChannel from '../shared/getOutputChannel';
 import { trackException } from '../telemetry/tracking';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
-const CMD = `${MAKE_BIN} --no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
+const MAKE_PARAMS = `--no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
 
 export default async function getMakefileTargetNames(
   makefileUri: vscode.Uri,
+  folder: vscode.WorkspaceFolder,
 ): Promise<string[] | null> {
   try {
     const makeFileExists = await exists(makefileUri.fsPath);
@@ -21,9 +22,13 @@ export default async function getMakefileTargetNames(
       return null;
     }
 
+    const makeBin = getMakeExecutablePath(folder);
+    const cmd = `${makeBin} ${MAKE_PARAMS}`;
+
     const rootPath = path.dirname(makefileUri.fsPath);
+
     // TODO: how to warn the user that `make` is not available?
-    const { stdout, error } = await exec(CMD, { cwd: rootPath });
+    const { stdout, error } = await exec(cmd, { cwd: rootPath });
 
     if (error) {
       return null;

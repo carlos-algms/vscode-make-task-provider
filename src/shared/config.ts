@@ -1,4 +1,7 @@
+import { platform } from 'os';
 import vscode from 'vscode';
+
+import { trackEvent } from '../telemetry/tracking';
 
 import { APP_NAME } from './constants';
 
@@ -48,4 +51,36 @@ export function getFolderConfig(folder?: vscode.WorkspaceFolder): vscode.Workspa
 
 export function isAutoDetectEnabled(folder?: vscode.WorkspaceFolder): boolean {
   return getFolderConfig(folder).get<boolean>('autoDetect', true);
+}
+
+export function getMakeExecutablePath(folder?: vscode.WorkspaceFolder): string {
+  const key = getUserPlatformKey();
+  let executablePath = 'make';
+
+  if (key) {
+    executablePath = getFolderConfig(folder).get<string>(key, executablePath);
+  }
+
+  return executablePath;
+}
+
+export function getUserPlatformKey(): string | null {
+  const userPlatform = platform();
+
+  switch (userPlatform) {
+    case 'win32':
+      return 'windows.makeExecutable';
+    case 'darwin':
+      return 'osx.makeExecutable';
+    case 'linux':
+    case 'openbsd':
+    case 'freebsd':
+      return 'unix.makeExecutable';
+    default:
+      trackEvent({
+        action: 'Platform not recognized',
+        value: userPlatform,
+      });
+      return null;
+  }
 }

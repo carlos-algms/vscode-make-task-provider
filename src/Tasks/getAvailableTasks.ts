@@ -59,7 +59,7 @@ async function buildTasksFromMakefile(
   makefileUri: vscode.Uri,
   folder: vscode.WorkspaceFolder,
 ): Promise<MakefileTask[]> {
-  const targetNames = await getMakefileTargetNames(makefileUri);
+  const targetNames = await getMakefileTargetNames(makefileUri, folder);
 
   if (!targetNames) {
     trackEvent({

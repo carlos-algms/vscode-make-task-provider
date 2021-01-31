@@ -9,9 +9,3 @@ export const MAKEFILE = 'Makefile'; // TODO get the Makefile name from config
  * Task provider type name
  */
 export const TYPE = 'make';
-
-// TODO get `make` executable from user's config
-/**
- * The make executable path
- */
-export const MAKE_BIN = 'make';

@@ -122,6 +122,30 @@
           "type": "boolean",
           "default": true,
           "description": "Controls whether auto detection of Make tasks is on or off. Default is on."
+        },
+        "make-task-provider.telemetry": {
+          "scope": "resource",
+          "type": "boolean",
+          "default": true,
+          "description": "Enable usage data and errors to be sent to an online service. We follow Microsoft's privacy statement, please, find it here [here](https://go.microsoft.com/fwlink/?LinkId=786907)"
+        },
+        "make-task-provider.windows.makeExecutable": {
+          "scope": "resource",
+          "type": "string",
+          "default": null,
+          "description": "The executable path to your make command in the Windows environment, i.e: \"C:\\Program Files\\make\\bin\\make.exe\", please use a correct path, this is just an example."
+        },
+        "make-task-provider.unix.makeExecutable": {
+          "scope": "resource",
+          "type": "string",
+          "default": null,
+          "description": "The executable path to your make command in the Unix environment, i.e: \"/usr/bin/make\", please use a correct path, this is just an example."
+        },
+        "make-task-provider.osx.makeExecutable": {
+          "scope": "resource",
+          "type": "string",
+          "default": null,
+          "description": "The executable path to your make command in the MacOS environment, i.e: \"/usr/bin/make\", please use a correct path, this is just an example."
         }
       }
     }

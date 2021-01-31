@@ -1,5 +1,7 @@
 import vscode from 'vscode';
 
+import { trackEvent } from '../telemetry/tracking';
+
 import getOutputChannel from './getOutputChannel';
 
 export async function showGenericErrorNotification(): Promise<void> {
@@ -9,6 +11,10 @@ export async function showGenericErrorNotification(): Promise<void> {
   );
 
   if (result !== undefined) {
+    trackEvent({
+      action: 'Show Output',
+    });
+
     getOutputChannel().show(true);
   }
 }
