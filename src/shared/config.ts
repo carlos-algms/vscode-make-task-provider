@@ -58,7 +58,7 @@ export function getMakeExecutablePath(folder?: vscode.WorkspaceFolder): string {
   let executablePath = 'make';
 
   if (key) {
-    executablePath = getFolderConfig(folder).get<string>(key, executablePath);
+    executablePath = getFolderConfig(folder).get<string>(key, '') || executablePath;
   }
 
   return executablePath;
