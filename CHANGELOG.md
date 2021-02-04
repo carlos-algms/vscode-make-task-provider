@@ -1,3 +1,9 @@
+## <small>1.4.1 (2021-02-04)</small>
+
+* Fix target names with dependencies or variables ([37f6073](https://github.com/carlos-algms/vscode-make-task-provider/commit/37f6073))
+
+
+
 ## 1.4.0 (2021-01-31)
 
 * Enable setting make executable path ([df76f99](https://github.com/carlos-algms/vscode-make-task-provider/commit/df76f99)), closes [#3](https://github.com/carlos-algms/vscode-make-task-provider/issues/3)
