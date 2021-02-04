@@ -51,9 +51,9 @@ export default async function getMakefileTargetNames(
 function extractNamesFromStdout(result: string): string[] {
   const startAt = result.lastIndexOf('# Files');
   const lines = result.substr(startAt).split(/\r{0,1}\n/g);
-  const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:$/;
+  const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:/;
   const validLines = lines
     .filter((line) => validLineRegex.test(line))
-    .map((line) => line.replace(':', ''));
+    .map((line) => line.split(':')[0]);
   return validLines;
 }

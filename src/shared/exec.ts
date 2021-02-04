@@ -2,6 +2,7 @@ import cp, { ExecException } from 'child_process';
 
 import { trackException } from '../telemetry/tracking';
 
+import { showGenericErrorNotification } from './errorNotifications';
 import getOutputChannel from './getOutputChannel';
 
 export type ExecStdIoResult = {
@@ -27,6 +28,7 @@ export default function exec(command: string, options: cp.ExecOptions): Promise<
         });
 
         getOutputChannel().appendLine(error.message);
+        showGenericErrorNotification();
         return;
       }
 

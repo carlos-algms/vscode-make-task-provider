@@ -1,6 +1,7 @@
 import { AnalyticsReporter, Attributes, Exception } from 'vscode-extension-analytics';
 
 import { name, version } from '../../package.json';
+import getOutputChannel from '../shared/getOutputChannel';
 
 import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
 
@@ -37,10 +38,22 @@ export function getTracker(): AnalyticsReporter {
 }
 
 export function trackEvent(attributes: StandardAttributes): void {
+  if (process.env.NODE_ENV !== 'production') {
+    getOutputChannel().appendLine(
+      `Not tracking event in development: ${JSON.stringify(attributes, null, 2)}`,
+    );
+    return;
+  }
   getTracker().sendEvent(new AnalyticsEvent(attributes.action, attributes));
 }
 
 export function trackException(error: Error, attributes: StandardAttributes): void {
+  if (process.env.NODE_ENV !== 'production') {
+    getOutputChannel().appendLine(
+      `Not tracking Exception in development: ${JSON.stringify(attributes, null, 2)}`,
+    );
+    return;
+  }
   getTracker().sendException(new Exception(error, attributes));
 }
 
