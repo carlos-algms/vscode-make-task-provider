@@ -24,6 +24,8 @@ export default class AmplitudeVsCodeAnalyticsClient implements IAnalyticsClient 
 
   private userId: string;
 
+  private exceptionsSent = new Set<string>();
+
   constructor(private extensionId: string, private extensionVersion: string) {
     const user = userInfo({ encoding: 'utf8' });
     this.userId = crypto.createHash('md5').update(user.username).digest('hex');
@@ -70,10 +72,14 @@ export default class AmplitudeVsCodeAnalyticsClient implements IAnalyticsClient 
   sendException({ error, attributes }: AnalyticsException): void {
     const { action, category, label, ...extra } = attributes;
 
-    Sentry.captureException(error, {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      tags: { action, category, label } as any,
-      extra,
-    });
+    if (!this.exceptionsSent.has(error.message)) {
+      this.exceptionsSent.add(error.message);
+
+      Sentry.captureException(error, {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        tags: { action, category, label } as any,
+        extra,
+      });
+    }
   }
 }
