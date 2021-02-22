@@ -1,3 +1,10 @@
+## <small>1.4.2 (2021-02-22)</small>
+
+* Limit the exceptions sent to Sentry ([a83668b](https://github.com/carlos-algms/vscode-make-task-provider/commit/a83668b))
+* Update README for executables path settings ([1007f8d](https://github.com/carlos-algms/vscode-make-task-provider/commit/1007f8d))
+
+
+
 ## <small>1.4.1 (2021-02-04)</small>
 
 * Fix target names with dependencies or variables ([37f6073](https://github.com/carlos-algms/vscode-make-task-provider/commit/37f6073))
