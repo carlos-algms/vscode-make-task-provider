@@ -21,3 +21,15 @@ Run `make` tasks and targets from VS Code command picker or via tasks menu.
 ### Running from the tasks view:
 
 ![command picker](images/task-tree.gif)
+
+---
+
+**PS:** This extension is not a re-implementation of `make`, so you need to have `make` executables available on your system.
+
+If `make` is not on your `PATH`, you can customize the executable path individually based on your operating system:
+
+| OS      | Settings                                    | Example                                  |
+| ------- | ------------------------------------------- | ---------------------------------------- |
+| Windows | `make-task-provider.windows.makeExecutable` | "C:\\Program Files\\make\\bin\\make.exe" |
+| Linux   | `make-task-provider.unix.makeExecutable`    | "/usr/bin/make"                          |
+| Mac OS  | `make-task-provider.osx.makeExecutable`     | "/usr/bin/make"                          |
