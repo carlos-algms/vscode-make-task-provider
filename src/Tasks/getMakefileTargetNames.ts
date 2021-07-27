@@ -9,7 +9,7 @@ import getOutputChannel from '../shared/getOutputChannel';
 import { trackException } from '../telemetry/tracking';
 
 // TODO maybe for better cross-OS, move to read-file instead of depending on make executable
-const MAKE_PARAMS = `--no-builtin-rules --no-builtin-variables --print-data-base --just-print`;
+const MAKE_PARAMS = `--print-data-base --just-print`;
 
 export default async function getMakefileTargetNames(
   makefileUri: vscode.Uri,
@@ -52,8 +52,9 @@ function extractNamesFromStdout(result: string): string[] {
   const startAt = result.lastIndexOf('# Files');
   const lines = result.substr(startAt).split(/\r{0,1}\n/g);
   const validLineRegex = /^(?!(Makefile|#|\.|\s)).+?:/;
+  const notATarget = '# Not a target';
   const validLines = lines
-    .filter((line) => validLineRegex.test(line))
+    .filter((line, i, list) => validLineRegex.test(line) && !list[i - 1].startsWith(notATarget))
     .map((line) => line.split(':')[0]);
   return validLines;
 }
