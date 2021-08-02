@@ -30,6 +30,7 @@ export class MakefileTaskProvider implements vscode.TaskProvider<vscode.Task | M
       return undefined;
     }
 
+    // TODO how to identify a Makefile to use when the task is being executed from VSCode's tasks.json ????
     const makefileUri: vscode.Uri = scope.uri.with({
       path: path.join(scope.uri.path, definition.relativeFolder ?? '', MAKEFILE),
     });
