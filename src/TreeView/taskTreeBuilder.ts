@@ -67,6 +67,7 @@ function getTaskHostFileItem(
       folderItem.addChild(item);
     }
   } else {
+    // TODO get full path to the actual Makefile containing the target
     const relativePath = task.definition.relativeFolder ?? '';
     const fullPath = path.join(scope.name, relativePath, MAKEFILE);
     item = map.get(fullPath);

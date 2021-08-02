@@ -75,6 +75,7 @@ export class TasksJsonItem extends TaskHostFileItem {
   constructor(parent: FolderItem) {
     super(parent, TasksJsonItem.getLabel(), Expanded);
 
+    // TODO use the actual Makefile file name
     this.contextValue = MAKEFILE;
     this.resourceUri = vscode.Uri.file(
       path.join(parent.resourceUri?.fsPath ?? '', this.label ?? ''),
@@ -85,6 +86,7 @@ export class TasksJsonItem extends TaskHostFileItem {
 
 export class MakefileItem extends TaskHostFileItem {
   static getLabel(relativePath: string): string {
+    // TODO stop using MAKEFILE constant
     if (relativePath.length > 0) {
       return path.join(relativePath, MAKEFILE);
     }
@@ -95,8 +97,10 @@ export class MakefileItem extends TaskHostFileItem {
   constructor(parent: FolderItem, relativePath: string) {
     super(parent, MakefileItem.getLabel(relativePath), Expanded);
 
+    // TODO use the actual Makefile name
     this.contextValue = MAKEFILE;
 
+    // TODO replace relative path with the actual Makefile path
     this.resourceUri = vscode.Uri.file(
       path.join(parent.resourceUri?.fsPath ?? '', relativePath, MAKEFILE),
     );

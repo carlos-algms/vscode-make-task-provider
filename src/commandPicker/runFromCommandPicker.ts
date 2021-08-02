@@ -33,18 +33,12 @@ export async function runFromCommandPicker(taskProvider?: MakefileTaskProvider):
 
   if (selectedTarget) {
     vscode.tasks.executeTask(selectedTarget);
-    trackEvent({
-      action: 'Run Command',
-      category: 'CommandPicker',
-      label: 'runTarget',
-      value: selectedTarget.name,
-    });
-  } else {
-    trackEvent({
-      action: 'Run Command',
-      category: 'CommandPicker',
-      label: 'runTarget',
-      value: 'userCancelled',
-    });
   }
+
+  trackEvent({
+    action: 'Run Command',
+    category: 'CommandPicker',
+    label: 'runTarget',
+    value: selectedTarget?.name ?? 'userCancelled',
+  });
 }
