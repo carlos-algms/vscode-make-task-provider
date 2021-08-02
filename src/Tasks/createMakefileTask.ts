@@ -35,9 +35,10 @@ export function createMakefileTask(
   makefileUri: vscode.Uri,
 ): MakefileTask {
   const definition = getDefinition(nameOrDefinition, folder, makefileUri);
-  const { targetName } = definition;
+  const { targetName, makeFileRelativePath } = definition;
 
   const cwd = path.dirname(makefileUri.fsPath);
+  const makefile = path.basename(makeFileRelativePath);
 
   const options: vscode.ShellExecutionOptions = { cwd };
   // TODO: check performance degradation here
@@ -49,7 +50,7 @@ export function createMakefileTask(
       folder,
       targetName,
       TYPE,
-      new vscode.ShellExecution(makeBin, [targetName], options),
+      new vscode.ShellExecution(makeBin, ['-f', makefile, targetName], options),
       [],
     )
   );
