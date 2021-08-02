@@ -1,3 +1,10 @@
+## 1.5.0 (2021-08-02)
+
+* Allow case insensitive file name for Makefiles (#8) ([7d21b50](https://github.com/carlos-algms/vscode-make-task-provider/commit/7d21b50)), closes [#8](https://github.com/carlos-algms/vscode-make-task-provider/issues/8)
+* Enable built in variables and targets (#7) ([58edd48](https://github.com/carlos-algms/vscode-make-task-provider/commit/58edd48)), closes [#7](https://github.com/carlos-algms/vscode-make-task-provider/issues/7)
+
+
+
 ## <small>1.4.2 (2021-02-22)</small>
 
 * Limit the exceptions sent to Sentry ([a83668b](https://github.com/carlos-algms/vscode-make-task-provider/commit/a83668b))
