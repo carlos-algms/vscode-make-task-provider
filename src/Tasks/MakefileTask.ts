@@ -8,9 +8,9 @@ export interface MakefileTaskDefinition extends vscode.TaskDefinition {
   targetName: string;
 
   /**
-   * Relative folder path where the Makefile is stored
+   * The relative path to the Makefile containing the Target task
    */
-  relativeFolder?: string;
+  makeFileRelativePath: string;
 }
 
 export interface MakefileTask extends vscode.Task {

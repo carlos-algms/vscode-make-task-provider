@@ -1,10 +1,6 @@
 export const APP_NAME = 'make-task-provider';
 
-/**
- * Preferred file name of the Makefile
- * @deprecated
- */
-export const MAKEFILE = 'Makefile'; // TODO get the Makefile name from config
+export const MAKEFILE = 'Makefile';
 
 /**
  * Glob to match `M` or `m` in the file name

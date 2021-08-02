@@ -3,7 +3,7 @@ import vscode from 'vscode';
 
 import { getMakeExecutablePath } from '../shared/config';
 import { TYPE } from '../shared/constants';
-import { getParentRelativePath } from '../shared/workspaceUtils';
+import { getFileRelativePath } from '../shared/workspaceUtils';
 
 import { MakefileTask, MakefileTaskDefinition } from './MakefileTask';
 import { getTaskGroupGuess } from './taskGroup';
@@ -20,9 +20,9 @@ export function getDefinition(
 ): MakefileTaskDefinition {
   if (typeof nameOrDefinition === 'string') {
     return {
-      type: 'make',
+      type: TYPE,
       targetName: nameOrDefinition,
-      relativeFolder: getParentRelativePath(makefileUri, folder),
+      makeFileRelativePath: getFileRelativePath(makefileUri, folder),
     };
   }
 

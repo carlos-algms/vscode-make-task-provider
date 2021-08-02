@@ -1,7 +1,5 @@
-import path from 'path';
 import vscode from 'vscode';
 
-import { MAKEFILE } from '../shared/constants';
 import { isWorkspaceFolder } from '../shared/workspaceUtils';
 import { MakefileTask } from '../Tasks/MakefileTask';
 
@@ -67,14 +65,12 @@ function getTaskHostFileItem(
       folderItem.addChild(item);
     }
   } else {
-    // TODO get full path to the actual Makefile containing the target
-    const relativePath = task.definition.relativeFolder ?? '';
-    const fullPath = path.join(scope.name, relativePath, MAKEFILE);
-    item = map.get(fullPath);
+    const makeFileRelativePath = task.definition.makeFileRelativePath ?? '';
+    item = map.get(makeFileRelativePath);
 
     if (!item) {
-      item = new MakefileItem(folderItem, relativePath);
-      map.set(fullPath, item);
+      item = new MakefileItem(folderItem, makeFileRelativePath);
+      map.set(makeFileRelativePath, item);
       folderItem.addChild(item);
     }
   }
