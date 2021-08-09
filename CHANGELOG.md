@@ -1,3 +1,10 @@
+## <small>2.0.1 (2021-08-09)</small>
+
+* Customize makefile name (#9) ([b5b0309](https://github.com/carlos-algms/vscode-make-task-provider/commit/b5b0309)), closes [#9](https://github.com/carlos-algms/vscode-make-task-provider/issues/9)
+* Fix lint issues ([4a8d8ef](https://github.com/carlos-algms/vscode-make-task-provider/commit/4a8d8ef))
+
+
+
 ## 2.0.0 (2021-08-09)
 
 * Allow using any name for the Makefile ([12e4042](https://github.com/carlos-algms/vscode-make-task-provider/commit/12e4042))
