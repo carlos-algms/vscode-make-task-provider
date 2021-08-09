@@ -22,8 +22,14 @@ export function registerTreeViewProvider(
     }),
 
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration(CONFIG_KEYS.autoDetect)) {
+      const shouldInvalidate =
+        e.affectsConfiguration(CONFIG_KEYS.autoDetect) ||
+        e.affectsConfiguration(CONFIG_KEYS.makeExecutable) ||
+        e.affectsConfiguration(CONFIG_KEYS.makefileNames);
+
+      if (shouldInvalidate) {
         invalidateTaskCaches();
+
         if (treeDataProvider) {
           treeDataProvider.refresh();
         }

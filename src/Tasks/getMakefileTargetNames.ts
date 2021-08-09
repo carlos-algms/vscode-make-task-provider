@@ -23,7 +23,8 @@ export default async function getMakefileTargetNames(
     }
 
     const makeBin = getMakeExecutablePath(folder);
-    const cmd = `${makeBin} ${MAKE_PARAMS}`;
+    const makefile = path.basename(makefileUri.fsPath);
+    const cmd = `${makeBin} -f ${makefile} ${MAKE_PARAMS}`;
 
     const rootPath = path.dirname(makefileUri.fsPath);
 
