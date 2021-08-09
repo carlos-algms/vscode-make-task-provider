@@ -1,34 +1,37 @@
 import vscode from 'vscode';
 
 import { registerCommands } from './commandPicker/commandsManager';
-import { COMMANDS, getMakefileNames } from './shared/config';
+import { COMMANDS, CONFIG_KEYS } from './shared/config';
+import watchForMakefiles from './shared/watchForMakefiles';
 import registerTaskProvider from './Tasks/registerTaskProvider';
 import { getTracker, trackEvent } from './telemetry/tracking';
-import { registerTreeViewProvider } from './TreeView/registerTreeViewProvider';
+import { registerTreeViewDataProvider } from './TreeView/registerTreeViewDataProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
   const taskProvider = registerTaskProvider(context);
-  const treeViewProvider = registerTreeViewProvider(context);
+  const treeViewDataProvider = registerTreeViewDataProvider(context);
 
-  registerCommands(context, taskProvider, treeViewProvider);
+  registerCommands(context, taskProvider, treeViewDataProvider);
 
   const runRefreshCommand = () => {
     vscode.commands.executeCommand(COMMANDS.refresh);
   };
 
-  context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(runRefreshCommand));
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeWorkspaceFolders(runRefreshCommand),
 
-  if (vscode.workspace.workspaceFolders) {
-    const makefileNames = getMakefileNames();
-    const glob = `**/{${makefileNames.join(',')}}`;
-    const watcher = vscode.workspace.createFileSystemWatcher(glob);
+    watchForMakefiles(runRefreshCommand),
 
-    watcher.onDidChange(runRefreshCommand);
-    watcher.onDidDelete(runRefreshCommand);
-    watcher.onDidCreate(runRefreshCommand);
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      const shouldRefresh =
+        e.affectsConfiguration(CONFIG_KEYS.autoDetect) ||
+        e.affectsConfiguration(CONFIG_KEYS.makeExecutable);
 
-    context.subscriptions.push(watcher);
-  }
+      if (shouldRefresh) {
+        runRefreshCommand();
+      }
+    }),
+  );
 
   trackEvent({
     action: 'activated',

@@ -11,7 +11,7 @@ import { runFromCommandPicker } from './runFromCommandPicker';
 export function registerCommands(
   context: vscode.ExtensionContext,
   taskProvider?: MakefileTaskProvider,
-  treeViewProvider?: MakefileTreeDataProvider,
+  treeViewDataProvider?: MakefileTreeDataProvider,
 ): void {
   context.subscriptions.push(
     vscode.commands.registerCommand(COMMANDS.runTarget, () => {
@@ -21,8 +21,8 @@ export function registerCommands(
     vscode.commands.registerCommand(COMMANDS.refresh, () => {
       invalidateTaskCaches();
 
-      if (treeViewProvider) {
-        treeViewProvider.refresh();
+      if (treeViewDataProvider) {
+        treeViewDataProvider.refresh();
       }
 
       trackEvent({
