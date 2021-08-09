@@ -1,3 +1,11 @@
+## 2.0.0 (2021-08-09)
+
+* Allow using any name for the Makefile ([12e4042](https://github.com/carlos-algms/vscode-make-task-provider/commit/12e4042))
+* Display the right file name in the tasks tree ([8640789](https://github.com/carlos-algms/vscode-make-task-provider/commit/8640789))
+* Use the right Makefile when executing a target ([4546f2c](https://github.com/carlos-algms/vscode-make-task-provider/commit/4546f2c))
+
+
+
 ## 1.5.0 (2021-08-02)
 
 * Allow case insensitive file name for Makefiles (#8) ([7d21b50](https://github.com/carlos-algms/vscode-make-task-provider/commit/7d21b50)), closes [#8](https://github.com/carlos-algms/vscode-make-task-provider/issues/8)
