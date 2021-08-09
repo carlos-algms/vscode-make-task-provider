@@ -1,12 +1,23 @@
 import { platform } from 'os';
 import vscode from 'vscode';
 
+import { contributes } from '../../package.json';
 import { trackEvent } from '../telemetry/tracking';
 
 import { APP_NAME } from './constants';
 
+const {
+  configuration: {
+    properties: {
+      'make-task-provider.makefileNames': { default: defaultMakefileNames },
+    },
+  },
+} = contributes;
+
 export const CONFIG_KEYS = {
   autoDetect: `${APP_NAME}.autoDetect`,
+  makefileNames: `${APP_NAME}.makefileNames`,
+  makeExecutable: `${APP_NAME}.${getUserPlatformKey() ?? 'unix.makeExecutable'}`,
 };
 
 export const COMMANDS = {
@@ -62,6 +73,10 @@ export function getMakeExecutablePath(folder?: vscode.WorkspaceFolder): string {
   }
 
   return executablePath;
+}
+
+export function getMakefileNames(folder?: vscode.WorkspaceFolder): string[] {
+  return getFolderConfig(folder).get<string[]>('makefileNames', defaultMakefileNames);
 }
 
 export function getUserPlatformKey(): string | null {

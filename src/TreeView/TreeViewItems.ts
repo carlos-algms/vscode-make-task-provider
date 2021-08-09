@@ -63,8 +63,15 @@ export class FolderItem extends BaseTreeItem<null, TaskHostFileItem> {
   }
 }
 
+/**
+ * Represents one file containing tasks to be executed
+ * Could be a Makefile or the tasks.json
+ */
 export class TaskHostFileItem extends BaseTreeItem<FolderItem> {}
 
+/**
+ * Represents the tasks.json file
+ */
 export class TasksJsonItem extends TaskHostFileItem {
   private static fixedLabel: string = path.join('.vscode', 'tasks.json');
 
@@ -75,7 +82,6 @@ export class TasksJsonItem extends TaskHostFileItem {
   constructor(parent: FolderItem) {
     super(parent, TasksJsonItem.getLabel(), Expanded);
 
-    // TODO use the actual Makefile file name
     this.contextValue = MAKEFILE;
     this.resourceUri = vscode.Uri.file(
       path.join(parent.resourceUri?.fsPath ?? '', this.label ?? ''),
@@ -84,30 +90,25 @@ export class TasksJsonItem extends TaskHostFileItem {
   }
 }
 
+/**
+ * Represents a Makefile within the Workspace
+ */
 export class MakefileItem extends TaskHostFileItem {
-  static getLabel(relativePath: string): string {
-    // TODO stop using MAKEFILE constant
-    if (relativePath.length > 0) {
-      return path.join(relativePath, MAKEFILE);
-    }
+  constructor(parent: FolderItem, makeFileRelativePath: string) {
+    super(parent, makeFileRelativePath, Expanded);
 
-    return MAKEFILE;
-  }
-
-  constructor(parent: FolderItem, relativePath: string) {
-    super(parent, MakefileItem.getLabel(relativePath), Expanded);
-
-    // TODO use the actual Makefile name
     this.contextValue = MAKEFILE;
 
-    // TODO replace relative path with the actual Makefile path
     this.resourceUri = vscode.Uri.file(
-      path.join(parent.resourceUri?.fsPath ?? '', relativePath, MAKEFILE),
+      path.join(parent.resourceUri?.fsPath ?? '', makeFileRelativePath),
     );
     this.iconPath = vscode.ThemeIcon.File;
   }
 }
 
+/**
+ * Represents an executable target from within a Makefile or tasks.json
+ */
 export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
   task: MakefileTask;
 
@@ -118,7 +119,7 @@ export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
 
     this.contextValue = 'MakefileTarget';
 
-    // TODO read the default click action from the config, run, or open the file at the script position
+    // TODO read the default click action from the config, run or open the file at the script position
     this.command = {
       title: 'Run this target',
       command: COMMANDS.runTargetFromTreeView,

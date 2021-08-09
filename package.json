@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "2.0.0",
   "name": "make-task-provider",
   "publisher": "carlos-algms",
   "displayName": "Make support and task provider",
@@ -21,16 +21,17 @@
       {
         "type": "make",
         "required": [
-          "targetName"
+          "targetName",
+          "makeFileRelativePath"
         ],
         "properties": {
           "targetName": {
             "type": "string",
             "description": "The make target name to run. Must exist in your Makefile"
           },
-          "relativeFolder": {
+          "makeFileRelativePath": {
             "type": "string",
-            "description": "Relative path to the folder where the Makefile is located in the Workspace"
+            "description": "Relative path to the Makefile containing your targets to be executed"
           }
         }
       }
@@ -121,31 +122,40 @@
           "scope": "resource",
           "type": "boolean",
           "default": true,
-          "description": "Controls whether auto detection of Make tasks is on or off. Default is on."
+          "description": "Controls whether auto detection of Make tasks is on or off.\nDefault is on."
         },
         "make-task-provider.telemetry": {
           "scope": "resource",
           "type": "boolean",
           "default": true,
-          "description": "Enable usage data and errors to be sent to an online service. We follow Microsoft's privacy statement, please, find it here [here](https://go.microsoft.com/fwlink/?LinkId=786907)"
+          "description": "Enable usage data and errors to be sent to an online service.\nWe follow Microsoft's privacy statement, please, find it [here](https://go.microsoft.com/fwlink/?LinkId=786907)"
         },
         "make-task-provider.windows.makeExecutable": {
           "scope": "resource",
           "type": "string",
           "default": null,
-          "description": "The executable path to your make command in the Windows environment, i.e: \"C:\\Program Files\\make\\bin\\make.exe\", please use a correct path, this is just an example."
+          "description": "The executable path to your make command in the Windows environment. \ni.e: \"C:\\Program Files\\make\\bin\\make.exe\"\nplease use a correct path, this is just an example."
         },
         "make-task-provider.unix.makeExecutable": {
           "scope": "resource",
           "type": "string",
           "default": null,
-          "description": "The executable path to your make command in the Unix environment, i.e: \"/usr/bin/make\", please use a correct path, this is just an example."
+          "description": "The executable path to your make command in the Unix environment.\ni.e: \"/usr/bin/make\"\nplease use a correct path, this is just an example."
         },
         "make-task-provider.osx.makeExecutable": {
           "scope": "resource",
           "type": "string",
           "default": null,
-          "description": "The executable path to your make command in the MacOS environment, i.e: \"/usr/bin/make\", please use a correct path, this is just an example."
+          "description": "The executable path to your make command in the MacOS environment.\ni.e: \"/usr/bin/make\"\nplease use a correct path, this is just an example."
+        },
+        "make-task-provider.makefileNames": {
+          "scope": "resource",
+          "type": "array",
+          "default": [
+            "makefile",
+            "Makefile"
+          ],
+          "description": "A list of file names that the extension should look for while searching the workspace.\nThis allows you to have non-standard name for your file."
         }
       }
     }

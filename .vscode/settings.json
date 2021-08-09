@@ -5,7 +5,9 @@
   "editor.formatOnSave": false,
   "eslint.packageManager": "yarn",
   "npm.packageManager": "yarn",
-  "prettier.packageManager": "yarn",
   "typescript.tsc.autoDetect": "off",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.rulers": [
+    100,
+  ]
 }

@@ -14,13 +14,3 @@ export function getFileRelativePath(fileUri: vscode.Uri, folder: vscode.Workspac
   const rootUri = folder.uri;
   return absolutePath.substring(rootUri.path.length + 1);
 }
-
-/**
- * Get the relative path to a given file's parent directory without trailing slash
- */
-export function getParentRelativePath(fileUri: vscode.Uri, folder: vscode.WorkspaceFolder): string {
-  const relativePath = getFileRelativePath(fileUri, folder);
-  const lastPart = path.basename(relativePath);
-  const parentPath = relativePath.substring(0, relativePath.length - lastPart.length - 1);
-  return parentPath;
-}

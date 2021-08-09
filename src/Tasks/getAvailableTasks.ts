@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import vscode from 'vscode';
 
-import { MAKEFILE_GLOB } from '../shared/constants';
+import { getMakefileNames } from '../shared/config';
 import { showGenericErrorNotification } from '../shared/errorNotifications';
 import getOutputChannel from '../shared/getOutputChannel';
 import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
@@ -33,8 +33,11 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
   }
 
   try {
+    const makefileNames = getMakefileNames();
+    const glob = `**/{${makefileNames.join(',')}}`;
+
     const promises = folders.map(async (folder) => {
-      const files = await findFilesInFolder(folder, `**/${MAKEFILE_GLOB}`);
+      const files = await findFilesInFolder(folder, glob);
       const tasksPromises = files.map((file) => buildTasksFromMakefile(file, folder));
 
       return (await Promise.all(tasksPromises)).flat();

@@ -1,8 +1,7 @@
 import vscode from 'vscode';
 
 import { registerCommands } from './commandPicker/commandsManager';
-import { COMMANDS } from './shared/config';
-import { MAKEFILE_GLOB } from './shared/constants';
+import { COMMANDS, getMakefileNames } from './shared/config';
 import registerTaskProvider from './Tasks/registerTaskProvider';
 import { getTracker, trackEvent } from './telemetry/tracking';
 import { registerTreeViewProvider } from './TreeView/registerTreeViewProvider';
@@ -20,10 +19,14 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(runRefreshCommand));
 
   if (vscode.workspace.workspaceFolders) {
-    const watcher = vscode.workspace.createFileSystemWatcher(`**/${MAKEFILE_GLOB}`);
+    const makefileNames = getMakefileNames();
+    const glob = `**/{${makefileNames.join(',')}}`;
+    const watcher = vscode.workspace.createFileSystemWatcher(glob);
+
     watcher.onDidChange(runRefreshCommand);
     watcher.onDidDelete(runRefreshCommand);
     watcher.onDidCreate(runRefreshCommand);
+
     context.subscriptions.push(watcher);
   }
 

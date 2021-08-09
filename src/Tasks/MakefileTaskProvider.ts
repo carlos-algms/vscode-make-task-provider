@@ -1,8 +1,6 @@
 import path from 'path';
 import vscode from 'vscode';
 
-import { MAKEFILE } from '../shared/constants';
-
 import { createMakefileTask } from './createMakefileTask';
 import getAvailableTasks from './getAvailableTasks';
 import { MakefileTask } from './MakefileTask';
@@ -30,9 +28,8 @@ export class MakefileTaskProvider implements vscode.TaskProvider<vscode.Task | M
       return undefined;
     }
 
-    // TODO how to identify a Makefile to use when the task is being executed from VSCode's tasks.json ????
     const makefileUri: vscode.Uri = scope.uri.with({
-      path: path.join(scope.uri.path, definition.relativeFolder ?? '', MAKEFILE),
+      path: path.join(scope.uri.path, definition.makeFileRelativePath),
     });
 
     const providedTask = createMakefileTask(definition, scope, makefileUri);

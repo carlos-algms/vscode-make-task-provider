@@ -3,7 +3,7 @@ import vscode from 'vscode';
 
 import { getMakeExecutablePath } from '../shared/config';
 import { TYPE } from '../shared/constants';
-import { getParentRelativePath } from '../shared/workspaceUtils';
+import { getFileRelativePath } from '../shared/workspaceUtils';
 
 import { MakefileTask, MakefileTaskDefinition } from './MakefileTask';
 import { getTaskGroupGuess } from './taskGroup';
@@ -20,9 +20,9 @@ export function getDefinition(
 ): MakefileTaskDefinition {
   if (typeof nameOrDefinition === 'string') {
     return {
-      type: 'make',
+      type: TYPE,
       targetName: nameOrDefinition,
-      relativeFolder: getParentRelativePath(makefileUri, folder),
+      makeFileRelativePath: getFileRelativePath(makefileUri, folder),
     };
   }
 
@@ -35,9 +35,10 @@ export function createMakefileTask(
   makefileUri: vscode.Uri,
 ): MakefileTask {
   const definition = getDefinition(nameOrDefinition, folder, makefileUri);
-  const { targetName } = definition;
+  const { targetName, makeFileRelativePath } = definition;
 
   const cwd = path.dirname(makefileUri.fsPath);
+  const makefile = path.basename(makeFileRelativePath);
 
   const options: vscode.ShellExecutionOptions = { cwd };
   // TODO: check performance degradation here
@@ -49,7 +50,7 @@ export function createMakefileTask(
       folder,
       targetName,
       TYPE,
-      new vscode.ShellExecution(makeBin, [targetName], options),
+      new vscode.ShellExecution(makeBin, ['-f', makefile, targetName], options),
       [],
     )
   );
