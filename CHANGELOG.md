@@ -1,3 +1,9 @@
+## <small>2.0.2 (2021-08-09)</small>
+
+* Reset file watcher when config changes (#10) ([6c671ea](https://github.com/carlos-algms/vscode-make-task-provider/commit/6c671ea)), closes [#10](https://github.com/carlos-algms/vscode-make-task-provider/issues/10)
+
+
+
 ## <small>2.0.1 (2021-08-09)</small>
 
 * Customize makefile name (#9) ([b5b0309](https://github.com/carlos-algms/vscode-make-task-provider/commit/b5b0309)), closes [#9](https://github.com/carlos-algms/vscode-make-task-provider/issues/9)
