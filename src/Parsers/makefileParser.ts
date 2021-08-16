@@ -12,7 +12,7 @@ import { trackException, trackExecutionTime } from '../telemetry/tracking';
 const excludesRegex = /^[.%]/;
 const targetNameRegex = /^([\w-./ ]+)\s*:[^=]*/gi;
 
-export const makefileParser = async (makefileUri: vscode.Uri): Promise<string[] | null> => {
+export async function makefileParser(makefileUri: vscode.Uri): Promise<string[] | null> {
   try {
     const targetNames = await trackExecutionTime(() => fileReader(makefileUri.fsPath, lineFilter), {
       category: 'Parsers',
@@ -27,7 +27,7 @@ export const makefileParser = async (makefileUri: vscode.Uri): Promise<string[] 
   }
 
   return null;
-};
+}
 
 function lineFilter(line: string): string | null {
   const match = targetNameRegex.exec(line);
