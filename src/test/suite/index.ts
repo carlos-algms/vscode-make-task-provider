@@ -1,40 +1,32 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import glob from 'glob';
-import Mocha from 'mocha';
+import { runCLI } from 'jest';
 import path from 'path';
 
-export function run(): Promise<void> {
-  // Create the mocha test
-  const mocha = new Mocha({
-    ui: 'tdd',
-    color: true,
-  });
+export async function run(
+  _testsRoot: string,
+  reportTestResults: (error: Error, failures?: number) => void,
+): Promise<void> {
+  const projectRootPath = path.join(process.cwd());
+  const configPath = path.join(projectRootPath, 'jest.config.js');
 
-  const testsRoot = path.resolve(__dirname, '..');
+  try {
+    const jestCliCallResult = await runCLI({ config: configPath } as any, [projectRootPath]);
 
-  return new Promise((c, e) => {
-    glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
-      if (err) {
-        e(err);
-        return;
-      }
-
-      // Add files to the test suite
-      files.forEach((f) => mocha.addFile(path.resolve(testsRoot, f)));
-
-      try {
-        // Run the mocha test
-        mocha.run((failures) => {
-          if (failures > 0) {
-            e(new Error(`${failures} tests failed.`));
-          } else {
-            c();
-          }
+    jestCliCallResult.results.testResults.forEach((testResult) => {
+      testResult.testResults
+        .filter((assertionResult) => assertionResult.status === 'passed')
+        .forEach(({ ancestorTitles, title, status }) => {
+          console.info(`  ● ${ancestorTitles.join(' › ')} › ${title} (${status})`);
         });
-      } catch (error) {
-        console.error(error);
-        e(error);
+    });
+
+    jestCliCallResult.results.testResults.forEach((testResult) => {
+      if (testResult.failureMessage) {
+        console.error(testResult.failureMessage);
       }
     });
-  });
+
+    reportTestResults(undefined, jestCliCallResult.results.numFailedTests);
+  } catch (error) {
+    reportTestResults(error, 0);
+  }
 }
