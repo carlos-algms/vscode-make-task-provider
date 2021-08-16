@@ -162,13 +162,14 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn lint && rm -rf build/ && yarn compile:prod",
-    "compile": "esbuild src/extension.ts --bundle --sourcemap --platform=node --target=node14 --external:vscode  --outfile=build/extension.js",
+    "compile_base": "esbuild --sourcemap --platform=node --target=node14 --external:vscode",
+    "compile": "yarn compile_base src/extension.ts --bundle  --outfile=build/extension.js",
     "compile:prod": "yarn run compile --minify --define:process.env.NODE_ENV=\\\"production\\\"",
     "lint": "yarn type-check && eslint src",
     "watch": "nodemon --watch src -e ts --exec \"yarn compile\" ",
     "test": "node .temp/test/test/runTest.js",
     "pretest": "rm -rf .temp/test && yarn compile:test",
-    "compile:test": "esbuild `find ./src -name '*.ts'` --sourcemap --platform=node --target=node14 --format=cjs --outdir='.temp/test' ",
+    "compile:test": "yarn compile_base `find ./src -name '*.ts'` --format=cjs --outdir='.temp/test' --define:process.env.PROJECT_FOLDER=\\\"`pwd`\\\" --define:process.env.NODE_ENV=\\\"test\\\"",
     "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md",
     "type-check": "tsc --noEmit -p ./"

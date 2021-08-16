@@ -9,6 +9,7 @@
       "name": "Run Extension",
       "type": "extensionHost",
       "request": "launch",
+      "sourceMaps": true,
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/build/**/*.js"],
       "preLaunchTask": "${defaultBuildTask}"
@@ -17,12 +18,17 @@
       "name": "Extension Tests",
       "type": "extensionHost",
       "request": "launch",
+      "sourceMaps": true,
+      "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/build/test/suite/index"
+        "--extensionTestsPath=${workspaceFolder}/.temp/test/test/suite/index"
       ],
-      "outFiles": ["${workspaceFolder}/build/test/**/*.js"],
-      "preLaunchTask": "${defaultBuildTask}"
+      "outFiles": ["${workspaceFolder}/.temp/test/**/*.js"],
+      "preLaunchTask": "npm: compile:test",
+      "env": {
+        "PROJECT_FOLDER": "${workspaceFolder}"
+      }
     }
   ]
 }
