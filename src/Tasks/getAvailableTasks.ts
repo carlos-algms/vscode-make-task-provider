@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import vscode from 'vscode';
 
+import { makefileParser } from '../Parsers/makefileParser';
 import { getMakefileNames } from '../shared/config';
 import { showGenericErrorNotification } from '../shared/errorNotifications';
 import getOutputChannel from '../shared/getOutputChannel';
@@ -8,7 +9,6 @@ import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspace
 import { trackEvent, trackException, trackExecutionTime } from '../telemetry/tracking';
 
 import { createMakefileTask } from './createMakefileTask';
-import getMakefileTargetNames from './getMakefileTargetNames';
 import { MakefileTask } from './MakefileTask';
 import { getCachedTasks, setCachedTasks } from './taskCaches';
 
@@ -33,10 +33,9 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
   }
 
   try {
-    const makefileNames = getMakefileNames();
-    const glob = `**/{${makefileNames.join(',')}}`;
-
     const promises = folders.map(async (folder) => {
+      const makefileNames = getMakefileNames(folder);
+      const glob = `**/{${makefileNames.join(',')}}`;
       const files = await findFilesInFolder(folder, glob);
       const tasksPromises = files.map((file) => buildTasksFromMakefile(file, folder));
 
@@ -62,7 +61,7 @@ async function buildTasksFromMakefile(
   makefileUri: vscode.Uri,
   folder: vscode.WorkspaceFolder,
 ): Promise<MakefileTask[]> {
-  const targetNames = await getMakefileTargetNames(makefileUri, folder);
+  const targetNames = await makefileParser(makefileUri);
 
   if (!targetNames) {
     trackEvent({
