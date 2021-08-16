@@ -293,6 +293,16 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
+"@vscode/test-electron@^1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@vscode/test-electron/-/test-electron-1.6.2.tgz#f639cab19a0013949015079dcfd2ff0c1aa88a1b"
+  integrity sha512-W01ajJEMx6223Y7J5yaajGjVs1QfW3YGkkOJHVKfAMEqNB1ZHN9wCcViehv5ZwVSSJnjhu6lYEYgwBdHtCxqhQ==
+  dependencies:
+    http-proxy-agent "^4.0.1"
+    https-proxy-agent "^5.0.0"
+    rimraf "^3.0.2"
+    unzipper "^0.10.11"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -2603,16 +2613,6 @@ vscode-extension-analytics@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/vscode-extension-analytics/-/vscode-extension-analytics-0.0.4.tgz#3efb2d81afed322d4f126eb260f7fb1f785c4ab0"
   integrity sha512-Ll0KT0tZOnnjefseaIBaJ6RVNQ0XNG8uxTCkU5GBcp6aPrYkQwu/kcQ5uC6vhKZwD998OpK+PKN9KYMmKJMZhA==
-
-vscode-test@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/vscode-test/-/vscode-test-1.5.0.tgz#7bcb6b1aeac41d35c29f4404f8ca3399ae52e78e"
-  integrity sha512-svwE/mhBBqrB77C1U7pkUKfUmxnkzg0dLGi1vEmitsleu88oNsqZEhG3ANZrL/Ia4m0CW0oYEKRw2EojpFxLlQ==
-  dependencies:
-    http-proxy-agent "^4.0.1"
-    https-proxy-agent "^5.0.0"
-    rimraf "^3.0.2"
-    unzipper "^0.10.11"
 
 which-module@^2.0.0:
   version "2.0.0"
