@@ -1,8 +1,6 @@
 import vscode from 'vscode';
 
-import { showGenericErrorNotification } from '../shared/errorNotifications';
 import { fileReader } from '../shared/fileReader';
-import getOutputChannel from '../shared/getOutputChannel';
 import { trackException, trackExecutionTime } from '../telemetry/tracking';
 
 /**
@@ -20,7 +18,7 @@ export const makefileParser = async (makefileUri: vscode.Uri): Promise<string[] 
       category: 'Parsers',
       label: 'Parse Makefile',
     });
-    return targetNames;
+    return Array.from(new Set(targetNames));
   } catch (error) {
     trackException(error, {
       category: 'Parsers',
