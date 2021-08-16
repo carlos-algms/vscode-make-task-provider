@@ -1,3 +1,9 @@
+## 2.1.0 (2021-08-16)
+
+* Migrate to file parse instead of relying on Make (#11) ([88c2b9d](https://github.com/carlos-algms/vscode-make-task-provider/commit/88c2b9d)), closes [#11](https://github.com/carlos-algms/vscode-make-task-provider/issues/11)
+
+
+
 ## <small>2.0.2 (2021-08-09)</small>
 
 * Reset file watcher when config changes (#10) ([6c671ea](https://github.com/carlos-algms/vscode-make-task-provider/commit/6c671ea)), closes [#10](https://github.com/carlos-algms/vscode-make-task-provider/issues/10)
