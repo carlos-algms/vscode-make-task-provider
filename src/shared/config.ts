@@ -56,27 +56,27 @@ export const COMMON_EXCLUDES = [
   '**/vendor',
 ].join(',');
 
-export function getFolderConfig(folder?: vscode.WorkspaceFolder): vscode.WorkspaceConfiguration {
-  return vscode.workspace.getConfiguration(APP_NAME, folder?.uri);
+export function getFolderConfig(scope?: vscode.ConfigurationScope): vscode.WorkspaceConfiguration {
+  return vscode.workspace.getConfiguration(APP_NAME, scope);
 }
 
-export function isAutoDetectEnabled(folder?: vscode.WorkspaceFolder): boolean {
-  return getFolderConfig(folder).get<boolean>('autoDetect', true);
+export function isAutoDetectEnabled(scope?: vscode.ConfigurationScope): boolean {
+  return getFolderConfig(scope).get<boolean>('autoDetect', true);
 }
 
-export function getMakeExecutablePath(folder?: vscode.WorkspaceFolder): string {
+export function getMakeExecutablePath(scope?: vscode.ConfigurationScope): string {
   const key = getUserPlatformKey();
   let executablePath = 'make';
 
   if (key) {
-    executablePath = getFolderConfig(folder).get<string>(key, '') || executablePath;
+    executablePath = getFolderConfig(scope).get<string>(key, '') || executablePath;
   }
 
   return executablePath;
 }
 
-export function getMakefileNames(folder?: vscode.WorkspaceFolder): string[] {
-  return getFolderConfig(folder).get<string[]>('makefileNames', defaultMakefileNames);
+export function getMakefileNames(scope?: vscode.ConfigurationScope): string[] {
+  return getFolderConfig(scope).get<string[]>('makefileNames', defaultMakefileNames);
 }
 
 export function getUserPlatformKey(): string | null {
