@@ -162,14 +162,14 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn lint && rm -rf build/ && yarn compile:prod",
-    "compile_base": "esbuild --sourcemap --platform=node --target=node14 --external:vscode",
-    "compile": "yarn compile_base src/extension.ts --bundle  --outfile=build/extension.js",
+    "compile_base": "esbuild --sourcemap --format=cjs --platform=node --target=node14",
+    "compile": "yarn compile_base src/extension.ts --outfile=build/extension.js --bundle --external:vscode",
     "compile:prod": "yarn run compile --minify --define:process.env.NODE_ENV=\\\"production\\\"",
     "lint": "yarn type-check && eslint src",
     "watch": "nodemon --watch src -e ts --exec \"yarn compile\" ",
     "test": "node .temp/test/test/runTest.js",
     "pretest": "rm -rf .temp/test && yarn compile:test",
-    "compile:test": "yarn compile_base `find ./src -name '*.ts'` --format=cjs --outdir='.temp/test' --define:process.env.PROJECT_FOLDER=\\\"`pwd`\\\" --define:process.env.NODE_ENV=\\\"test\\\"",
+    "compile:test": "yarn compile_base `find ./src -name '*.ts'` --outdir='.temp/test' --define:process.env.NODE_ENV=\\\"test\\\" --define:process.env.PROJECT_FOLDER=\\\"`pwd`\\\"",
     "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md",
     "type-check": "tsc --noEmit -p ./"
