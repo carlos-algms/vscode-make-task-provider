@@ -38,6 +38,10 @@ export function getTracker(): AnalyticsReporter {
 }
 
 export function trackEvent(attributes: StandardAttributes): void {
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     getOutputChannel().appendLine(
       `Not tracking event in development: ${JSON.stringify(attributes, null, 2)}`,
@@ -48,6 +52,10 @@ export function trackEvent(attributes: StandardAttributes): void {
 }
 
 export function trackException(error: Error, attributes: StandardAttributes): void {
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     getOutputChannel().appendLine(
       `Not tracking Exception in development: ${JSON.stringify(attributes, null, 2)}`,
