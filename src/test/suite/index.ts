@@ -1,32 +1,48 @@
-import { runCLI } from 'jest';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import glob from 'glob';
+import Mocha from 'mocha';
 import path from 'path';
 
-export async function run(
-  _testsRoot: string,
-  reportTestResults: (error: Error, failures?: number) => void,
-): Promise<void> {
-  const projectRootPath = process.env.PROJECT_FOLDER;
-  const configPath = path.join(projectRootPath, 'jest.config.js');
+import 'chai/register-expect';
+import 'chai/register-should';
+import 'chai/register-assert';
 
-  try {
-    const jestCliCallResult = await runCLI({ config: configPath } as any, [projectRootPath]);
+export function run(): Promise<void> {
+  chai.use(chaiAsPromised);
 
-    jestCliCallResult.results.testResults.forEach((testResult) => {
-      testResult.testResults
-        .filter((assertionResult) => assertionResult.status === 'passed')
-        .forEach(({ ancestorTitles, title, status }) => {
-          console.info(`  ● ${ancestorTitles.join(' › ')} › ${title} (${status})`);
+  // Create the mocha test
+  const mocha = new Mocha({
+    ui: 'bdd',
+    color: true,
+    reporter: 'list',
+  });
+
+  const testsRoot = path.resolve(__dirname, '../..');
+
+  return new Promise((resolve, reject) => {
+    glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      // Add files to the test suite
+      files.forEach((f) => mocha.addFile(path.resolve(testsRoot, f)));
+
+      try {
+        // Run the mocha test
+        mocha.run((failures) => {
+          if (failures > 0) {
+            reject(new Error(`${failures} tests failed.`));
+          } else {
+            resolve();
+          }
         });
-    });
-
-    jestCliCallResult.results.testResults.forEach((testResult) => {
-      if (testResult.failureMessage) {
-        console.error(testResult.failureMessage);
+      } catch (error) {
+        console.error(error);
+        reject(error);
       }
     });
-
-    reportTestResults(undefined, jestCliCallResult.results.numFailedTests);
-  } catch (error) {
-    reportTestResults(error, 0);
-  }
+  });
 }

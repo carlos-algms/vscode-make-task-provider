@@ -15,7 +15,7 @@
       "preLaunchTask": "${defaultBuildTask}"
     },
     {
-      "name": "Extension Tests",
+      "name": "Test Extension",
       "type": "extensionHost",
       "request": "launch",
       "sourceMaps": true,
@@ -27,7 +27,7 @@
       "outFiles": ["${workspaceFolder}/.temp/test/**/*.js"],
       "preLaunchTask": "npm: compile:test",
       "env": {
-        "PROJECT_FOLDER": "${workspaceFolder}"
+        "NODE_ENV": "test"
       }
     }
   ]

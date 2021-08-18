@@ -1,5 +1,10 @@
+import { assert, expect } from 'chai';
+
 describe('Extension Test Suite', () => {
-  test('Sample test', () => {
-    expect(true).toBeTruthy();
+  it('Sample test', () => {
+    const v = true;
+    v.should.be.equal(true);
+    expect(true).to.be.ok;
+    assert(true);
   });
 });

@@ -77,6 +77,12 @@
       "rules": {
         "@typescript-eslint/no-unused-vars": "off"
       }
+    },
+    {
+      "files": ["*.test.ts"],
+      "rules": {
+        "no-unused-expressions": "off"
+      }
     }
   ]
 }
