@@ -17,11 +17,12 @@ function getNewFileWatcher(callback: () => any): vscode.FileSystemWatcher {
 
 export default function watchForMakefiles(callback: () => any): { dispose(): any } {
   let watcher: vscode.FileSystemWatcher | undefined;
+  let configChangeListener: vscode.Disposable | undefined;
 
   if (vscode.workspace.workspaceFolders) {
     watcher = getNewFileWatcher(callback);
 
-    vscode.workspace.onDidChangeConfiguration((e) => {
+    configChangeListener = vscode.workspace.onDidChangeConfiguration((e) => {
       if (e.affectsConfiguration(CONFIG_KEYS.makefileNames)) {
         watcher?.dispose();
         watcher = getNewFileWatcher(callback);
@@ -33,6 +34,7 @@ export default function watchForMakefiles(callback: () => any): { dispose(): any
   return {
     dispose() {
       watcher?.dispose();
+      configChangeListener?.dispose();
     },
   };
 }
