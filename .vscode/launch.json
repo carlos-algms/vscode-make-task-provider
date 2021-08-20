@@ -22,9 +22,9 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/.temp/test/test/suite/index"
+        "--extensionTestsPath=${workspaceFolder}/.vscode-test/build/test/suite/index"
       ],
-      "outFiles": ["${workspaceFolder}/.temp/test/**/*.js"],
+      "outFiles": ["${workspaceFolder}/.vscode-test/build/**/*.js"],
       "preLaunchTask": "npm: compile:test",
       "env": {
         "NODE_ENV": "test"

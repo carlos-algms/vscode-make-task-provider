@@ -167,9 +167,9 @@
     "compile:prod": "yarn run compile --minify --define:process.env.NODE_ENV=\\\"production\\\"",
     "lint": "yarn type-check && eslint src",
     "watch": "nodemon --watch src -e ts --exec \"yarn compile\" ",
-    "test": "node .temp/test/test/runTest.js",
-    "pretest": "rm -rf .temp/test && yarn compile:test && cp package.json .temp/",
-    "compile:test": "yarn compile_base `find ./src -name '*.ts'` --outdir='.temp/test' --define:process.env.NODE_ENV=\\\"test\\\"",
+    "test": "node .vscode-test/build/test/runTest.js",
+    "pretest": "rm -rf .vscode-test/build && yarn compile:test",
+    "compile:test": "yarn compile_base `find ./src -name '*.ts'` --outdir='.vscode-test/build' --define:process.env.NODE_ENV=\\\"test\\\" && cp package.json .vscode-test/",
     "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md",
     "type-check": "tsc --noEmit -p ./"

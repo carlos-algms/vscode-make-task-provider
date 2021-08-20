@@ -32,7 +32,7 @@
       "group": "build",
       "problemMatcher": [],
       "label": "npm: compile:test",
-      "detail": "esbuild `find ./src -name '*.ts'` --sourcemap --platform=node --target=node14 --format=cjs --outdir='.temp/test' "
+      "detail": "esbuild `find ./src -name '*.ts'` --sourcemap --platform=node --target=node14 --format=cjs --outdir='.vscode-test/build' "
     }
   ]
 }
