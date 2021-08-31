@@ -2,6 +2,7 @@ import vscode from 'vscode';
 
 import { registerCommands } from './commandPicker/commandsManager';
 import { COMMANDS, CONFIG_KEYS } from './shared/config';
+import getOutputChannel from './shared/getOutputChannel';
 import watchForMakefiles from './shared/watchForMakefiles';
 import registerTaskProvider from './Tasks/registerTaskProvider';
 import { getTracker, trackEvent } from './telemetry/tracking';
@@ -31,6 +32,8 @@ export function activate(context: vscode.ExtensionContext): void {
         runRefreshCommand();
       }
     }),
+
+    getOutputChannel(),
   );
 
   trackEvent({
