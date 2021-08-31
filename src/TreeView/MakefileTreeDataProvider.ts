@@ -2,6 +2,7 @@ import vscode from 'vscode';
 
 import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
 import { TYPE } from '../shared/constants';
+import DisposeManager from '../shared/DisposeManager';
 import { MakefileTask } from '../Tasks/MakefileTask';
 import { trackEvent } from '../telemetry/tracking';
 
@@ -14,15 +15,18 @@ import {
   TaskHostFileItem,
 } from './TreeViewItems';
 
-export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class MakefileTreeDataProvider
+  extends DisposeManager
+  implements vscode.TreeDataProvider<vscode.TreeItem> {
   private taskTree: BaseTreeItem<null | FolderItem>[] | null = null;
 
-  private eventEmitter: vscode.EventEmitter<vscode.TreeItem | null> = new vscode.EventEmitter<vscode.TreeItem | null>();
+  private eventEmitter = new vscode.EventEmitter<vscode.TreeItem | null>();
 
-  readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | null> = this.eventEmitter.event;
+  readonly onDidChangeTreeData = this.eventEmitter.event;
 
-  constructor(context: vscode.ExtensionContext) {
-    context.subscriptions.push(
+  constructor() {
+    super();
+    this.disposables.push(
       this.eventEmitter,
       vscode.commands.registerCommand(COMMANDS.runTargetFromTreeView, this.runTargetFromTreeView),
       vscode.commands.registerCommand(COMMANDS.openMakefile, this.openHostFile),
@@ -106,10 +110,10 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     return element.getChildren();
   }
 
-  refresh(): void {
+  refresh = (): void => {
     this.taskTree = null;
     this.eventEmitter.fire(null);
-  }
+  };
 
   getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;

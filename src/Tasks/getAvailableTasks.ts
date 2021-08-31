@@ -3,6 +3,7 @@ import vscode from 'vscode';
 
 import { makefileParser } from '../Parsers/makefileParser';
 import { getMakefileNames } from '../shared/config';
+import { TYPE } from '../shared/constants';
 import { showGenericErrorNotification } from '../shared/errorNotifications';
 import getOutputChannel from '../shared/getOutputChannel';
 import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
@@ -91,4 +92,12 @@ function displayError(errorThrown: Error) {
 
   getOutputChannel().appendLine(message);
   showGenericErrorNotification();
+}
+
+/**
+ * Uses `vscode.tasks.fetchTasks(..)` to list all available tasks,
+ * including the ones defined in the tasks.json
+ */
+export function fetchTaskFromVsCode(): Promise<MakefileTask[]> {
+  return <Promise<MakefileTask[]>>vscode.tasks.fetchTasks({ type: TYPE });
 }

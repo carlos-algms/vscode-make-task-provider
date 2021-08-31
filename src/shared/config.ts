@@ -22,8 +22,7 @@ export const CONFIG_KEYS = {
 
 export const COMMANDS = {
   /**
-   * Run a Make target in interactive mode
-   * Either by command picker or from menu: Terminal -> Run Task
+   * Run a Make target when the user run `Make: run target` from the command pallet
    */
   runTarget: `${APP_NAME}.runTarget`,
 

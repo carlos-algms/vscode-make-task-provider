@@ -1,35 +1,38 @@
 import vscode from 'vscode';
 
 import { COMMANDS } from '../shared/config';
-import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
+import DisposeManager from '../shared/DisposeManager';
 import { invalidateTaskCaches } from '../Tasks/taskCaches';
 import { trackEvent } from '../telemetry/tracking';
-import { MakefileTreeDataProvider } from '../TreeView/MakefileTreeDataProvider';
 
 import { runFromCommandPicker } from './runFromCommandPicker';
 
-export function registerCommands(
-  context: vscode.ExtensionContext,
-  taskProvider?: MakefileTaskProvider,
-  treeViewDataProvider?: MakefileTreeDataProvider,
-): void {
-  context.subscriptions.push(
-    vscode.commands.registerCommand(COMMANDS.runTarget, () => {
-      runFromCommandPicker(taskProvider);
-    }),
+export class CommandsRegistration extends DisposeManager {
+  private refreshEventEmitter = new vscode.EventEmitter();
 
-    vscode.commands.registerCommand(COMMANDS.refresh, () => {
-      invalidateTaskCaches();
+  /**
+   * Event triggered every time the user triggers a refresh command
+   */
+  readonly onRunRefresh = this.refreshEventEmitter.event;
 
-      if (treeViewDataProvider) {
-        treeViewDataProvider.refresh();
-      }
+  constructor() {
+    super();
 
-      trackEvent({
-        action: 'Run Command',
-        category: 'Global',
-        label: 'Refresh',
-      });
-    }),
-  );
+    this.disposables.push(
+      this.refreshEventEmitter,
+
+      vscode.commands.registerCommand(COMMANDS.runTarget, () => runFromCommandPicker()),
+
+      vscode.commands.registerCommand(COMMANDS.refresh, () => {
+        invalidateTaskCaches();
+        this.refreshEventEmitter.fire(null);
+
+        trackEvent({
+          action: 'Run Command',
+          category: 'Global',
+          label: 'Refresh',
+        });
+      }),
+    );
+  }
 }

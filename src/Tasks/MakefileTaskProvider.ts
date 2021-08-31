@@ -28,7 +28,7 @@ export class MakefileTaskProvider implements vscode.TaskProvider<vscode.Task | M
       return undefined;
     }
 
-    const makefileUri: vscode.Uri = scope.uri.with({
+    const makefileUri = scope.uri.with({
       path: path.join(scope.uri.path, definition.makeFileRelativePath),
     });
 

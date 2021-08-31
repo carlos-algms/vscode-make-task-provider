@@ -1,9 +1,12 @@
-import { AnalyticsReporter, Attributes, Exception } from 'vscode-extension-analytics';
+import { AnalyticsReporter, Attributes } from 'vscode-extension-analytics';
 
 import { name, version } from '../../package.json';
 import getOutputChannel from '../shared/getOutputChannel';
 
-import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
+import AmplitudeVsCodeAnalyticsClient, {
+  AnalyticsEvent,
+  AnalyticsException,
+} from './AmplitudeVsCodeAnalyticsClient';
 
 export type Primitive = string | number | null | undefined;
 
@@ -48,6 +51,7 @@ export function trackEvent(attributes: StandardAttributes): void {
     );
     return;
   }
+
   getTracker().sendEvent(new AnalyticsEvent(attributes.action, attributes));
 }
 
@@ -62,7 +66,8 @@ export function trackException(error: Error, attributes: StandardAttributes): vo
     );
     return;
   }
-  getTracker().sendException(new Exception(error, attributes));
+
+  getTracker().sendException(new AnalyticsException(error, attributes));
 }
 
 /**

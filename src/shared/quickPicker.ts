@@ -17,8 +17,10 @@ export interface MakefileQuickPickItem extends vscode.QuickPickItem {
   task: MakefileTask;
 }
 
-export async function showQuickPickForTasks(targets: MakefileTask[]): Promise<MakefileTask | null> {
-  const items = targets.map<MakefileQuickPickItem>((t) => ({
+export async function showQuickPickForTasks<T extends vscode.Task>(
+  targets: T[],
+): Promise<T | null> {
+  const items = targets.map((t) => ({
     label: t.name,
     task: t,
   }));
