@@ -3,7 +3,7 @@ import vscode from 'vscode';
 
 import { getMakeExecutablePath } from '../shared/config';
 import { TYPE } from '../shared/constants';
-import { getFileRelativePath } from '../shared/workspaceUtils';
+import { getFileRelativePath } from '../shared/workspaceFiles';
 
 import { MakefileTask, MakefileTaskDefinition } from './MakefileTask';
 import { getTaskGroupGuess } from './taskGroup';
@@ -13,16 +13,16 @@ type PossibleDefinition = MakefileTaskDefinition | string;
 /**
  * When the definition is coming from `resolveTask`, it is required to return it immutable.
  */
-export function getDefinition(
+function getDefinition(
   nameOrDefinition: PossibleDefinition,
-  folder: vscode.WorkspaceFolder,
-  makefileUri: vscode.Uri,
+  makefilePath: string,
+  folderPath: string,
 ): MakefileTaskDefinition {
   if (typeof nameOrDefinition === 'string') {
     return {
       type: TYPE,
       targetName: nameOrDefinition,
-      makeFileRelativePath: getFileRelativePath(makefileUri, folder),
+      makeFileRelativePath: getFileRelativePath(makefilePath, folderPath),
     };
   }
 
@@ -34,7 +34,8 @@ export function createMakefileTask(
   folder: vscode.WorkspaceFolder,
   makefileUri: vscode.Uri,
 ): MakefileTask {
-  const definition = getDefinition(nameOrDefinition, folder, makefileUri);
+  // TODO test on Windows if uri.fsPath === uri.path
+  const definition = getDefinition(nameOrDefinition, makefileUri.fsPath, folder.uri.fsPath);
   const { targetName, makeFileRelativePath } = definition;
 
   const cwd = path.dirname(makefileUri.fsPath);

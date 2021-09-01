@@ -1,15 +1,23 @@
 import vscode from 'vscode';
 
+import { isAutoDetectEnabled } from './config';
+
 export function isWorkspaceFolder(value: unknown): value is vscode.WorkspaceFolder {
   return Boolean(value) && typeof value !== 'number';
 }
 
-/**
- * Get the relative path to a file in the Workspace
- */
-export function getFileRelativePath(fileUri: vscode.Uri, folder: vscode.WorkspaceFolder): string {
-  // TODO folder could be optional and assumed to be the current workspace folder
-  const absolutePath = fileUri.path.substring(0, fileUri.path.length);
-  const rootUri = folder.uri;
-  return absolutePath.substring(rootUri.path.length + 1);
+export function getValidWorkspaceFolders(): vscode.WorkspaceFolder[] | null {
+  const folders = vscode.workspace.workspaceFolders;
+
+  if (!folders) {
+    return null;
+  }
+
+  const validFolders = folders.filter((f) => isAutoDetectEnabled(f) && f.uri.scheme === 'file');
+
+  if (!validFolders.length) {
+    return null;
+  }
+
+  return validFolders;
 }

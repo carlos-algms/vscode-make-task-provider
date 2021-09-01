@@ -18,6 +18,7 @@ export const CONFIG_KEYS = {
   autoDetect: `${APP_NAME}.autoDetect`,
   makefileNames: `${APP_NAME}.makefileNames`,
   makeExecutable: `${APP_NAME}.${getUserPlatformKey() ?? 'unix.makeExecutable'}`,
+  telemetry: `${APP_NAME}.telemetry`,
 };
 
 export const COMMANDS = {

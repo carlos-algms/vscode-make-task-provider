@@ -2,10 +2,9 @@ import vscode from 'vscode';
 
 import { showQuickPickForTasks } from '../shared/quickPicker';
 import { fetchTaskFromVsCode } from '../Tasks/getAvailableTasks';
-import { MakefileTaskProvider } from '../Tasks/MakefileTaskProvider';
 import { trackEvent } from '../telemetry/tracking';
 
-export async function runFromCommandPicker(_taskProvider?: MakefileTaskProvider): Promise<void> {
+export async function runFromCommandPicker(): Promise<void> {
   trackEvent({
     action: 'Run Command',
     category: 'CommandPicker',

@@ -1,9 +1,8 @@
 import vscode from 'vscode';
 
 import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
-import { TYPE } from '../shared/constants';
 import DisposeManager from '../shared/DisposeManager';
-import { MakefileTask } from '../Tasks/MakefileTask';
+import { fetchTaskFromVsCode } from '../Tasks/getAvailableTasks';
 import { trackEvent } from '../telemetry/tracking';
 
 import { buildTasksTree } from './taskTreeBuilder';
@@ -86,13 +85,13 @@ export class MakefileTreeDataProvider
   async getChildren(element?: BaseTreeItem): Promise<vscode.TreeItem[] | null | undefined> {
     if (!element) {
       if (!this.taskTree) {
-        const availableTargets = <MakefileTask[]>await vscode.tasks.fetchTasks({ type: TYPE });
+        const availableTargets = await fetchTaskFromVsCode();
 
         if (availableTargets) {
           this.taskTree = buildTasksTree(availableTargets);
         }
 
-        if (!this.taskTree || this.taskTree.length === 0) {
+        if (!this.taskTree?.length) {
           let message = 'No scripts found.';
 
           if (!isAutoDetectEnabled()) {

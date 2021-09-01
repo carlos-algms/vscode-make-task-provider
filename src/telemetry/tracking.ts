@@ -1,6 +1,6 @@
 import { AnalyticsReporter, Attributes } from 'vscode-extension-analytics';
 
-import { name, version } from '../../package.json';
+import { APP_NAME, APP_VERSION } from '../shared/constants';
 import getOutputChannel from '../shared/getOutputChannel';
 
 import AmplitudeVsCodeAnalyticsClient, {
@@ -34,7 +34,7 @@ const createReporter = (extensionId: string, extensionVersion: string): Analytic
 
 export function getTracker(): AnalyticsReporter {
   if (!tracker) {
-    tracker = createReporter(name, version);
+    tracker = createReporter(APP_NAME, APP_VERSION);
   }
 
   return tracker;

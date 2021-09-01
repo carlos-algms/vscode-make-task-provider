@@ -112,7 +112,7 @@ export class MakefileItem extends TaskHostFileItem {
 export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
   task: MakefileTask;
 
-  constructor(hostFile: BaseTreeItem<FolderItem>, task: MakefileTask) {
+  constructor(hostFile: TaskHostFileItem, task: MakefileTask) {
     super(hostFile, task.name, None);
 
     this.task = task;
@@ -128,6 +128,7 @@ export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
 
     this.tooltip = task.detail ?? '';
 
+    // TODO check here why the icons stopped matching
     if (task.group === vscode.TaskGroup.Test) {
       this.iconPath = new vscode.ThemeIcon('beaker');
     } else if (task.group === vscode.TaskGroup.Build) {

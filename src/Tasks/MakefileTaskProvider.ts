@@ -6,6 +6,9 @@ import getAvailableTasks from './getAvailableTasks';
 import { MakefileTask } from './MakefileTask';
 
 export class MakefileTaskProvider implements vscode.TaskProvider<vscode.Task | MakefileTask> {
+  /**
+   * @inheritdoc
+   */
   provideTasks(): vscode.ProviderResult<MakefileTask[]> {
     return getAvailableTasks();
   }

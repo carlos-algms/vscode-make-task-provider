@@ -5,6 +5,7 @@ const testNames = ['test'];
 
 export function getTaskGroupGuess(taskName: string): vscode.TaskGroup | undefined {
   const lowerCaseTaskName = taskName.toLowerCase();
+
   if (isBuildTask(lowerCaseTaskName)) {
     return vscode.TaskGroup.Build;
   }
@@ -17,19 +18,9 @@ export function getTaskGroupGuess(taskName: string): vscode.TaskGroup | undefine
 }
 
 export function isBuildTask(name: string): boolean {
-  for (const buildName of buildNames) {
-    if (name.includes(buildName)) {
-      return true;
-    }
-  }
-  return false;
+  return buildNames.some((buildName) => name.includes(buildName));
 }
 
 export function isTestTask(name: string): boolean {
-  for (const testName of testNames) {
-    if (name.includes(testName)) {
-      return true;
-    }
-  }
-  return false;
+  return testNames.some((testName) => name.includes(testName));
 }

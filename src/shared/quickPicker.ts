@@ -1,7 +1,5 @@
 import vscode from 'vscode';
 
-import { MakefileTask } from '../Tasks/MakefileTask';
-
 export async function showQuickPicker<T extends vscode.QuickPickItem>(
   items: T[],
   placeHolder = '',
@@ -11,10 +9,6 @@ export async function showQuickPicker<T extends vscode.QuickPickItem>(
   });
 
   return selected;
-}
-
-export interface MakefileQuickPickItem extends vscode.QuickPickItem {
-  task: MakefileTask;
 }
 
 export async function showQuickPickForTasks<T extends vscode.Task>(
