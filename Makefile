@@ -1,4 +1,4 @@
-.PHONY: pack publish
+.PHONY: pack publish compile compile_prod test
 
 #####
 # REMEMBER TO INSTALL VSCE GLOBALLY
@@ -15,3 +15,25 @@ pack:
 # https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 publish:
 	vsce publish -p $(VSCE_TOKEN)
+
+
+
+compile_base = npx esbuild --sourcemap --format=cjs --platform=node --target=node14
+compile_extension = $(compile_base) src/extension.ts --outfile=build/extension.js --bundle --external:vscode
+
+compile:
+	$(compile_extension)
+
+compile_prod:
+	$(compile_extension) --minify --define:process.env.NODE_ENV=\"production\"
+
+test:
+	rm -rf .vscode-test/build
+
+	$(compile_base) `find ./src -name '*.ts'` \
+		--outdir='.vscode-test/build' \
+		--define:process.env.NODE_ENV=\"test\"
+
+	cp package.json .vscode-test/
+
+	node .vscode-test/build/test/runTest.js `realpath src/test/examples/case-1`

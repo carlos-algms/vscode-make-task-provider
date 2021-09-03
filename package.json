@@ -161,15 +161,10 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn lint && rm -rf build/ && yarn compile:prod",
-    "compile_base": "esbuild --sourcemap --format=cjs --platform=node --target=node14",
-    "compile": "yarn compile_base src/extension.ts --outfile=build/extension.js --bundle --external:vscode",
-    "compile:prod": "yarn run compile --minify --define:process.env.NODE_ENV=\\\"production\\\"",
+    "vscode:prepublish": "yarn lint && rm -rf build/ && make compile_prod",
     "lint": "yarn type-check && eslint src",
-    "watch": "nodemon --watch src -e ts --exec \"yarn compile\" ",
-    "test": "node .vscode-test/build/test/runTest.js",
-    "pretest": "rm -rf .vscode-test/build && yarn compile:test",
-    "compile:test": "yarn compile_base `find ./src -name '*.ts'` --outdir='.vscode-test/build' --define:process.env.NODE_ENV=\\\"test\\\" && cp package.json .vscode-test/",
+    "watch": "nodemon --watch src -e ts --exec \"make compile\"",
+    "test": "make test",
     "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
     "version": "yarn run changelog && git add CHANGELOG.md",
     "type-check": "tsc --noEmit -p ./"

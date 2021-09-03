@@ -11,11 +11,14 @@ async function main() {
     // Passed to --extensionTestsPath
     const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
+    const [, , workspace] = process.argv;
+
     // Download VS Code, unzip it and run the integration test
     await runTests({
       version: 'insiders',
       extensionDevelopmentPath,
       extensionTestsPath,
+      launchArgs: [workspace],
     });
   } catch (err) {
     console.error('Failed to run tests', (<Error>err).message);
