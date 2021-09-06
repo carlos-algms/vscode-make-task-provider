@@ -3,7 +3,7 @@ import vscode from 'vscode';
 
 import watchForMakefiles from './watchForMakefiles';
 
-describe.only('Watch for Makefiles', () => {
+describe('Watch for Makefiles', () => {
   let onDidChangeConfigurationStub: sinon.SinonStub;
   let createFileSystemWatcherStub: sinon.SinonStub<any[], vscode.FileSystemWatcher>;
   let configListener: (e: vscode.ConfigurationChangeEvent) => any;
