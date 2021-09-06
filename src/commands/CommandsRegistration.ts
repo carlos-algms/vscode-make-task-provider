@@ -7,7 +7,7 @@ import { trackEvent } from '../telemetry/tracking';
 
 import { runFromCommandPicker } from './runFromCommandPicker';
 
-export class CommandsRegistration extends DisposeManager {
+export default class CommandsRegistration extends DisposeManager {
   private refreshEventEmitter = new vscode.EventEmitter();
 
   /**
@@ -20,19 +20,23 @@ export class CommandsRegistration extends DisposeManager {
 
     this.disposables.push(
       this.refreshEventEmitter,
-
-      vscode.commands.registerCommand(COMMANDS.runTarget, () => runFromCommandPicker()),
-
-      vscode.commands.registerCommand(COMMANDS.refresh, () => {
-        invalidateTaskCaches();
-        this.refreshEventEmitter.fire(null);
-
-        trackEvent({
-          action: 'Run Command',
-          category: 'Global',
-          label: 'Refresh',
-        });
-      }),
+      vscode.commands.registerCommand(COMMANDS.runTarget, this.handleRunTarget),
+      vscode.commands.registerCommand(COMMANDS.refresh, this.handleRefresh),
     );
   }
+
+  handleRunTarget = (): void => {
+    runFromCommandPicker();
+  };
+
+  handleRefresh = (): void => {
+    invalidateTaskCaches();
+    this.refreshEventEmitter.fire(null);
+
+    trackEvent({
+      action: 'Run Command',
+      category: 'Global',
+      label: 'Refresh',
+    });
+  };
 }

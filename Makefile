@@ -1,4 +1,4 @@
-.PHONY: pack publish compile compile_prod test
+.PHONY: pack publish compile compile_prod compile_test test
 
 #####
 # REMEMBER TO INSTALL VSCE GLOBALLY
@@ -27,13 +27,13 @@ compile:
 compile_prod:
 	$(compile_extension) --minify --define:process.env.NODE_ENV=\"production\"
 
-test:
+compile_test:
 	rm -rf .vscode-test/build
-
 	$(compile_base) `find ./src -name '*.ts'` \
 		--outdir='.vscode-test/build' \
 		--define:process.env.NODE_ENV=\"test\"
 
+test:
+	make compile_test
 	cp package.json .vscode-test/
-
 	node .vscode-test/build/test/runTest.js `realpath src/test/examples/case-1`

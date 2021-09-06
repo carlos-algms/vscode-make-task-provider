@@ -1,6 +1,6 @@
 import vscode from 'vscode';
 
-import { CommandsRegistration } from './commandPicker/commandsManager';
+import CommandsRegistration from './commands/CommandsRegistration';
 import { COMMANDS, CONFIG_KEYS } from './shared/config';
 import getOutputChannel from './shared/getOutputChannel';
 import watchForMakefiles from './shared/watchForMakefiles';
