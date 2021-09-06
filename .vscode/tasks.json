@@ -27,12 +27,10 @@
       }
     },
     {
-      "type": "npm",
-      "script": "compile:test",
-      "group": "build",
-      "problemMatcher": [],
-      "label": "npm: compile:test",
-      "detail": "esbuild `find ./src -name '*.ts'` --sourcemap --platform=node --target=node14 --format=cjs --outdir='.vscode-test/build' "
+      "label": "Compile Test",
+      "type": "shell",
+      "command": "make compile_test",
+      "problemMatcher": []
     }
   ]
 }

@@ -25,7 +25,7 @@
         "--extensionTestsPath=${workspaceFolder}/.vscode-test/build/test/suite/index"
       ],
       "outFiles": ["${workspaceFolder}/.vscode-test/build/**/*.js"],
-      "preLaunchTask": "npm: compile:test",
+      "preLaunchTask": "Compile Test",
       "env": {
         "NODE_ENV": "test"
       }
