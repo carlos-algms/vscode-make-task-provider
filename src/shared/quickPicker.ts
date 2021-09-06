@@ -3,7 +3,7 @@ import vscode from 'vscode';
 export async function showQuickPicker<T extends vscode.QuickPickItem>(
   items: T[],
   placeHolder = '',
-): Promise<T | null | void> {
+): Promise<T | void> {
   const selected = await vscode.window.showQuickPick(items, {
     placeHolder,
   });
