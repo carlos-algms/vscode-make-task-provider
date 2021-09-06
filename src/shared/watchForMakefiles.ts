@@ -15,7 +15,7 @@ function getNewFileWatcher(callback: () => any): vscode.FileSystemWatcher {
   return watcher;
 }
 
-export default function watchForMakefiles(callback: () => any): { dispose(): any } {
+export default function watchForMakefiles(callback: () => any): DisposeLike {
   let watcher: vscode.FileSystemWatcher | undefined;
   let configChangeListener: vscode.Disposable | undefined;
 

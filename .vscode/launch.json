@@ -22,7 +22,8 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/.vscode-test/build/test/suite/index"
+        "--extensionTestsPath=${workspaceFolder}/.vscode-test/build/test/suite/index",
+        "${workspaceFolder}/src/test/examples/case-1"
       ],
       "outFiles": ["${workspaceFolder}/.vscode-test/build/**/*.js"],
       "preLaunchTask": "Compile Test",

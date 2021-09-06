@@ -33,7 +33,6 @@ compile_test:
 		--outdir='.vscode-test/build' \
 		--define:process.env.NODE_ENV=\"test\"
 
-test:
-	make compile_test
+test: compile_test
 	cp package.json .vscode-test/
-	node .vscode-test/build/test/runTest.js `realpath src/test/examples/case-1`
+	node --enable-source-maps .vscode-test/build/test/runTest.js `realpath src/test/examples/case-1`
