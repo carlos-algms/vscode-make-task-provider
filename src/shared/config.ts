@@ -1,18 +1,9 @@
 import { platform } from 'os';
 import vscode from 'vscode';
 
-import { contributes } from '../../package.json';
 import { trackEvent } from '../telemetry/tracking';
 
-import { APP_NAME } from './constants';
-
-const {
-  configuration: {
-    properties: {
-      'make-task-provider.makefileNames': { default: defaultMakefileNames },
-    },
-  },
-} = contributes;
+import { APP_NAME, DEFAULT_MAKEFILE_NAMES } from './constants';
 
 export const CONFIG_KEYS = {
   autoDetect: `${APP_NAME}.autoDetect`,
@@ -76,7 +67,7 @@ export function getMakeExecutablePath(scope?: vscode.ConfigurationScope): string
 }
 
 export function getMakefileNames(scope?: vscode.ConfigurationScope): string[] {
-  return getFolderConfig(scope).get<string[]>('makefileNames', defaultMakefileNames);
+  return getFolderConfig(scope).get<string[]>('makefileNames', DEFAULT_MAKEFILE_NAMES);
 }
 
 export function getUserPlatformKey(): string | null {
