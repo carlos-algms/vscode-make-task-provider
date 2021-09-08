@@ -47,7 +47,7 @@ function setupTasksTimingTrack(): vscode.Disposable {
       trackEvent({
         action: 'Timing',
         category: 'Task Execution',
-        label: execution.task.name,
+        label: task.name,
         value: duration,
       });
     }),
