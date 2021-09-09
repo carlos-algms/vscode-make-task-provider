@@ -5,9 +5,22 @@ import { TYPE } from '../shared/constants';
 
 import { createMakefileTask } from './createMakefileTask';
 
-describe.only('Create Makefile tasks', () => {
+describe('Create Makefile tasks', () => {
   let workspace: vscode.WorkspaceFolder;
   let makefileUri: vscode.Uri;
+
+  before(() => {
+    const [firstWorkspace] = vscode.workspace.workspaceFolders ?? [];
+
+    if (!firstWorkspace) {
+      throw new Error('No open workspace while testing');
+    }
+
+    workspace = firstWorkspace;
+    makefileUri = firstWorkspace.uri.with({
+      path: path.join(firstWorkspace.uri.path, 'Makefile'),
+    });
+  });
 
   it('should create a task from a string name', () => {
     const name = 'test_name';
@@ -40,18 +53,5 @@ describe.only('Create Makefile tasks', () => {
     };
     const task = createMakefileTask(fakeDefinition, workspace, makefileUri);
     expect(task.definition).to.equal(fakeDefinition);
-  });
-
-  before(() => {
-    const [firstWorkspace] = vscode.workspace.workspaceFolders ?? [];
-
-    if (!firstWorkspace) {
-      throw new Error('No open workspace while testing');
-    }
-
-    workspace = firstWorkspace;
-    makefileUri = firstWorkspace.uri.with({
-      path: path.join(firstWorkspace.uri.path, 'Makefile'),
-    });
   });
 });
