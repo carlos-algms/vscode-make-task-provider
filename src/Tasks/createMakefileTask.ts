@@ -29,6 +29,11 @@ function getDefinition(
   return nameOrDefinition;
 }
 
+/**
+ * This function will be called when:
+ * 1. A task is defined in tasks.json and requires a execution definition
+ * 2. While parsing a Makefile and only the name of the target is available
+ */
 export function createMakefileTask(
   nameOrDefinition: PossibleDefinition,
   folder: vscode.WorkspaceFolder,

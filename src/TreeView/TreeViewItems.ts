@@ -129,6 +129,7 @@ export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
     this.tooltip = task.detail ?? '';
 
     // TODO check here why the icons stopped matching
+    // https://github.com/microsoft/vscode/issues/132279
     if (task.group === vscode.TaskGroup.Test) {
       this.iconPath = new vscode.ThemeIcon('beaker');
     } else if (task.group === vscode.TaskGroup.Build) {
