@@ -1,3 +1,9 @@
+## <small>2.1.1 (2021-11-08)</small>
+
+* Remove variables with `:` and `?` from the task list ([7590def](https://github.com/carlos-algms/vscode-make-task-provider/commit/7590def))
+
+
+
 ## 2.1.0 (2021-08-16)
 
 * Migrate to file parse instead of relying on Make (#11) ([88c2b9d](https://github.com/carlos-algms/vscode-make-task-provider/commit/88c2b9d)), closes [#11](https://github.com/carlos-algms/vscode-make-task-provider/issues/11)
