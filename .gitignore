@@ -2,6 +2,7 @@
 .env
 .env.backup
 *.log
+*.vsix
 /build/
 # Mac files
 .DS_Store
