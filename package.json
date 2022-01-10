@@ -164,7 +164,7 @@
     "vscode:prepublish": "yarn lint && rm -rf build/ && yarn compile:prod",
     "compile": "esbuild src/extension.ts --bundle --sourcemap --platform=node --target=node14 --external:vscode  --outfile=build/extension.js",
     "compile:prod": "yarn run compile --minify --define:process.env.NODE_ENV=\\\"production\\\"",
-    "lint": "yarn type-check && eslint src",
+    "lint": "yarn type-check && eslint src --fix",
     "watch": "nodemon --watch src -e ts --exec \"yarn compile\" ",
     "pretest": "yarn run compile && yarn run lint",
     "test": "node ./build/test/runTest.js",
