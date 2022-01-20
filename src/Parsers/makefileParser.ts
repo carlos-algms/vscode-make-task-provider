@@ -10,7 +10,7 @@ import { trackException, trackExecutionTime } from '../telemetry/tracking';
  * - pattern rules: https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html
  */
 const excludesRegex = /^[.%]/;
-const targetNameRegex = /^([\w-./ ]+)\s*:(?![:=?])/gi;
+const targetNameRegex = /^([\w-./ ]+)\s*:(?![:=?])/i;
 
 export async function makefileParser(makefileUri: vscode.Uri): Promise<string[] | null> {
   try {
