@@ -19,7 +19,8 @@
     "downlevelIteration": false,
     "newLine": "lf",
     "removeComments": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "useUnknownInCatchVariables": false
   },
   "exclude": ["node_modules", "src/test", ".vscode-test", "build", ".temp"]
 }

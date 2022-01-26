@@ -1,5 +1,6 @@
 import { name, version, contributes } from '../../package.json';
 
+// TODO find a way of avoid using `contributes`, since it is keeping a huge amount of unused code from package.json
 const {
   configuration: {
     properties: {
