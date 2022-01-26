@@ -91,7 +91,7 @@
         {
           "command": "make-task-provider.openMakefile",
           "when": "view == make && viewItem == Makefile",
-          "group": "navigation"
+          "group": "inline"
         },
         {
           "command": "make-task-provider.runTargetFromTreeView",
@@ -102,16 +102,6 @@
           "command": "make-task-provider.openMakefile",
           "when": "view == make && viewItem == MakefileTarget",
           "group": "inline"
-        },
-        {
-          "command": "make-task-provider.runTargetFromTreeView",
-          "when": "view == make && viewItem == MakefileTarget",
-          "group": "navigation@1"
-        },
-        {
-          "command": "make-task-provider.openMakefile",
-          "when": "view == make && viewItem == MakefileTarget",
-          "group": "navigation@2"
         }
       ]
     },
