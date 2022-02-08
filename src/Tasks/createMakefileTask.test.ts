@@ -18,7 +18,7 @@ describe('Create Makefile tasks', () => {
 
     workspace = firstWorkspace;
     makefileUri = firstWorkspace.uri.with({
-      path: path.join(firstWorkspace.uri.path, 'Makefile'),
+      path: path.join(firstWorkspace.uri.fsPath, 'Makefile'),
     });
   });
 

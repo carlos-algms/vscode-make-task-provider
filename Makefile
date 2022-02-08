@@ -28,7 +28,7 @@ compile_prod:
 	$(compile_extension) --minify --define:process.env.NODE_ENV=\"production\"
 
 compile_test:
-	rm -rf .vscode-test/build
+	yarn rimraf .vscode-test/build
 	$(compile_base) `find ./src -name '*.ts'` \
 		--outdir='.vscode-test/build' \
 		--define:process.env.NODE_ENV=\"test\"

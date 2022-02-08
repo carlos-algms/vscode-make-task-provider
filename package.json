@@ -187,6 +187,7 @@
     "node-machine-id": "^1.1.12",
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "sinon": "^11.1.2",
     "sinon-chai": "^3.7.0",
     "tap": "^15.0.9",
