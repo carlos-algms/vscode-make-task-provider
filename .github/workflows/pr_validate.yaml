@@ -11,6 +11,11 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - id: checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+
       - id: setup
         uses: ./.github/actions/setup_workspace
 

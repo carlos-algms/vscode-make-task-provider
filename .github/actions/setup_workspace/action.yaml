@@ -4,10 +4,6 @@ description: Checkout the repo, setup Node, and install dependencies
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v1
-      with:
-        fetch-depth: 0
-
     - uses: actions/setup-node@v1
       with:
         node-version: 14
