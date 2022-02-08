@@ -1,13 +1,7 @@
-*           text=auto
+*           text eol=lf
 
-# enforce linux line endings
-*.md        text eol=lf
-*.txt       text eol=lf
-*.js        text eol=lf
-*.json      text eol=lf
-*.ts        text eol=lf
-*.yml       text eol=lf
-*.yaml      text eol=lf
+# enforce specific line endings
+*.bat       text eol=crlf
 
 # dotfiles configurations
 .*          text eol=lf
