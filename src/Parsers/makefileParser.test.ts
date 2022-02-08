@@ -11,7 +11,7 @@ describe('Makefile Parser', () => {
       throw new TypeError('No workspace folder open while running tests');
     }
 
-    const makefilePath = path.join(workspaceFolder.uri.path, 'Makefile');
+    const makefilePath = path.join(workspaceFolder.uri.fsPath, 'Makefile');
 
     const targetNames = await makefileParser(makefilePath);
 

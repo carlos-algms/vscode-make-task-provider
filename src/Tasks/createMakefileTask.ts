@@ -39,7 +39,6 @@ export function createMakefileTask(
   folder: vscode.WorkspaceFolder,
   makefileUri: vscode.Uri,
 ): MakefileTask {
-  // TODO test on Windows if uri.fsPath === uri.path
   const definition = getDefinition(nameOrDefinition, makefileUri.fsPath, folder.uri.fsPath);
   const { targetName, makeFileRelativePath } = definition;
 

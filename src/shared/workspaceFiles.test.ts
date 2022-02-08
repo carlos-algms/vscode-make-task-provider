@@ -1,4 +1,5 @@
 import vscode from 'vscode';
+import path from 'path';
 
 import { filterUniqueUris, findFilesInFolder, getFileRelativePath } from './workspaceFiles';
 
@@ -18,8 +19,8 @@ describe('Workspace Files Utils', () => {
   });
 
   it('should filter unique Uris', () => {
-    const file1 = '/a/b/file-1.txt';
-    const file2 = '/a/b/file-2.txt';
+    const file1 = path.normalize('/a/b/file-1.txt');
+    const file2 = path.normalize('/a/b/file-2.txt');
 
     const uris = [vscode.Uri.file(file1), vscode.Uri.file(file2), vscode.Uri.file(file1)];
 
