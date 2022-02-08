@@ -35,4 +35,4 @@ compile_test:
 
 test: compile_test
 	cp package.json .vscode-test/
-	node --enable-source-maps .vscode-test/build/test/runTest.js `realpath src/test/examples/case-1`
+	node --enable-source-maps .vscode-test/build/test/runTest.js `npx realpath src/test/examples/case-1`
