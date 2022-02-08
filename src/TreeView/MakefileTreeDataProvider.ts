@@ -1,8 +1,8 @@
 import vscode from 'vscode';
 
 import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
-import { TYPE } from '../shared/constants';
-import { MakefileTask } from '../Tasks/MakefileTask';
+import DisposeManager from '../shared/DisposeManager';
+import { fetchTaskFromVsCode } from '../Tasks/getAvailableTasks';
 import { trackEvent } from '../telemetry/tracking';
 
 import { buildTasksTree } from './taskTreeBuilder';
@@ -14,15 +14,18 @@ import {
   TaskHostFileItem,
 } from './TreeViewItems';
 
-export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class MakefileTreeDataProvider
+  extends DisposeManager
+  implements vscode.TreeDataProvider<vscode.TreeItem> {
   private taskTree: BaseTreeItem<null | FolderItem>[] | null = null;
 
-  private eventEmitter: vscode.EventEmitter<vscode.TreeItem | null> = new vscode.EventEmitter<vscode.TreeItem | null>();
+  private eventEmitter = new vscode.EventEmitter<vscode.TreeItem | null>();
 
-  readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | null> = this.eventEmitter.event;
+  readonly onDidChangeTreeData = this.eventEmitter.event;
 
-  constructor(context: vscode.ExtensionContext) {
-    context.subscriptions.push(
+  constructor() {
+    super();
+    this.disposables.push(
       this.eventEmitter,
       vscode.commands.registerCommand(COMMANDS.runTargetFromTreeView, this.runTargetFromTreeView),
       vscode.commands.registerCommand(COMMANDS.openMakefile, this.openHostFile),
@@ -82,13 +85,13 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
   async getChildren(element?: BaseTreeItem): Promise<vscode.TreeItem[] | null | undefined> {
     if (!element) {
       if (!this.taskTree) {
-        const availableTargets = <MakefileTask[]>await vscode.tasks.fetchTasks({ type: TYPE });
+        const availableTargets = await fetchTaskFromVsCode();
 
         if (availableTargets) {
           this.taskTree = buildTasksTree(availableTargets);
         }
 
-        if (!this.taskTree || this.taskTree.length === 0) {
+        if (!this.taskTree?.length) {
           let message = 'No scripts found.';
 
           if (!isAutoDetectEnabled()) {
@@ -106,10 +109,10 @@ export class MakefileTreeDataProvider implements vscode.TreeDataProvider<vscode.
     return element.getChildren();
   }
 
-  refresh(): void {
+  refresh = (): void => {
     this.taskTree = null;
     this.eventEmitter.fire(null);
-  }
+  };
 
   getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;

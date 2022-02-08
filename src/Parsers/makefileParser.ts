@@ -1,5 +1,3 @@
-import vscode from 'vscode';
-
 import { fileReader } from '../shared/fileReader';
 import { trackException, trackExecutionTime } from '../telemetry/tracking';
 
@@ -10,11 +8,11 @@ import { trackException, trackExecutionTime } from '../telemetry/tracking';
  * - pattern rules: https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html
  */
 const excludesRegex = /^[.%]/;
-const targetNameRegex = /^([\w-./ ]+)\s*:(?![:=?])/gi;
+const targetNameRegex = /^([\w-./ ]+)\s*:(?![:=?])/i;
 
-export async function makefileParser(makefileUri: vscode.Uri): Promise<string[] | null> {
+export async function makefileParser(makefileFsPath: string): Promise<string[] | null> {
   try {
-    const targetNames = await trackExecutionTime(() => fileReader(makefileUri.fsPath, lineFilter), {
+    const targetNames = await trackExecutionTime(() => fileReader(makefileFsPath, lineFilter), {
       category: 'Parsers',
       label: 'Parse Makefile',
     });

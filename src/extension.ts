@@ -1,26 +1,32 @@
 import vscode from 'vscode';
 
-import { registerCommands } from './commandPicker/commandsManager';
+import CommandsRegistration from './commands/CommandsRegistration';
 import { COMMANDS, CONFIG_KEYS } from './shared/config';
+import getOutputChannel from './shared/getOutputChannel';
 import watchForMakefiles from './shared/watchForMakefiles';
-import registerTaskProvider from './Tasks/registerTaskProvider';
+import { TaskProviderRegistration } from './Tasks/registerTaskProvider';
 import { getTracker, trackEvent } from './telemetry/tracking';
-import { registerTreeViewDataProvider } from './TreeView/registerTreeViewDataProvider';
+import { TreeViewRegistration } from './TreeView/registerTreeViewDataProvider';
 
 export function activate(context: vscode.ExtensionContext): void {
-  const taskProvider = registerTaskProvider(context);
-  const treeViewDataProvider = registerTreeViewDataProvider(context);
+  const taskProviderRegistration = new TaskProviderRegistration();
+  const treeViewRegistration = new TreeViewRegistration();
+  const commandsRegistration = new CommandsRegistration();
 
-  registerCommands(context, taskProvider, treeViewDataProvider);
+  commandsRegistration.onRunRefresh(treeViewRegistration.refreshTree);
 
-  const runRefreshCommand = () => {
+  const executeRefreshCommand = () => {
     vscode.commands.executeCommand(COMMANDS.refresh);
   };
 
   context.subscriptions.push(
-    vscode.workspace.onDidChangeWorkspaceFolders(runRefreshCommand),
+    taskProviderRegistration,
+    treeViewRegistration,
+    commandsRegistration,
 
-    watchForMakefiles(runRefreshCommand),
+    vscode.workspace.onDidChangeWorkspaceFolders(executeRefreshCommand),
+
+    watchForMakefiles(executeRefreshCommand),
 
     vscode.workspace.onDidChangeConfiguration((e) => {
       const shouldRefresh =
@@ -28,9 +34,11 @@ export function activate(context: vscode.ExtensionContext): void {
         e.affectsConfiguration(CONFIG_KEYS.makeExecutable);
 
       if (shouldRefresh) {
-        runRefreshCommand();
+        executeRefreshCommand();
       }
     }),
+
+    getOutputChannel(),
   );
 
   trackEvent({

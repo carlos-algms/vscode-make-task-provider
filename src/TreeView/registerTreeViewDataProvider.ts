@@ -1,24 +1,33 @@
 import vscode from 'vscode';
 
 import { TYPE } from '../shared/constants';
+import DisposeManager from '../shared/DisposeManager';
 
 import { MakefileTreeDataProvider } from './MakefileTreeDataProvider';
 
-export function registerTreeViewDataProvider(
-  context: vscode.ExtensionContext,
-): MakefileTreeDataProvider | undefined {
-  if (!vscode.workspace.workspaceFolders) {
-    return undefined;
+export class TreeViewRegistration extends DisposeManager {
+  readonly treeDataProvider?: MakefileTreeDataProvider;
+
+  constructor() {
+    super();
+
+    if (!vscode.workspace.workspaceFolders) {
+      return;
+    }
+
+    this.treeDataProvider = new MakefileTreeDataProvider();
+
+    this.disposables.push(
+      this.treeDataProvider,
+
+      vscode.window.createTreeView(TYPE, {
+        treeDataProvider: this.treeDataProvider,
+        showCollapseAll: true,
+      }),
+    );
   }
 
-  const treeDataProvider = new MakefileTreeDataProvider(context);
-
-  context.subscriptions.push(
-    vscode.window.createTreeView(TYPE, {
-      treeDataProvider,
-      showCollapseAll: true,
-    }),
-  );
-
-  return treeDataProvider;
+  refreshTree = (): void => {
+    this.treeDataProvider?.refresh();
+  };
 }

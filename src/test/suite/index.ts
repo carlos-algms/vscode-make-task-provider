@@ -1,21 +1,37 @@
-/* eslint-disable import/no-extraneous-dependencies */
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import glob from 'glob';
 import Mocha from 'mocha';
 import path from 'path';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+
+import 'chai/register-expect';
+import 'chai/register-should';
+import 'chai/register-assert';
 
 export function run(): Promise<void> {
+  chai.use(chaiAsPromised);
+  chai.use(sinonChai);
+
   // Create the mocha test
   const mocha = new Mocha({
-    ui: 'tdd',
+    ui: 'bdd',
     color: true,
+    reporter: 'list',
+    rootHooks: {
+      afterEach() {
+        sinon.restore();
+      },
+    },
   });
 
-  const testsRoot = path.resolve(__dirname, '..');
+  const testsRoot = path.resolve(__dirname, '../..');
 
-  return new Promise((c, e) => {
+  return new Promise((resolve, reject) => {
     glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
       if (err) {
-        e(err);
+        reject(err);
         return;
       }
 
@@ -26,14 +42,14 @@ export function run(): Promise<void> {
         // Run the mocha test
         mocha.run((failures) => {
           if (failures > 0) {
-            e(new Error(`${failures} tests failed.`));
+            reject(new Error(`${failures} tests failed.`));
           } else {
-            c();
+            resolve();
           }
         });
       } catch (error) {
         console.error(error);
-        e(error);
+        reject(error);
       }
     });
   });

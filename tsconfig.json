@@ -12,15 +12,15 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "alwaysStrict": true,
-    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
-    "downlevelIteration": true,
+    "downlevelIteration": false,
     "newLine": "lf",
     "removeComments": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "useUnknownInCatchVariables": false
   },
   "exclude": ["node_modules", "src/test", ".vscode-test", "build", ".temp"]
 }

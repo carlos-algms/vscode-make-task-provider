@@ -1,11 +1,9 @@
 import vscode from 'vscode';
 
-import { MakefileTask } from '../Tasks/MakefileTask';
-
 export async function showQuickPicker<T extends vscode.QuickPickItem>(
   items: T[],
   placeHolder = '',
-): Promise<T | null | void> {
+): Promise<T | void> {
   const selected = await vscode.window.showQuickPick(items, {
     placeHolder,
   });
@@ -13,12 +11,10 @@ export async function showQuickPicker<T extends vscode.QuickPickItem>(
   return selected;
 }
 
-export interface MakefileQuickPickItem extends vscode.QuickPickItem {
-  task: MakefileTask;
-}
-
-export async function showQuickPickForTasks(targets: MakefileTask[]): Promise<MakefileTask | null> {
-  const items = targets.map<MakefileQuickPickItem>((t) => ({
+export async function showQuickPickForTasks<T extends vscode.Task>(
+  targets: T[],
+): Promise<T | null> {
+  const items = targets.map((t) => ({
     label: t.name,
     task: t,
   }));

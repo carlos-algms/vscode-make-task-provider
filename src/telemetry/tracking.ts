@@ -1,9 +1,12 @@
-import { AnalyticsReporter, Attributes, Exception } from 'vscode-extension-analytics';
+import { AnalyticsReporter, Attributes } from 'vscode-extension-analytics';
 
-import { name, version } from '../../package.json';
+import { APP_NAME, APP_VERSION } from '../shared/constants';
 import getOutputChannel from '../shared/getOutputChannel';
 
-import AmplitudeVsCodeAnalyticsClient, { AnalyticsEvent } from './AmplitudeVsCodeAnalyticsClient';
+import AmplitudeVsCodeAnalyticsClient, {
+  AnalyticsEvent,
+  AnalyticsException,
+} from './AmplitudeVsCodeAnalyticsClient';
 
 export type Primitive = string | number | null | undefined;
 
@@ -31,30 +34,40 @@ const createReporter = (extensionId: string, extensionVersion: string): Analytic
 
 export function getTracker(): AnalyticsReporter {
   if (!tracker) {
-    tracker = createReporter(name, version);
+    tracker = createReporter(APP_NAME, APP_VERSION);
   }
 
   return tracker;
 }
 
 export function trackEvent(attributes: StandardAttributes): void {
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     getOutputChannel().appendLine(
       `Not tracking event in development: ${JSON.stringify(attributes, null, 2)}`,
     );
     return;
   }
+
   getTracker().sendEvent(new AnalyticsEvent(attributes.action, attributes));
 }
 
 export function trackException(error: Error, attributes: StandardAttributes): void {
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     getOutputChannel().appendLine(
       `Not tracking Exception in development: ${JSON.stringify(attributes, null, 2)}`,
     );
     return;
   }
-  getTracker().sendException(new Exception(error, attributes));
+
+  getTracker().sendException(new AnalyticsException(error, attributes));
 }
 
 /**

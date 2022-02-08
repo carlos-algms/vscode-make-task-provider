@@ -9,20 +9,27 @@
       "name": "Run Extension",
       "type": "extensionHost",
       "request": "launch",
+      "sourceMaps": true,
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/build/**/*.js"],
       "preLaunchTask": "${defaultBuildTask}"
     },
     {
-      "name": "Extension Tests",
+      "name": "Test Extension",
       "type": "extensionHost",
       "request": "launch",
+      "sourceMaps": true,
+      "runtimeExecutable": "${execPath}",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--extensionTestsPath=${workspaceFolder}/build/test/suite/index"
+        "--extensionTestsPath=${workspaceFolder}/.vscode-test/build/test/suite/index",
+        "${workspaceFolder}/src/test/examples/case-1"
       ],
-      "outFiles": ["${workspaceFolder}/build/test/**/*.js"],
-      "preLaunchTask": "${defaultBuildTask}"
+      "outFiles": ["${workspaceFolder}/.vscode-test/build/**/*.js"],
+      "preLaunchTask": "Compile Test",
+      "env": {
+        "NODE_ENV": "test"
+      }
     }
   ]
 }

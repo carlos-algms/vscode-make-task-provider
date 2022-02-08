@@ -1,6 +1,5 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import * as path from 'path';
-import { runTests } from 'vscode-test';
+import { runTests } from '@vscode/test-electron';
+import path from 'path';
 
 async function main() {
   try {
@@ -12,10 +11,17 @@ async function main() {
     // Passed to --extensionTestsPath
     const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
+    const [, , workspace] = process.argv;
+
     // Download VS Code, unzip it and run the integration test
-    await runTests({ extensionDevelopmentPath, extensionTestsPath });
+    await runTests({
+      version: 'insiders',
+      extensionDevelopmentPath,
+      extensionTestsPath,
+      launchArgs: [workspace],
+    });
   } catch (err) {
-    console.error('Failed to run tests');
+    console.error('Failed to run tests', (<Error>err).message);
     process.exit(1);
   }
 }

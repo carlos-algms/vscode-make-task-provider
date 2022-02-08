@@ -1,29 +1,32 @@
 import vscode from 'vscode';
 
 import { TYPE } from '../shared/constants';
+import DisposeManager from '../shared/DisposeManager';
 import { trackEvent } from '../telemetry/tracking';
 
 import { MakefileTaskProvider } from './MakefileTaskProvider';
 
-export default function registerTaskProvider(
-  context: vscode.ExtensionContext,
-): MakefileTaskProvider | undefined {
-  if (!vscode.workspace.workspaceFolders) {
-    return undefined;
+export class TaskProviderRegistration extends DisposeManager {
+  readonly taskProvider?: MakefileTaskProvider;
+
+  constructor() {
+    super();
+
+    if (vscode.workspace.workspaceFolders) {
+      this.taskProvider = new MakefileTaskProvider();
+
+      this.disposables.push(
+        vscode.tasks.registerTaskProvider(TYPE, this.taskProvider),
+        setupTasksTimingTrack(),
+      );
+    }
   }
-
-  const provider = new MakefileTaskProvider();
-  const disposable = vscode.tasks.registerTaskProvider(TYPE, <vscode.TaskProvider>provider);
-  context.subscriptions.push(disposable);
-
-  setupTasksTimingTrack(context);
-  return provider;
 }
 
-function setupTasksTimingTrack(context: vscode.ExtensionContext) {
+function setupTasksTimingTrack(): vscode.Disposable {
   const executionTimingMap = new WeakMap<vscode.TaskExecution, number>();
 
-  context.subscriptions.push(
+  return vscode.Disposable.from(
     vscode.tasks.onDidStartTask(({ execution }) => {
       if (execution.task.source === TYPE) {
         executionTimingMap.set(execution, Date.now());
@@ -44,7 +47,7 @@ function setupTasksTimingTrack(context: vscode.ExtensionContext) {
       trackEvent({
         action: 'Timing',
         category: 'Task Execution',
-        label: execution.task.name,
+        label: task.name,
         value: duration,
       });
     }),

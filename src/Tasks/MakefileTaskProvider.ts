@@ -6,6 +6,9 @@ import getAvailableTasks from './getAvailableTasks';
 import { MakefileTask } from './MakefileTask';
 
 export class MakefileTaskProvider implements vscode.TaskProvider<vscode.Task | MakefileTask> {
+  /**
+   * @inheritdoc
+   */
   provideTasks(): vscode.ProviderResult<MakefileTask[]> {
     return getAvailableTasks();
   }
@@ -28,7 +31,7 @@ export class MakefileTaskProvider implements vscode.TaskProvider<vscode.Task | M
       return undefined;
     }
 
-    const makefileUri: vscode.Uri = scope.uri.with({
+    const makefileUri = scope.uri.with({
       path: path.join(scope.uri.path, definition.makeFileRelativePath),
     });
 

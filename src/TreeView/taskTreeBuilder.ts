@@ -28,13 +28,16 @@ export function buildTasksTree(targets: MakefileTask[]): BaseTreeItem<null | Fol
     taskHostItem.addChild(targetItem);
   });
 
-  const items = [...folders.values()];
+  const folderItems = [...folders.values()];
 
-  if (items.length === 1) {
-    return items[0].getChildren();
+  /**
+   * In case just one workspace is open, there is no need of showing the only folder open in the tree.
+   */
+  if (folderItems.length === 1) {
+    return folderItems[0].getChildren();
   }
 
-  return items;
+  return folderItems;
 }
 
 function getFolderItem(scope: vscode.WorkspaceFolder, map: Map<string, FolderItem>): FolderItem {

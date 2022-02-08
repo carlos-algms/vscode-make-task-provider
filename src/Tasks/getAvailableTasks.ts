@@ -3,9 +3,11 @@ import vscode from 'vscode';
 
 import { makefileParser } from '../Parsers/makefileParser';
 import { getMakefileNames } from '../shared/config';
+import { TYPE } from '../shared/constants';
 import { showGenericErrorNotification } from '../shared/errorNotifications';
 import getOutputChannel from '../shared/getOutputChannel';
-import { findFilesInFolder, getValidWorkspaceFolders } from '../shared/workspaceFiles';
+import { findFilesInFolder } from '../shared/workspaceFiles';
+import { getValidWorkspaceFolders } from '../shared/workspaceUtils';
 import { trackEvent, trackException, trackExecutionTime } from '../telemetry/tracking';
 
 import { createMakefileTask } from './createMakefileTask';
@@ -36,8 +38,8 @@ async function fetchAvailableTasks(): Promise<MakefileTask[]> {
     const promises = folders.map(async (folder) => {
       const makefileNames = getMakefileNames(folder);
       const glob = `**/{${makefileNames.join(',')}}`;
-      const files = await findFilesInFolder(folder, glob);
-      const tasksPromises = files.map((file) => buildTasksFromMakefile(file, folder));
+      const makefiles = await findFilesInFolder(folder, glob);
+      const tasksPromises = makefiles.map((file) => buildTasksFromMakefile(file, folder));
 
       return (await Promise.all(tasksPromises)).flat();
     });
@@ -61,7 +63,7 @@ async function buildTasksFromMakefile(
   makefileUri: vscode.Uri,
   folder: vscode.WorkspaceFolder,
 ): Promise<MakefileTask[]> {
-  const targetNames = await makefileParser(makefileUri);
+  const targetNames = await makefileParser(makefileUri.fsPath);
 
   if (!targetNames) {
     trackEvent({
@@ -91,4 +93,12 @@ function displayError(errorThrown: Error) {
 
   getOutputChannel().appendLine(message);
   showGenericErrorNotification();
+}
+
+/**
+ * Uses `vscode.tasks.fetchTasks(..)` to list all available tasks,
+ * including the ones defined in the tasks.json
+ */
+export function fetchTaskFromVsCode(): Promise<MakefileTask[]> {
+  return <Promise<MakefileTask[]>>vscode.tasks.fetchTasks({ type: TYPE });
 }
