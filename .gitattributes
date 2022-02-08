@@ -1,0 +1,18 @@
+*           text=auto
+
+# enforce linux line endings
+*.md        text eol=lf
+*.txt       text eol=lf
+*.js        text eol=lf
+*.json      text eol=lf
+*.ts        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+
+# dotfiles configurations
+.*          text eol=lf
+
+# Graphics
+*.png       binary
+*.jpg       binary
+*.svg       binary
