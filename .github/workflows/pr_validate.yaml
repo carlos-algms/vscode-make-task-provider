@@ -5,7 +5,7 @@ on:
 
 jobs:
   validate:
-    name: Validate Pull Request
+    name: Lint and Test
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
