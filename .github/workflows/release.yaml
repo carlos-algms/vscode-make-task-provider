@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+
+      - id: setup
+        uses: ./.github/actions/setup_workspace
+
+      - run: yarn lint
+
+      - run: yarn rimraf build/
+
+      - run: make compile_prod
+
+      - name: Run headless test
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: make test
+
+      - name: Semantic Release
+        id: semantic_release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          extra_plugins: |
+            @semantic-release/git
+            @semantic-release/changelog
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: false
+
+      - name: Install vsce
+        if: steps.semantic_release.outputs.new_release_published == 'true'
+        run: npm i -g vsce
+
+      - id: publish
+        if: steps.semantic_release.outputs.new_release_published == 'true'
+        run: vsce publish -p ${{ secrets.VSCE_PAT }}

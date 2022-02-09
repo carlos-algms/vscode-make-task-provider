@@ -12,6 +12,7 @@ vsc-extension-quickstart.md
 Makefile
 *.config.js
 images
-!images/Makefile.png
+!images/make_provider.png
+!images/makefile.svg
 **/.*
 *.lock

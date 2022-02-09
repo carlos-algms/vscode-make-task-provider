@@ -1,4 +1,4 @@
-<img src="images/Makefile.png" align="right" />
+<img src="images/make_provider.png" align="right" />
 
 # Make support and task runner
 

@@ -1,0 +1,12 @@
+*           text eol=lf
+
+# enforce specific line endings
+*.bat       text eol=crlf
+
+# dotfiles configurations
+.*          text eol=lf
+
+# Graphics
+*.png       binary
+*.jpg       binary
+*.svg       binary
