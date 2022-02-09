@@ -29,10 +29,11 @@ jobs:
       - name: Semantic Release
         id: semantic_release
         uses: cycjimmy/semantic-release-action@v2
-        with: # You can specify specifying version range for the extra plugins if you prefer.
+        with:
           extra_plugins: |
             @semantic-release/git
             @semantic-release/changelog
+          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: false
