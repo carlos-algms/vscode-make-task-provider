@@ -4,7 +4,7 @@
   "publisher": "carlos-algms",
   "displayName": "Make support and task provider",
   "description": "Extension to run Makefile tasks from VS Code",
-  "icon": "images/Makefile.png",
+  "icon": "images/make_provider.png",
   "repository": "https://github.com/carlos-algms/vscode-make-task-provider",
   "author": {
     "name": "Carlos Gomes",
@@ -41,7 +41,7 @@
         {
           "id": "make",
           "name": "Makefile tasks",
-          "icon": "images/official-gnu.svg",
+          "icon": "images/makefile.svg",
           "visibility": "visible",
           "contextualTitle": "Makefile tasks"
         }
@@ -151,12 +151,9 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn lint && rm -rf build/ && make compile_prod",
     "lint": "yarn type-check && eslint src",
     "watch": "nodemon --watch src -e ts --exec \"make compile\"",
     "test": "make test",
-    "changelog": "npx conventional-changelog-cli --infile CHANGELOG.md --same-file",
-    "version": "yarn run changelog && git add CHANGELOG.md",
     "type-check": "tsc --noEmit -p ./"
   },
   "dependencies": {},
