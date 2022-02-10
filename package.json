@@ -67,6 +67,10 @@
         "command": "make-task-provider.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "make-task-provider.targetFromTreeViewClicked",
+        "title": "target clicked"
       }
     ],
     "menus": {
@@ -77,6 +81,10 @@
         },
         {
           "command": "make-task-provider.refresh",
+          "when": "false"
+        },
+        {
+          "command": "make-task-provider.targetFromTreeViewClicked",
           "when": "false"
         }
       ],
@@ -146,6 +154,16 @@
             "Makefile"
           ],
           "description": "A list of file names that the extension should look for while searching the workspace.\nThis allows you to have non-standard name for your file."
+        },
+        "make-task-provider.targetsExplorerClickAction": {
+          "scope": "resource",
+          "type": "string",
+          "default": "run",
+          "enum": [
+            "run",
+            "open"
+          ],
+          "markdownDescription": "The action to trigger when clicking on a target on the targets list: `open` or `run`, the default is `run`."
         }
       }
     }

@@ -32,6 +32,11 @@ export const COMMANDS = {
    * Should invalidate all caches and refresh the tree-view
    */
   refresh: `${APP_NAME}.refresh`,
+
+  /**
+   * Triggered when a `target` from the tree-view is clicked
+   */
+  targetFromTreeViewClicked: `${APP_NAME}.targetFromTreeViewClicked`,
 };
 
 // TODO use common excludes from user config and also provide a custom exclude setting
@@ -89,4 +94,8 @@ export function getUserPlatformKey(): string | null {
       });
       return null;
   }
+}
+
+export function getTargetsExplorerClickAction(scope?: vscode.ConfigurationScope): 'run' | 'open' {
+  return getFolderConfig(scope).get<'run' | 'open'>('targetsExplorerClickAction', 'run');
 }

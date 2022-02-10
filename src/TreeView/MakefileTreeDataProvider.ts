@@ -1,6 +1,11 @@
 import vscode from 'vscode';
 
-import { COMMANDS, CONFIG_KEYS, isAutoDetectEnabled } from '../shared/config';
+import {
+  COMMANDS,
+  CONFIG_KEYS,
+  getTargetsExplorerClickAction,
+  isAutoDetectEnabled,
+} from '../shared/config';
 import DisposeManager from '../shared/DisposeManager';
 import { fetchTaskFromVsCode } from '../Tasks/getAvailableTasks';
 import { trackEvent } from '../telemetry/tracking';
@@ -29,6 +34,7 @@ export class MakefileTreeDataProvider
       this.eventEmitter,
       vscode.commands.registerCommand(COMMANDS.runTargetFromTreeView, this.runTargetFromTreeView),
       vscode.commands.registerCommand(COMMANDS.openMakefile, this.openHostFile),
+      vscode.commands.registerCommand(COMMANDS.targetFromTreeViewClicked, this.handleTargetClicked),
     );
   }
 
@@ -36,17 +42,35 @@ export class MakefileTreeDataProvider
     trackEvent({
       action: 'Run Command',
       category: 'TreeView',
+      label: 'Run Target',
+    });
+
+    trackEvent({
+      action: 'Run Target',
+      category: 'Tasks',
       label: item.label,
     });
 
     return vscode.tasks.executeTask(item.task);
   };
 
+  private handleTargetClicked = (item: MakefileTargetItem) => {
+    const parent = item.getParent();
+    const action = getTargetsExplorerClickAction(parent.resourceUri);
+
+    if (action === 'run') {
+      this.runTargetFromTreeView(item);
+      return;
+    }
+
+    this.openHostFile(item);
+  };
+
   /**
    * Open the file where the target tasks are stored
    * Can be a Makefile or a tasks.json
    */
-  private openHostFile = async (selection: TaskHostFileItem | MakefileTargetItem) => {
+  private openHostFile = async (item: TaskHostFileItem | MakefileTargetItem) => {
     trackEvent({
       action: 'Run Command',
       category: 'TreeView',
@@ -56,11 +80,11 @@ export class MakefileTreeDataProvider
     let uri: vscode.Uri | undefined;
     let targetItem: MakefileTargetItem | undefined;
 
-    if (selection instanceof MakefileTargetItem) {
-      uri = selection.getParent().resourceUri;
-      targetItem = selection;
+    if (item instanceof MakefileTargetItem) {
+      uri = item.getParent().resourceUri;
+      targetItem = item;
     } else {
-      uri = selection.resourceUri;
+      uri = item.resourceUri;
     }
 
     if (!uri) {
@@ -68,18 +92,27 @@ export class MakefileTreeDataProvider
     }
 
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
-    const offset = this.findScript(document, targetItem);
-    const position = document.positionAt(offset);
+    const selection = this.findTargetPosition(document, targetItem);
 
     await vscode.window.showTextDocument(document, {
       preserveFocus: true,
-      selection: new vscode.Selection(position, position),
+      selection,
     });
   };
 
-  private findScript(_document: vscode.TextDocument, _script?: MakefileTargetItem): number {
-    // TODO get the position of the script in the file
-    return 0;
+  private findTargetPosition(
+    document: vscode.TextDocument,
+    targetItem?: MakefileTargetItem,
+  ): vscode.Selection {
+    if (!targetItem) {
+      return new vscode.Selection(0, 0, 0, 0);
+    }
+
+    const taskName = `${targetItem.label}:`;
+    const documentLines = document.getText().split('\n');
+    const lineNumber = documentLines.findIndex((line) => line.includes(taskName));
+
+    return new vscode.Selection(lineNumber, 0, lineNumber, taskName.length);
   }
 
   async getChildren(element?: BaseTreeItem): Promise<vscode.TreeItem[] | null | undefined> {
