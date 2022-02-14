@@ -56,24 +56,25 @@ function getTaskHostFileItem(
   task: MakefileTask,
   folderItem: FolderItem,
 ): TaskHostFileItem {
-  const scope = <vscode.WorkspaceFolder>task.scope;
+  const { source } = task;
   let item: TaskHostFileItem | undefined;
 
-  if (task.source === 'Workspace') {
-    item = map.get(scope.name);
+  if (source === 'Workspace') {
+    item = map.get(source);
 
     if (!item) {
       item = new TasksJsonItem(folderItem);
-      map.set(scope.name, item);
+      map.set(source, item);
       folderItem.addChild(item);
     }
   } else {
     const makeFileRelativePath = task.definition.makeFileRelativePath ?? '';
-    item = map.get(makeFileRelativePath);
+    const key = `${folderItem.label}-${makeFileRelativePath}`;
+    item = map.get(key);
 
     if (!item) {
       item = new MakefileItem(folderItem, makeFileRelativePath);
-      map.set(makeFileRelativePath, item);
+      map.set(key, item);
       folderItem.addChild(item);
     }
   }
