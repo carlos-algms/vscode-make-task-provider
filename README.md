@@ -24,7 +24,8 @@ Run `make` tasks and targets from VS Code command picker or via tasks menu.
 
 ---
 
-**PS:** This extension is not a re-implementation of `make`, so you need to have `make` executables available on your system.
+**PS:** This extension is **NOT** a re-implementation of `make`,
+so you need to have `make` executables available on your system.
 
 If `make` is not on your `PATH`, you can customize the executable path individually based on your operating system:
 
