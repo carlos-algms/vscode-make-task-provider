@@ -1,3 +1,11 @@
+## [2.2.1](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.0...v2.2.1) (2022-02-14)
+
+
+### Bug Fixes
+
+* List targets under the right Makefile on a multi-folder workspace ([ca7c533](https://github.com/carlos-algms/vscode-make-task-provider/commit/ca7c5337efd15425e05b92098d3707cc69ae6854)), closes [#16](https://github.com/carlos-algms/vscode-make-task-provider/issues/16)
+* Rearrange semantic-release plugins to include the CHANGELOG.md ([10a1e87](https://github.com/carlos-algms/vscode-make-task-provider/commit/10a1e872800745c20c56a5fd52e34b2b35ff8273))
+
 ## <small>2.1.1 (2021-11-08)</small>
 
 * Remove variables with `:` and `?` from the task list ([7590def](https://github.com/carlos-algms/vscode-make-task-provider/commit/7590def))
