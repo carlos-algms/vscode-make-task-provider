@@ -1,5 +1,6 @@
 import vscode from 'vscode';
 
+import { getSelectionForTarget } from '../Parsers/selectionFinder';
 import {
   COMMANDS,
   CONFIG_KEYS,
@@ -92,28 +93,13 @@ export class MakefileTreeDataProvider
     }
 
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(uri);
-    const selection = this.findTargetPosition(document, targetItem);
+    const selection = getSelectionForTarget(document.getText(), targetItem?.label);
 
     await vscode.window.showTextDocument(document, {
       preserveFocus: true,
       selection,
     });
   };
-
-  private findTargetPosition(
-    document: vscode.TextDocument,
-    targetItem?: MakefileTargetItem,
-  ): vscode.Selection {
-    if (!targetItem) {
-      return new vscode.Selection(0, 0, 0, 0);
-    }
-
-    const taskName = `${targetItem.label}:`;
-    const documentLines = document.getText().split('\n');
-    const lineNumber = documentLines.findIndex((line) => line.includes(taskName));
-
-    return new vscode.Selection(lineNumber, 0, lineNumber, taskName.length);
-  }
 
   async getChildren(element?: BaseTreeItem): Promise<vscode.TreeItem[] | null | undefined> {
     if (!element) {
