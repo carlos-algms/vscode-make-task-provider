@@ -119,10 +119,9 @@ export class MakefileTargetItem extends BaseTreeItem<MakefileItem> {
 
     this.contextValue = 'MakefileTarget';
 
-    // TODO read the default click action from the config, run or open the file at the script position
     this.command = {
       title: 'Run this target',
-      command: COMMANDS.runTargetFromTreeView,
+      command: COMMANDS.targetFromTreeViewClicked,
       arguments: [this],
     };
 
