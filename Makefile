@@ -28,11 +28,13 @@ compile_prod:
 	$(compile_extension) --minify --define:process.env.NODE_ENV=\"production\"
 
 compile_test:
-	yarn rimraf .vscode-test/build
+	npx rimraf .vscode-test/build
 	$(compile_base) `find ./src -name '*.ts'` \
 		--outdir='.vscode-test/build' \
 		--define:process.env.NODE_ENV=\"test\"
 
+test: NODE_ENV=test
+test: TEST_CASE_PATH=`npx realpath src/test/examples/case-1`
 test: compile_test
 	cp package.json .vscode-test/
-	node --enable-source-maps .vscode-test/build/test/runTest.js `npx realpath src/test/examples/case-1`
+	node --enable-source-maps .vscode-test/build/test/runTest.js $(TEST_CASE_PATH)
