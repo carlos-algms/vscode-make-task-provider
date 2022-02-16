@@ -14,14 +14,11 @@
   "extends": [
     "eslint:recommended",
     "airbnb-base",
+    "plugin:import/typescript",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint",
-    "plugin:import/warnings",
-    "plugin:import/errors",
-    "plugin:import/typescript"
+    "plugin:prettier/recommended"
   ],
   "settings": {
     "import/core-modules": ["vscode"]
@@ -62,7 +59,8 @@
     "@typescript-eslint/prefer-string-starts-ends-with": "error",
     "@typescript-eslint/type-annotation-spacing": "error",
     "@typescript-eslint/no-floating-promises": "off",
-    "@typescript-eslint/no-unused-vars": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unsafe-argument": "off"
   },
   "overrides": [
     {

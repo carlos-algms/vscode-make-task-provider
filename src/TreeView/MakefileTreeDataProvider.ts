@@ -22,7 +22,8 @@ import {
 
 export class MakefileTreeDataProvider
   extends DisposeManager
-  implements vscode.TreeDataProvider<vscode.TreeItem> {
+  implements vscode.TreeDataProvider<vscode.TreeItem>
+{
   private taskTree: BaseTreeItem<null | FolderItem>[] | null = null;
 
   private eventEmitter = new vscode.EventEmitter<vscode.TreeItem | null>();
@@ -44,12 +45,6 @@ export class MakefileTreeDataProvider
       action: 'Run Command',
       category: 'TreeView',
       label: 'Run Target',
-    });
-
-    trackEvent({
-      action: 'Run Target',
-      category: 'Tasks',
-      label: item.label,
     });
 
     return vscode.tasks.executeTask(item.task);
