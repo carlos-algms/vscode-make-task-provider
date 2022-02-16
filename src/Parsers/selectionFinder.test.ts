@@ -2,10 +2,13 @@ import { getSelectionForTarget } from './selectionFinder';
 
 describe('Selection Finder', () => {
   const text = `foo:
-  \techo foo
+\techo foo
 
-  bar:
-  \techo bar
+false_bar:
+\techo false_bar:
+
+bar:
+\techo bar
   `;
 
   it('should find the target and select it', () => {
@@ -14,9 +17,9 @@ describe('Selection Finder', () => {
 
     const { anchor, active } = selection;
     [anchor.line, anchor.character, active.line, active.character].should.eql([
-      3,
+      6,
       0,
-      3,
+      6,
       target.length + 1,
     ]);
   });

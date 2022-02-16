@@ -10,7 +10,10 @@
       "type": "extensionHost",
       "request": "launch",
       "sourceMaps": true,
-      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "${workspaceFolder}/src/test/examples/case-1"
+      ],
       "outFiles": ["${workspaceFolder}/build/**/*.js"],
       "preLaunchTask": "${defaultBuildTask}"
     },
