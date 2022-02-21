@@ -7,7 +7,7 @@ export function getSelectionForTarget(documentText: string, targetName?: string)
 
   const taskName = `${targetName}:`;
   const documentLines = documentText.split('\n');
-  const lineNumber = documentLines.findIndex((line) => line.includes(taskName));
+  const lineNumber = documentLines.findIndex((line) => line.trim().startsWith(taskName));
 
   if (lineNumber === -1) {
     return new vscode.Selection(0, 0, 0, 0);
