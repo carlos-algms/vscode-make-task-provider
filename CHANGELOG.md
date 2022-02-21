@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.1...v2.2.2) (2022-02-21)
+
+
+### Bug Fixes
+
+* The go-to command now matches the entire target name ([#22](https://github.com/carlos-algms/vscode-make-task-provider/issues/22)) ([2878bda](https://github.com/carlos-algms/vscode-make-task-provider/commit/2878bda28f5148d02475cb017f71be434a4d3664))
+
 ## [2.2.1](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.0...v2.2.1) (2022-02-14)
 
 
