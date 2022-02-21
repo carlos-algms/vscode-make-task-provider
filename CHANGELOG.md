@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.2...v2.2.3) (2022-02-21)
+
+
+### Bug Fixes
+
+* Match vscode types with engine version ([1fd35e1](https://github.com/carlos-algms/vscode-make-task-provider/commit/1fd35e1a323dff061b0a3af9ef656af8de631fa1))
+
 ## [2.2.2](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.1...v2.2.2) (2022-02-21)
 
 
