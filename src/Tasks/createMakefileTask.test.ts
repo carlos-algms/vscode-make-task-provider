@@ -74,4 +74,29 @@ describe('Create Makefile tasks', () => {
     expect(execution.command).to.equal('make');
     expect(execution.args).to.deep.equal(['-f', 'Makefile', ...extraArgsMock, name]);
   });
+
+  it('should merge extra arguments from settings and tasks.json', () => {
+    const extraArgsMock = ['--extra-unique', '-B'];
+    const getConfigurationMocked = sinon.stub(vscode.workspace, 'getConfiguration');
+
+    getConfigurationMocked.onFirstCall().callThrough();
+    getConfigurationMocked.onSecondCall().returns({
+      get: () => extraArgsMock,
+    } as any);
+    getConfigurationMocked.callThrough();
+
+    const name = 'test_with_args_merged';
+    const fakeDefinition = {
+      type: TYPE,
+      targetName: name,
+      makeFileRelativePath: 'Makefile',
+      args: ['--extra-arg', '-B'],
+    };
+
+    const task = createMakefileTask(fakeDefinition, workspace, makefileUri);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { execution }: { execution: vscode.ShellExecution } = <any>task;
+
+    expect(execution.args).to.deep.equal(['-f', 'Makefile', ...extraArgsMock, '--extra-arg', name]);
+  });
 });

@@ -32,6 +32,10 @@
           "makeFileRelativePath": {
             "type": "string",
             "description": "Relative path to the Makefile containing your targets to be executed"
+          },
+          "args": {
+            "type": "array",
+            "description": "Arguments to pass to the make target as: make {...args} {target}"
           }
         }
       }
