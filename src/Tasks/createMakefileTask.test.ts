@@ -1,4 +1,5 @@
 import path from 'path';
+import sinon from 'sinon';
 import vscode from 'vscode';
 
 import { TYPE } from '../shared/constants';
@@ -35,7 +36,7 @@ describe('Create Makefile tasks', () => {
       },
       'task.definition',
     );
-    expect(task.scope).to.equal(workspace, 'task.source');
+    expect(task.scope).to.equal(workspace, 'task.scope');
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { execution }: { execution: vscode.ShellExecution } = <any>task;
@@ -53,5 +54,24 @@ describe('Create Makefile tasks', () => {
     };
     const task = createMakefileTask(fakeDefinition, workspace, makefileUri);
     expect(task.definition).to.equal(fakeDefinition);
+  });
+
+  it('should pass extra arguments when defined on settings', () => {
+    const extraArgsMock = ['--extra-arg', '-B'];
+    const getConfigurationMocked = sinon.stub(vscode.workspace, 'getConfiguration');
+
+    getConfigurationMocked.onFirstCall().callThrough();
+    getConfigurationMocked.onSecondCall().returns({
+      get: () => extraArgsMock,
+    } as any);
+    getConfigurationMocked.callThrough();
+
+    const name = 'test_with_args';
+    const task = createMakefileTask(name, workspace, makefileUri);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { execution }: { execution: vscode.ShellExecution } = <any>task;
+    expect(execution.command).to.equal('make');
+    expect(execution.args).to.deep.equal(['-f', 'Makefile', ...extraArgsMock, name]);
   });
 });

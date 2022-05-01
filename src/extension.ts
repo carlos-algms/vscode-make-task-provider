@@ -31,6 +31,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.workspace.onDidChangeConfiguration((e) => {
       const shouldRefresh =
         e.affectsConfiguration(CONFIG_KEYS.autoDetect) ||
+        e.affectsConfiguration(CONFIG_KEYS.extraArguments) ||
         e.affectsConfiguration(CONFIG_KEYS.makeExecutable);
 
       if (shouldRefresh) {

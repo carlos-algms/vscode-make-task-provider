@@ -10,6 +10,7 @@ export const CONFIG_KEYS = {
   makefileNames: `${APP_NAME}.makefileNames`,
   makeExecutable: `${APP_NAME}.${getUserPlatformKey() ?? 'unix.makeExecutable'}`,
   telemetry: `${APP_NAME}.telemetry`,
+  extraArguments: `${APP_NAME}.extraArguments`,
 };
 
 export const COMMANDS = {
@@ -98,4 +99,8 @@ export function getUserPlatformKey(): string | null {
 
 export function getTargetsExplorerClickAction(scope?: vscode.ConfigurationScope): 'run' | 'open' {
   return getFolderConfig(scope).get<'run' | 'open'>('targetsExplorerClickAction', 'run');
+}
+
+export function getExtraArguments(scope?: vscode.ConfigurationScope): string[] {
+  return getFolderConfig(scope).get<string[]>('extraArguments', []);
 }

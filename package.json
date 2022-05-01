@@ -164,6 +164,12 @@
             "open"
           ],
           "markdownDescription": "The action to trigger when clicking on a target on the targets list: `open` or `run`, the default is `run`."
+        },
+        "make-task-provider.extraArguments": {
+          "scope": "resource",
+          "type": "array",
+          "default": [],
+          "markdownDescription": "Additional flags to be added to the run command like: `make {...extraFlags} {target}`"
         }
       }
     }

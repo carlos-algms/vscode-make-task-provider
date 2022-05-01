@@ -1,7 +1,7 @@
 import path from 'path';
 import vscode from 'vscode';
 
-import { getMakeExecutablePath } from '../shared/config';
+import { getExtraArguments, getMakeExecutablePath } from '../shared/config';
 import { TYPE } from '../shared/constants';
 import { getFileRelativePath } from '../shared/workspaceFiles';
 
@@ -48,6 +48,7 @@ export function createMakefileTask(
   const options: vscode.ShellExecutionOptions = { cwd };
   // TODO: check performance degradation here
   const makeBin = getMakeExecutablePath(folder);
+  const extraArguments = getExtraArguments(folder);
 
   const task = <MakefileTask>(
     new vscode.Task(
@@ -55,7 +56,7 @@ export function createMakefileTask(
       folder,
       targetName,
       TYPE,
-      new vscode.ShellExecution(makeBin, ['-f', makefile, targetName], options),
+      new vscode.ShellExecution(makeBin, ['-f', makefile, ...extraArguments, targetName], options),
       [],
     )
   );

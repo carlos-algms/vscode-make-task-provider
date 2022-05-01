@@ -32,7 +32,12 @@
       "preLaunchTask": "Compile Test",
       "env": {
         "NODE_ENV": "test"
-      }
+      },
+      "skipFiles": [
+        "<node_internals>/**",
+        "internal/**",
+        "**/Visual Studio Code.app/**"
+      ]
     }
   ]
 }
