@@ -13,6 +13,7 @@ Run `make` tasks and targets from VS Code command picker or via tasks menu.
 - Tasks-View listing all available targets
 - Multiple workspaces ready!
 - **NEW**: Set the executable path to your `make` command
+- **NEW**: Add extra arguments to the `make` execution command
 
 ### Running from the command picker:
 
@@ -22,10 +23,58 @@ Run `make` tasks and targets from VS Code command picker or via tasks menu.
 
 ![command picker](images/task-tree.gif)
 
+### Adding extra arguments/flags to the `make` execution command
+
+The setting `make-task-provider.extraArguments` can be set with an array of strings with extra arguments which will be added to the `make` command.
+
+```json
+"make-task-provider.extraArguments": [
+  "--always-make",
+  "--ignore-errors"
+]
+```
+
+Extra arguments will be appended to the `make` command as follows:
+
+```text
+[make bin path] -f [makefile path] [...extra arguments] [target name]
+```
+
+For example, If the target `build` is triggered, it will be executed as:
+
+```shell
+$ make -f ./Makefile --always-make --ignore-errors build
+```
+
+It is also possible to customize flags to a single target by using VSCode task customization:
+
+On your project's `tasks.json`, set the following:
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "make",
+      "targetName": "build",
+      "makeFileRelativePath": "Makefile",
+      "problemMatcher": [],
+      "label": "make: build with extra args",
+      "args": [
+        "--always-make",
+        "--ignore-errors"
+      ]
+    }
+  ]
+}
+```
+
+If `make-task-provider.extraArguments` is set along with `args` in the tasks.json,
+**ALL** the extra arguments will be added to the `make` command.
+
 ---
 
-**PS:** This extension is **NOT** a re-implementation of `make`,
-so you need to have `make` executables available on your system.
+**PS:** This extension is **NOT** a re-implementation of `make`, so you must have `make` executables available on your system.
 
 If `make` is not on your `PATH`, you can customize the executable path individually based on your operating system:
 

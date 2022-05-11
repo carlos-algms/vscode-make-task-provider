@@ -11,6 +11,11 @@ export interface MakefileTaskDefinition extends vscode.TaskDefinition {
    * The relative path to the Makefile containing the Target task
    */
   makeFileRelativePath: string;
+
+  /**
+   * Extra arguments to be passed to the make command
+   */
+  args?: string[];
 }
 
 export interface MakefileTask extends vscode.Task {
