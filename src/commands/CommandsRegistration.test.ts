@@ -15,11 +15,15 @@ describe('Commands Registration', () => {
   it('should properly register the commands', () => {
     const instance = new CommandsRegistration();
 
-    instance.disposables.should.have.length(3);
+    instance.disposables.should.have.length(4);
 
-    registerCommandMocked.should.have.callCount(2);
+    registerCommandMocked.should.have.callCount(3);
     registerCommandMocked.should.have.been.calledWith(COMMANDS.runTarget, instance.handleRunTarget);
     registerCommandMocked.should.have.been.calledWith(COMMANDS.refresh, instance.handleRefresh);
+    registerCommandMocked.should.have.been.calledWith(
+      COMMANDS.executeTarget,
+      instance.handleExecuteTarget,
+    );
   });
 
   it('should fire the refresh Event', () => {

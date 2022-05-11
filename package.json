@@ -14,7 +14,8 @@
   "activationEvents": [
     "onCommand:workbench.action.tasks.runTask",
     "onCommand:make-task-provider.runTarget",
-    "onView:make"
+    "onView:make",
+    "onLanguage:makefile"
   ],
   "contributes": {
     "taskDefinitions": [
@@ -58,6 +59,11 @@
         "icon": "$(run)"
       },
       {
+        "command": "make-task-provider.executeTarget",
+        "title": "Make: execute a target in a terminal",
+        "icon": "$(run)"
+      },
+      {
         "command": "make-task-provider.runTargetFromTreeView",
         "title": "Run this target",
         "icon": "$(run)"
@@ -81,6 +87,10 @@
       "commandPalette": [
         {
           "command": "make-task-provider.runTargetFromTreeView",
+          "when": "false"
+        },
+        {
+          "command": "make-task-provider.executeTarget",
           "when": "false"
         },
         {

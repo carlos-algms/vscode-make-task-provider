@@ -1,5 +1,6 @@
 import vscode from 'vscode';
 
+import { MakefileCodeLensProvider } from './CodeLens/CodeLensProvider';
 import CommandsRegistration from './commands/CommandsRegistration';
 import { COMMANDS, CONFIG_KEYS } from './shared/config';
 import getOutputChannel from './shared/getOutputChannel';
@@ -12,6 +13,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const taskProviderRegistration = new TaskProviderRegistration();
   const treeViewRegistration = new TreeViewRegistration();
   const commandsRegistration = new CommandsRegistration();
+  const makefileCodeLensProvider = new MakefileCodeLensProvider();
 
   commandsRegistration.onRunRefresh(treeViewRegistration.refreshTree);
 
@@ -38,6 +40,8 @@ export function activate(context: vscode.ExtensionContext): void {
         executeRefreshCommand();
       }
     }),
+
+    vscode.languages.registerCodeLensProvider({ language: 'makefile' }, makefileCodeLensProvider),
 
     getOutputChannel(),
   );
