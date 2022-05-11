@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.3...v2.3.0) (2022-05-11)
+
+
+### Features
+
+* Adding extra arguments to execution ([#24](https://github.com/carlos-algms/vscode-make-task-provider/issues/24)) ([c11d208](https://github.com/carlos-algms/vscode-make-task-provider/commit/c11d208e1e814f0e73dc889ee69257e25c6f324b))
+
 ## [2.2.3](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.2...v2.2.3) (2022-02-21)
 
 
