@@ -4,13 +4,11 @@ import { targetNameMatcher } from '../Parsers/makefileParser';
 import { COMMANDS } from '../shared/config';
 
 export class MakefileCodeLensProvider implements vscode.CodeLensProvider {
-  private codeLenses: vscode.CodeLens[] = [];
-
   provideCodeLenses(document: vscode.TextDocument): vscode.CodeLens[] {
-    const text = document.getText().split('\n');
+    const text = document.getText().split(/\r?\n/);
     const uniques = new Set<string>();
 
-    this.codeLenses = text.reduce<vscode.CodeLens[]>((lenses, line, i) => {
+    const codeLenses = text.reduce<vscode.CodeLens[]>((lenses, line, i) => {
       const targetName = targetNameMatcher(line);
 
       if (targetName && !uniques.has(targetName)) {
@@ -34,6 +32,6 @@ export class MakefileCodeLensProvider implements vscode.CodeLensProvider {
       return lenses;
     }, []);
 
-    return this.codeLenses;
+    return codeLenses;
   }
 }
