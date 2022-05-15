@@ -20,6 +20,11 @@ export const COMMANDS = {
   runTarget: `${APP_NAME}.runTarget`,
 
   /**
+   * Execute a Make target
+   */
+  executeTarget: `${APP_NAME}.executeTarget`,
+
+  /**
    * Run a specific target clicked on the tree-view
    */
   runTargetFromTreeView: `${APP_NAME}.runTargetFromTreeView`,

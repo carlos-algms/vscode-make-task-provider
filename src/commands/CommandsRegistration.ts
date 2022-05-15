@@ -2,6 +2,7 @@ import vscode from 'vscode';
 
 import { COMMANDS } from '../shared/config';
 import DisposeManager from '../shared/DisposeManager';
+import { createMakefileTask } from '../Tasks/createMakefileTask';
 import { invalidateTaskCaches } from '../Tasks/taskCaches';
 import { trackEvent } from '../telemetry/tracking';
 
@@ -22,6 +23,7 @@ export default class CommandsRegistration extends DisposeManager {
       this.refreshEventEmitter,
       vscode.commands.registerCommand(COMMANDS.runTarget, this.handleRunTarget),
       vscode.commands.registerCommand(COMMANDS.refresh, this.handleRefresh),
+      vscode.commands.registerCommand(COMMANDS.executeTarget, this.handleExecuteTarget),
     );
   }
 
@@ -38,5 +40,16 @@ export default class CommandsRegistration extends DisposeManager {
       category: 'Global',
       label: 'Refresh',
     });
+  };
+
+  handleExecuteTarget = (targetName: string, makefileUri: vscode.Uri) => {
+    const scope = vscode.workspace.getWorkspaceFolder(makefileUri);
+    if (!scope) {
+      return;
+    }
+
+    const task = createMakefileTask(targetName, scope, makefileUri);
+    task.group = vscode.TaskGroup.Rebuild;
+    vscode.tasks.executeTask(task);
   };
 }

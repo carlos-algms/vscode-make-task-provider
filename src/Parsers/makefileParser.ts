@@ -12,10 +12,13 @@ const targetNameRegex = /^([\w-./ ]+)\s*:(?![:=?])/i;
 
 export async function makefileParser(makefileFsPath: string): Promise<string[] | null> {
   try {
-    const targetNames = await trackExecutionTime(() => fileReader(makefileFsPath, lineFilter), {
-      category: 'Parsers',
-      label: 'Parse Makefile',
-    });
+    const targetNames = await trackExecutionTime(
+      () => fileReader(makefileFsPath, targetNameMatcher),
+      {
+        category: 'Parsers',
+        label: 'Parse Makefile',
+      },
+    );
     return Array.from(new Set(targetNames));
   } catch (error) {
     trackException(error, {
@@ -27,7 +30,10 @@ export async function makefileParser(makefileFsPath: string): Promise<string[] |
   return null;
 }
 
-function lineFilter(line: string): string | null {
+/**
+ * Returns the target name or null if it doesn't match
+ */
+export function targetNameMatcher(line: string): string | null {
   const match = targetNameRegex.exec(line);
 
   if (!match?.[1]) {
