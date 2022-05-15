@@ -5,6 +5,10 @@ import { COMMANDS } from '../shared/config';
 
 export class MakefileCodeLensProvider implements vscode.CodeLensProvider {
   provideCodeLenses(document: vscode.TextDocument): vscode.CodeLens[] {
+    if (document.isDirty) {
+      return [];
+    }
+
     const text = document.getText().split(/\r?\n/);
     const uniques = new Set<string>();
 
