@@ -63,7 +63,7 @@ export function createMakefileTask(
   );
 
   task.group = getTaskGroupGuess(targetName);
-  // task.detail = `make ${targetName}`;
+  task.detail = `./${makeFileRelativePath}`;
 
   return task;
 }
