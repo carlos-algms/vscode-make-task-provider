@@ -1,3 +1,11 @@
+# [2.4.0](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.3.0...v2.4.0) (2022-06-16)
+
+
+### Features
+
+* Adding run buttons to targets in Makefiles ([#25](https://github.com/carlos-algms/vscode-make-task-provider/issues/25)) ([36cad42](https://github.com/carlos-algms/vscode-make-task-provider/commit/36cad4247839b465a6c2b4cedf1f2fd97fb9df26))
+* Include the path from where the Target is stored ([#27](https://github.com/carlos-algms/vscode-make-task-provider/issues/27)) ([fccb2f7](https://github.com/carlos-algms/vscode-make-task-provider/commit/fccb2f7c7c96493d0e6af2e9b613051b2c16dfc4))
+
 # [2.3.0](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.2.3...v2.3.0) (2022-05-11)
 
 
