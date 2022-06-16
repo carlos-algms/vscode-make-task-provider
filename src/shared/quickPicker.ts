@@ -16,6 +16,7 @@ export async function showQuickPickForTasks<T extends vscode.Task>(
 ): Promise<T | null> {
   const items = targets.map((t) => ({
     label: t.name,
+    detail: t.detail,
     task: t,
   }));
 
