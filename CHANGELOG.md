@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.4.0...v2.4.1) (2022-06-16)
+
+
+### Bug Fixes
+
+* Add target source also for the quick picker command ([#28](https://github.com/carlos-algms/vscode-make-task-provider/issues/28)) ([42a706d](https://github.com/carlos-algms/vscode-make-task-provider/commit/42a706de9b0e42a11ca4659210a4981e03317426))
+
 # [2.4.0](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.3.0...v2.4.0) (2022-06-16)
 
 
