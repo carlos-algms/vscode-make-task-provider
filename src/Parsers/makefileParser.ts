@@ -6,9 +6,10 @@ import { trackException, trackExecutionTime } from '../telemetry/tracking';
  * - special targets: https://www.gnu.org/software/make/manual/html_node/Special-Targets.html
  * - suffix rules: https://www.gnu.org/software/make/manual/html_node/Suffix-Rules.html
  * - pattern rules: https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html
+ * - comments starting with #
  */
-const excludesRegex = /^[.%]/;
-const targetNameRegex = /^([\w-./ ]+)\s*:(?![:=?])/i;
+const excludesRegex = /^[.%#]|:=/;
+const targetNameRegex = /^([\w-./ ]+)\s*:/i;
 
 export async function makefileParser(makefileFsPath: string): Promise<string[] | null> {
   try {
@@ -34,6 +35,10 @@ export async function makefileParser(makefileFsPath: string): Promise<string[] |
  * Returns the target name or null if it doesn't match
  */
 export function targetNameMatcher(line: string): string | null {
+  if (excludesRegex.test(line)) {
+    return null;
+  }
+
   const match = targetNameRegex.exec(line);
 
   if (!match?.[1]) {
@@ -41,10 +46,5 @@ export function targetNameMatcher(line: string): string | null {
   }
 
   const targetName = match[1].trim();
-
-  if (excludesRegex.test(targetName)) {
-    return null;
-  }
-
   return targetName;
 }

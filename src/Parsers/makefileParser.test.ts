@@ -15,6 +15,13 @@ describe('Makefile Parser', () => {
 
     const targetNames = await makefileParser(makefilePath);
 
-    expect(targetNames).to.eql(['foo', 'build', 'test']);
+    expect(targetNames).to.eql([
+      'foo',
+      'build',
+      'test',
+      'double-colon',
+      'double-colon-with-space',
+      'double-requisites',
+    ]);
   });
 });
