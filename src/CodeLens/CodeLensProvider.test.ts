@@ -2,10 +2,11 @@ import path from 'path';
 import vscode from 'vscode';
 
 import { COMMANDS } from '../shared/config';
+import { makeTasksResult } from '../test/examples/case-1/expectedResults';
 
 import { MakefileCodeLensProvider } from './CodeLensProvider';
 
-describe.only('CodeLensProvider', () => {
+describe('CodeLensProvider', () => {
   let document: vscode.TextDocument;
 
   beforeEach(async () => {
@@ -18,7 +19,7 @@ describe.only('CodeLensProvider', () => {
     const instance = new MakefileCodeLensProvider();
     const lenses = instance.provideCodeLenses(document);
 
-    lenses.should.have.length(3);
+    lenses.should.have.length(makeTasksResult.length);
     lenses.forEach((lens) => {
       expect(lens).to.be.instanceOf(vscode.CodeLens);
       expect(lens.command).to.exist;

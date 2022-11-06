@@ -1,6 +1,8 @@
 import path from 'path';
 import vscode from 'vscode';
 
+import { makeTasksResult } from '../test/examples/case-1/expectedResults';
+
 import { makefileParser } from './makefileParser';
 
 describe('Makefile Parser', () => {
@@ -15,6 +17,6 @@ describe('Makefile Parser', () => {
 
     const targetNames = await makefileParser(makefilePath);
 
-    expect(targetNames).to.eql(['foo', 'build', 'test']);
+    expect(targetNames).to.eql(makeTasksResult);
   });
 });
