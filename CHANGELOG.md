@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.4.1...v2.4.2) (2022-11-06)
+
+
+### Bug Fixes
+
+* Change the parser to add support for double colon rules ([#30](https://github.com/carlos-algms/vscode-make-task-provider/issues/30)) ([e5d8913](https://github.com/carlos-algms/vscode-make-task-provider/commit/e5d8913cd641abb53c9b038375f1b9d3d23154f2))
+
 ## [2.4.1](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.4.0...v2.4.1) (2022-06-16)
 
 
