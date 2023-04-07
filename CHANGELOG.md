@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.4.2...v2.5.0) (2023-04-07)
+
+
+### Features
+
+* Bump bundled dependencies ([#34](https://github.com/carlos-algms/vscode-make-task-provider/issues/34)) ([d9b55b2](https://github.com/carlos-algms/vscode-make-task-provider/commit/d9b55b2b69323a9cc16316a6582274c4ec0ab23c))
+
 ## [2.4.2](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.4.1...v2.4.2) (2022-11-06)
 
 
