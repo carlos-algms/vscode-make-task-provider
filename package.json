@@ -196,8 +196,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@amplitude/node": "^1.9.2",
-    "@sentry/node": "^6.17.9",
+    "@amplitude/node": "^1.10.2",
+    "@sentry/node": "^7.47.0",
     "@types/chai": "^4.3.4",
     "@types/chai-as-promised": "^7.1.5",
     "@types/glob": "^7.2.0",
@@ -205,19 +205,19 @@
     "@types/node": "^18",
     "@types/sinon": "^10.0.13",
     "@types/sinon-chai": "^3.2.9",
-    "@types/vscode": "^1.60.0",
+    "@types/vscode": "~1.70.0",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vscode/test-electron": "^2.3.0",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
-    "esbuild": "^0.14.21",
+    "esbuild": "^0.17.15",
     "eslint": "^8.37.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
-    "glob": "^7.2.0",
+    "glob": "^9.3.4",
     "mocha": "^10.2.0",
     "node-machine-id": "^1.1.12",
     "nodemon": "^2.0.22",
@@ -227,11 +227,10 @@
     "sinon": "^15.0.3",
     "sinon-chai": "^3.7.0",
     "typescript": "^5.0.3",
-    "util.promisify": "^1.1.1",
     "vscode-extension-analytics": "^0.0.4"
   },
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.70.0"
   },
   "categories": [
     "Other"
