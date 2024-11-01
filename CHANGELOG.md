@@ -5,6 +5,13 @@
 
 * **sentry:** Update and use local client to not pollute global scope ([#37](https://github.com/carlos-algms/vscode-make-task-provider/issues/37)) ([37b168a](https://github.com/carlos-algms/vscode-make-task-provider/commit/37b168a3acaa0e515d66a0a699e9e51f1b0486db))
 
+## [2.5.1](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.5.0...v2.5.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* **sentry:** Update and use local client to not pollute global scope ([#37](https://github.com/carlos-algms/vscode-make-task-provider/issues/37)) ([37b168a](https://github.com/carlos-algms/vscode-make-task-provider/commit/37b168a3acaa0e515d66a0a699e9e51f1b0486db))
+
 # [2.5.0](https://github.com/carlos-algms/vscode-make-task-provider/compare/v2.4.2...v2.5.0) (2023-04-07)
 
 
