@@ -3,10 +3,7 @@ import { AnalyticsReporter, Attributes } from 'vscode-extension-analytics';
 import { APP_NAME, APP_VERSION } from '../shared/constants';
 import getOutputChannel from '../shared/getOutputChannel';
 
-import AmplitudeVsCodeAnalyticsClient, {
-  AnalyticsEvent,
-  AnalyticsException,
-} from './AmplitudeVsCodeAnalyticsClient';
+import VsCodeAnalyticsClient, { AnalyticsEvent, AnalyticsException } from './VsCodeAnalyticsClient';
 
 export type Primitive = string | number | null | undefined;
 
@@ -24,7 +21,7 @@ export type StandardAttributes = Attributes & {
 let tracker: AnalyticsReporter | null = null;
 
 const createReporter = (extensionId: string, extensionVersion: string): AnalyticsReporter => {
-  const client = new AmplitudeVsCodeAnalyticsClient(extensionId, extensionVersion);
+  const client = new VsCodeAnalyticsClient(extensionId, extensionVersion);
 
   return new AnalyticsReporter(extensionId, extensionVersion, client, {
     configId: 'make-task-provider.telemetry',
