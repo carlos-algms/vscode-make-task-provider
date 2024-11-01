@@ -1,7 +1,7 @@
 name: Validate Pull Requests
 
 on:
-   pull_request:
+  pull_request:
 
 jobs:
   validate:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -23,6 +23,6 @@ jobs:
       - run: make compile_prod
 
       - name: Run headless test
-        uses: GabrielBB/xvfb-action@v1
+        uses: coactions/setup-xvfb@v1
         with:
           run: make test
