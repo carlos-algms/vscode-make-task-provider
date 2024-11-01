@@ -33,6 +33,7 @@ export default class VsCodeAnalyticsClient implements IAnalyticsClient {
   private userId: string;
 
   private sentryScope = new Scope();
+
   private exceptionsSent = new Set<string>();
 
   constructor(private extensionId: string, private extensionVersion: string) {
@@ -64,7 +65,7 @@ export default class VsCodeAnalyticsClient implements IAnalyticsClient {
       dsn: 'https://1035245fc12e491799d0b7a41a9c70a7@o443279.ingest.sentry.io/5613298',
       transport: makeFetchTransport,
       stackParser: defaultStackParser,
-      integrations: integrations,
+      integrations,
       release: `${this.extensionId}@${this.extensionVersion}`,
       // Leaving here for historical reasons
       // not needed anymore, as the client is not not tied to the global scope
